@@ -1,0 +1,9 @@
+@mixin fully-clickable {
+	position: relative;
+	
+	a::after {
+		content: '';
+		inset: 0;
+		position: absolute;
+	}
+}

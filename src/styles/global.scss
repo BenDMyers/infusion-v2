@@ -1,0 +1,19 @@
+@use 'open-props-scss' as op;
+@use './tokens.scss' as *;
+@use '@fontsource/sacramento/latin-400.css';
+
+:root {
+	--accent-color: #{$teal-9};
+	--page-background: #{op.$stone-2};
+	--surface: #{op.$gray-0};
+	--brand-font: Sacramento;
+	--body-font: Lato;
+	--shadow-strength: 10%;
+    --shadow-color: 220 40% 2%;
+
+	background-color: var(--page-background);
+}
+
+body {
+	font-family: Lato, sans-serif;
+}

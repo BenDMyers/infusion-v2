@@ -1,0 +1,15 @@
+@use '@acab/reset.css';
+@use 'open-props-scss' as op;
+@use 'tokens' as tokens;
+@use 'global';
+@use 'mixins';
+
+html {
+	color-scheme: auto;
+}
+
+main {
+	& :focus-visible {
+		outline: 3px solid tokens.$teal-8;
+	}
+}

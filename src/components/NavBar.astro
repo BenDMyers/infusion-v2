@@ -1,0 +1,65 @@
+<header>
+	<nav>
+		<ul>
+			<li>
+				<a href="/" class="brand">infusion</a>
+			</li>
+			<li>
+				<a href="/teas/">Teas</a>
+			</li>
+			<li>
+				<a href="/teas/?favorited=true">Favorites</a>
+			</li>
+			<li>
+				<a href="/brands/">Brands</a>
+			</li>
+		</ul>
+	</nav>
+</header>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+	@import '../styles/mixins.scss';
+
+	header {
+		width: 100%;
+		background-color: var(--accent-color);
+		box-shadow: op.$shadow-2;
+
+		nav {
+			ul {
+				list-style: none;
+				display: flex;
+
+				li {
+					@include fully-clickable();
+					padding-block: op.$size-2;
+					padding-inline: op.$size-fluid-2;
+					border-inline-end: 0.5px solid tokens.$teal-11;
+					display: grid;
+					place-items: center;
+
+					&:hover {
+						background-color: tokens.$teal-10;
+						a {
+							text-decoration: underline;
+							text-decoration-thickness: 0.5px;
+						}
+					}
+
+					a {
+						color: tokens.$teal-0;
+						text-decoration: none;
+						font-size: 0.9rem;
+					}
+				}
+			}
+		}
+	}
+
+	.brand {
+		font-family: var(--brand-font), cursive;
+		font-size: 1.9rem;
+	}
+</style>
