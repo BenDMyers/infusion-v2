@@ -1,0 +1,51 @@
+---
+import type { Rating, WithEmptyStringOption } from '../types/api';
+
+export interface Props {
+	rating: WithEmptyStringOption<Rating>
+}
+
+const {rating} = Astro.props;
+const ratingAsNumber = Number(rating);
+
+let screenreaderDescription = `${rating} stars`;
+if (rating === '') {
+	screenreaderDescription = 'Unrated';
+} else if (rating === '1') {
+	screenreaderDescription = '1 star';
+}
+
+const five = new Array(5).fill('');
+
+function getStarClasses(arrayIndex: number) {
+	const classes = ['star'];
+	const conceptualIndex = arrayIndex + 1;
+	if (conceptualIndex <= ratingAsNumber) {
+		classes.push('active');
+	}
+	return classes.join(' ');
+}
+---
+
+<>
+	<span class="visually-hidden">{screenreaderDescription}</span>
+	<span aria-hidden="true">
+		{five.map((_, index) => (
+			<span class={getStarClasses(index)}>
+				★
+			</span>
+		))}
+	</span>
+</>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+
+	.star {
+		color: op.$stone-5;
+
+		&.active {
+			color: var(--ink);
+		}
+	}
+</style>

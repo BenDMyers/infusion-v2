@@ -68,4 +68,4 @@ export type Tea = {
 	wishlist: boolean
 };
 
-type WithEmptyStringOption<E> = '' | E;
+export type WithEmptyStringOption<E> = '' | E;
