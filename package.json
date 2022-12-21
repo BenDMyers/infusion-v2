@@ -15,6 +15,8 @@
     "@fontsource/lato": "^4.5.10",
     "@fontsource/sacramento": "^4.5.9",
     "astro": "^1.7.2",
+    "mongodb": "^4.13.0",
+    "mongoose": "^6.8.1",
     "open-props-scss": "^0.4.0"
   },
   "devDependencies": {
