@@ -11,5 +11,10 @@ html {
 main {
 	& :focus-visible {
 		outline: 3px solid tokens.$teal-8;
+		outline-offset: 5px;
+
+		&:not(:hover) {
+			text-decoration: none;
+		}
 	}
 }

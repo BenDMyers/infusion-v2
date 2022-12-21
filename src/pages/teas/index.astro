@@ -1,0 +1,85 @@
+---
+import { getAllBrands } from '../../api/brands';
+import { getSteepsGroupedByTeas } from '../../api/steeps';
+import { getTeasGroupedByBrands } from '../../api/teas';
+import TeaCard from '../../components/TeaCard.astro';
+import Layout from '../../layouts/Layout.astro';
+
+const [groupedTeas, brands, groupedSteeps] = await Promise.all([
+	getTeasGroupedByBrands(),
+	getAllBrands(),
+	getSteepsGroupedByTeas()
+]);
+
+---
+
+<Layout title="My Teas">
+	<h1>My Teas</h1>
+	{
+		brands.map((brand) => {
+			const brandId = brand._id.toString();
+			const brandTeas = groupedTeas[brandId] || [];
+
+			if (!brandTeas.length) {
+				return;
+			}
+
+			return (
+				<section aria-labelledby={`brand-${brandId}-heading`}>
+					<h2 id={`brand-${brandId}-heading`}>
+						<a href="/">
+							{brand.name}
+						</a>
+					</h2>
+					<ul class="card-list">
+						{brandTeas.map(tea => (
+							<li>
+								<TeaCard
+									brand={brand}
+									tea={tea}
+									steeps={groupedSteeps[tea._id.toString()] || []}
+								/>
+							</li>
+						))}
+					</ul>
+				</section>
+			);
+		})
+	}
+</Layout>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../../styles/tokens.scss' as tokens;
+
+	section {
+		margin-block-start: op.$size-fluid-4; 
+	}
+
+	h1 {
+		margin-block-end: 0;
+	}
+
+	h2 a {
+		color: tokens.$teal-9;
+		text-decoration-thickness: 1px;
+		font-weight: 900;
+
+		&:not(:hover):not(:focus) {
+			text-decoration: none;
+		}
+	}
+
+	.card-list {
+		display: grid;
+		--min: 30ch;
+		grid-template-columns: repeat(
+			auto-fill,
+			minmax(
+				min(100%, var(--min)),
+				1fr
+			));
+		gap: op.$size-fluid-2 op.$size-fluid-3;
+		margin-block: op.$size-fluid-2;
+	}
+</style>

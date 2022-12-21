@@ -1,0 +1,110 @@
+---
+import type { WithId } from 'mongodb';
+import type { Brand, Month, Steep, Tea } from '../types/api';
+
+export interface Props {
+	brand: WithId<Brand>,
+	tea: WithId<Tea>;
+	steeps: WithId<Steep>[];
+}
+
+const {brand, steeps, tea} = Astro.props;
+const titleId = `tea-in-brand-${tea._id.toString()}-header`;
+const steepCount = steeps.length === 1 ? '1 steep' : `${steeps.length} steeps`;
+
+// const today = new Date();
+// const currentMonth = today.toLocaleDateString('en-US', {month: 'long'}) as Month;
+---
+
+<article
+	aria-labelledby={titleId}
+	data-favorite={tea.favorited ? 'true' : undefined}
+	data-unavailable={tea.discontinued ? 'true' : undefined}
+>
+	<div class="bottom-border">
+		<p id={titleId} class="title">
+			<a href="/">
+				{tea.name}
+			</a>
+		</p>
+		<p class="subtitle">
+			{brand.name}
+		</p>
+	</div>
+	<div class="interpuncted bottom-border">
+		{tea.teaType?.length && <span>{tea.teaType.join(', ')}</span>}
+		<span>{steepCount}</span>
+		{tea.wishlist && <span><strong>In wishlist</strong></span>}
+	</div>
+	<div>
+		5 stars
+	</div>
+</article>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+	@import '../styles/mixins.scss';
+
+	article {
+		@include fully-clickable();
+		background-color: white;
+		border-radius: op.$radius-2;
+		box-shadow: var(--shadow);
+		border: 1px solid op.$gray-2;
+		color: var(--ink);
+		padding-block: op.$size-3;
+		
+		div {
+			padding-inline: op.$size-3;
+		}
+	}
+
+	.bottom-border {
+		padding-block-end: op.$size-2;
+		margin-block-end: op.$size-2;
+		border-block-end: 1px solid op.$gray-3;
+	}
+
+	.title {
+		font-size: op.$font-size-3;
+		font-weight: op.$font-weight-9;
+		line-height: op.$font-lineheight-1;
+
+		a {
+			color: tokens.$teal-9;
+			text-decoration-thickness: 1px;
+
+			&:not(:hover):not(:focus) {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.subtitle {
+		color: op.$stone-7;
+		font-weight: op.$font-weight-7;
+	}
+
+	.interpuncted {
+		margin-block-start: op.$size-3;
+		& > *:not(:last-child) {
+			&::after {
+				content: ' · '
+			}
+		}
+	}
+
+	[data-favorite] a::after {
+		content: '⭐';
+	}
+
+	[data-unavailable] {
+		background-color: op.$stone-2;
+		border: 1px solid op.$gray-3;
+
+		.bottom-border {
+			border-block-end: 1px solid op.$gray-4;
+		}
+	}
+</style>

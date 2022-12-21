@@ -33,9 +33,12 @@ const { title } = Astro.props;
 	main {
 		background-color: var(--surface);
 		box-shadow: op.$shadow-2;
-		border-radius: op.$radius-2;
-		margin: op.$size-4;
 		padding-block: op.$size-4;
 		padding-inline: op.$size-5;
+		
+		@media (op.$md-n-above) {
+			border-radius: op.$radius-2;
+			margin: op.$size-4;
+		}
 	}
 </style>
