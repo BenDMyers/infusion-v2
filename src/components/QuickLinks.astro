@@ -1,4 +1,4 @@
-<nav aria-labelledby="quick-links-header">
+<nav id="quick-links" aria-labelledby="quick-links-header">
 	<h2 id="quick-links-header">Quick Links</h2>
 	<ul>
 		<li>
@@ -26,6 +26,10 @@
 
 		min-width: 16ch;
 		max-height: 23.8ch;
+
+		@media (op.$md-n-below) {
+			display: none;
+		}
 	}
 
 	h2 {
@@ -55,6 +59,7 @@
 	a {
 		color: var(--accent-color);
 		font-weight: op.$font-weight-9;
+		text-decoration-thickness: 0.75px;
 		&:not(:hover):not(:focus) {
 			text-decoration: none;
 		}

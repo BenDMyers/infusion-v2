@@ -22,30 +22,21 @@ const { title } = Astro.props;
 	</head>
 	<body>
 		<NavBar />
-		<div class="core">
-			<QuickLinks />
-			<main>
-				<slot />
-			</main>
-		</div>
+		<main>
+			<slot />
+		</main>
 	</body>
 </html>
 
 <style lang="scss">
 	@use 'open-props-scss' as op;
 
-	.core {
-		display: grid;
-		grid-template-columns: 1fr 6fr;
-		margin-block: op.$size-fluid-2;
-		padding-inline: op.$size-fluid-2;
-		gap: op.$size-fluid-2;
-	}
-
 	main {
 		background-color: var(--surface);
 		box-shadow: op.$shadow-2;
 		border-radius: op.$radius-2;
-		min-height: 40ch;
+		margin: op.$size-4;
+		padding-block: op.$size-4;
+		padding-inline: op.$size-5;
 	}
 </style>

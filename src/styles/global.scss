@@ -3,7 +3,8 @@
 @use '@fontsource/sacramento/latin-400.css';
 
 :root {
-	--accent-color: #{$teal-9};
+	--accent-color: #{$teal-base};
+	--accent-color-hover: #{$teal-8};
 	--page-background: #{op.$stone-2};
 	--surface: #{op.$gray-0};
 	--brand-font: Sacramento;
@@ -15,5 +16,5 @@
 }
 
 body {
-	font-family: Lato, sans-serif;
+	font-family: var(--body-font), sans-serif;
 }
