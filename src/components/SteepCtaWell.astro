@@ -1,6 +1,7 @@
 ---
 import type { WithId } from 'mongodb';
 import type { Steep, Tea } from '../types/api';
+import { generateSteepCta } from '../utils/generate-steep-cta';
 import CtaWell from './CtaWell.astro'
 
 export interface Props {
@@ -10,11 +11,12 @@ export interface Props {
 };
 
 const {tea, steeps, url} = Astro.props;
+const body = generateSteepCta(tea, steeps);
 
 ---
 
 <CtaWell
-	body="I am a Steeposaurus"
+	body={body}
 	linkText="Log a Steep"
 	url={url}
 	iconName="coffee"

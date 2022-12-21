@@ -14,6 +14,7 @@
 @mixin cta {
 	background-color: tokens.$teal-9;
 	border-radius: op.$radius-2;
+	box-shadow: var(--shadow);
 	color: tokens.$teal-0;
 	font-weight: op.$font-weight-7;
 	padding-inline: op.$size-3;
