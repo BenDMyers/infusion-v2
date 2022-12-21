@@ -56,6 +56,7 @@ export type Tea = {
 	memo: string,
 	monthsAvailable?: Month[],
 	preferredStyles?: string,
+	price?: string,
 	recommendedAmount?: string,
 	recommendedHotOrIced: WithEmptyStringOption<HotOrIced>,
 	recommendedSteepTime?: string,

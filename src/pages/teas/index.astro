@@ -1,15 +1,23 @@
 ---
+import type { WithId } from 'mongodb';
 import { getAllBrands } from '../../api/brands';
 import { getSteepsGroupedByTeas } from '../../api/steeps';
 import { getTeasGroupedByBrands } from '../../api/teas';
 import TeaCard from '../../components/TeaCard.astro';
 import Layout from '../../layouts/Layout.astro';
+import type { Brand } from '../../types/api';
+import { sluggify } from '../../utils/slug';
 
 const [groupedTeas, brands, groupedSteeps] = await Promise.all([
 	getTeasGroupedByBrands(),
 	getAllBrands(),
 	getSteepsGroupedByTeas()
 ]);
+
+function getBrandUrl(brand: WithId<Brand>) {
+	const brandSlug = sluggify(brand.name);
+	return new URL(`/brands/${brandSlug}/`, Astro.url);
+}
 
 ---
 
@@ -27,7 +35,7 @@ const [groupedTeas, brands, groupedSteeps] = await Promise.all([
 			return (
 				<section aria-labelledby={`brand-${brandId}-heading`}>
 					<h2 id={`brand-${brandId}-heading`}>
-						<a href="/">
+						<a href={getBrandUrl(brand)}>
 							{brand.name}
 						</a>
 					</h2>

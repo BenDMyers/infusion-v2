@@ -1,0 +1,39 @@
+---
+import type { HotOrIced, WithEmptyStringOption } from '../types/api';
+
+export interface Props {
+	amount?: string;
+	degreesFahreheit?: number;
+	freeform?: boolean;
+	hotOrIced?: WithEmptyStringOption<HotOrIced>;
+	steepTime?: string | number;
+}
+
+let temp = '';
+if (Astro.props.hotOrIced === 'Iced') {
+	temp = 'Iced';
+} else if (Astro.props.degreesFahreheit) {
+	temp = `${Astro.props.degreesFahreheit.toString()} ℉`;
+}
+
+let time = '';
+if (Astro.props.steepTime) {
+	time = `for ${Astro.props.steepTime.toString()}`;
+}
+if (time && !Astro.props.freeform && temp !== 'Iced') {
+	time += ' min';
+}
+
+let amount = '';
+if (Astro.props.amount) {
+	if (temp || time) {
+		amount = `${Astro.props.amount} at`;
+	} else {
+		amount = Astro.props.amount;
+	}
+}
+
+const preparation = [amount, temp, time];
+---
+
+<>{preparation.filter(x => !!x).join(' ')}</>

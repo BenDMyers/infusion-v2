@@ -1,0 +1,19 @@
+<dl>
+	<slot />
+</dl>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+
+	dl {
+		display: grid;
+		--min: 30ch;
+		grid-template-columns: repeat(
+			auto-fill,
+			minmax(
+				min(100%, var(--min)),
+				1fr
+			));
+		gap: op.$size-4 op.$size-3;
+	}
+</style>

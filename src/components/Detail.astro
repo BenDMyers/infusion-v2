@@ -1,0 +1,39 @@
+---
+export interface Props {
+	name: string;
+};
+
+const {name} = Astro.props;
+---
+
+<div>
+	<dt>{name}</dt>
+	<dd>
+		<slot />
+	</dd>
+</div>
+
+<style is:global lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+
+	dt {
+		font-size: op.$font-size-0;
+		font-weight: op.$font-weight-7;
+		text-transform: uppercase;
+	}
+
+	dd {
+		font-size: op.$font-size-0;
+		
+		a {
+			color: tokens.$teal-9;
+			font-weight: op.$font-weight-7;
+			text-decoration-thickness: 1px;
+
+			&:not(:hover):not(:focus) {
+				text-decoration: none;
+			}
+		}
+	}
+</style>

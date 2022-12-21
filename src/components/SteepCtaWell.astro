@@ -1,0 +1,27 @@
+---
+import type { WithId } from 'mongodb';
+import type { Steep, Tea } from '../types/api';
+import CtaWell from './CtaWell.astro'
+
+export interface Props {
+	tea: WithId<Tea>;
+	steeps: WithId<Steep>[];
+	url: URL;
+};
+
+const {tea, steeps, url} = Astro.props;
+
+---
+
+<CtaWell
+	body="I am a Steeposaurus"
+	linkText="Log a Steep"
+	url={url}
+	iconName="coffee"
+/>
+
+<style is:global>
+	.cta-well {
+		margin-block: 1rem;
+	}
+</style>

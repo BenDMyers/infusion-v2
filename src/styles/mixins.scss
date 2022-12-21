@@ -1,3 +1,6 @@
+@use 'open-props-scss' as op;
+@use './tokens.scss' as tokens;
+
 @mixin fully-clickable {
 	position: relative;
 	
@@ -5,6 +8,31 @@
 		content: '';
 		inset: 0;
 		position: absolute;
+	}
+}
+
+@mixin cta {
+	background-color: tokens.$teal-9;
+	border-radius: op.$radius-2;
+	color: tokens.$teal-0;
+	font-weight: op.$font-weight-7;
+	padding-inline: op.$size-3;
+	padding-block: op.$size-2;
+	transition: background-color 0.2s ease-in-out;
+	text-decoration: none;
+
+	display: flex;
+	align-items: center;
+	gap: op.$size-2;
+	
+	&:hover {
+		background-color: tokens.$teal-10;
+	}
+
+	svg {
+		display: inline;
+		height: 1rem;
+		opacity: 0.8;
 	}
 }
 

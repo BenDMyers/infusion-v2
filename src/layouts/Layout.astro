@@ -5,9 +5,10 @@ import NavBar from '../components/NavBar.astro';
 
 export interface Props {
 	title: string;
+	prefetches?: URL[]
 }
 
-const { title } = Astro.props;
+const { title, prefetches } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -18,6 +19,9 @@ const { title } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="prefetch" href="/">
+		<link rel="prefetch" href="/teas/">
+		{prefetches?.map(url => <link rel="prefetch" href={url} />)}
 	</head>
 	<body>
 		<NavBar />

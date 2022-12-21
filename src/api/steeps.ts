@@ -1,12 +1,12 @@
-import type { WithId } from 'mongodb';
+import type { ObjectId, WithId } from 'mongodb';
 import type { Steep } from '../types/api';
 import { byDate } from '../utils/sort';
 import { getDatabase } from './client';
 
 export async function getAllSteeps() {
 	const db = await getDatabase();
-	const teasCollection = await db.collection('steeps');
-	const allSteeps = await (teasCollection.find({})).toArray() as WithId<Steep>[];
+	const steepsCollection = await db.collection('steeps');
+	const allSteeps = await (steepsCollection.find<WithId<Steep>>({})).toArray();
 	allSteeps.sort(byDate.desc);
 	return allSteeps;
 }
@@ -22,4 +22,14 @@ export async function getSteepsGroupedByTeas() {
 		groupedSteeps[teaId].push(steep);
 	}
 	return groupedSteeps;
+}
+
+export async function getSteepsForTea(teaId: ObjectId) {
+	const db = await getDatabase();
+	const steepsCollection = await db.collection('steeps');
+	const steeps = await (steepsCollection.find<WithId<Steep>>({
+		tea: teaId
+	})).toArray();
+	steeps.sort(byDate.desc);
+	return steeps;
 }
