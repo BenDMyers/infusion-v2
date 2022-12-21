@@ -17,7 +17,8 @@
     "astro": "^1.7.2",
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.1",
-    "open-props-scss": "^0.4.0"
+    "open-props-scss": "^0.4.0",
+    "remove-accents": "^0.4.4"
   },
   "devDependencies": {
     "sass": "^1.57.1"

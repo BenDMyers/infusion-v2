@@ -1,6 +1,7 @@
 ---
 import type { WithId } from 'mongodb';
 import type { Brand, Month, Steep, Tea } from '../types/api';
+import { sluggify } from '../utils/slug';
 
 export interface Props {
 	brand: WithId<Brand>,
@@ -9,8 +10,15 @@ export interface Props {
 }
 
 const {brand, steeps, tea} = Astro.props;
-const titleId = `tea-in-brand-${tea._id.toString()}-header`;
+const cardIdPrefix = `tea-card-${tea._id.toString()}`;
 const steepCount = steeps.length === 1 ? '1 steep' : `${steeps.length} steeps`;
+
+const titleId = `${cardIdPrefix}-header`;
+const brandId = `${cardIdPrefix}-brand`;
+
+const brandSlug = sluggify(brand.name);
+const teaSlug = sluggify(tea.name);
+const href = new URL(`/teas/${brandSlug}/${teaSlug}/`, Astro.url);
 
 // const today = new Date();
 // const currentMonth = today.toLocaleDateString('en-US', {month: 'long'}) as Month;
@@ -23,11 +31,11 @@ const steepCount = steeps.length === 1 ? '1 steep' : `${steeps.length} steeps`;
 >
 	<div class="bottom-border">
 		<p id={titleId} class="title">
-			<a href="/">
+			<a href={href} aria-describedby={brandId}>
 				{tea.name}
 			</a>
 		</p>
-		<p class="subtitle">
+		<p id={brandId} class="subtitle">
 			{brand.name}
 		</p>
 	</div>
@@ -84,6 +92,7 @@ const steepCount = steeps.length === 1 ? '1 steep' : `${steeps.length} steeps`;
 	.subtitle {
 		color: op.$stone-7;
 		font-weight: op.$font-weight-7;
+		margin-block-start: -0.075rem;
 	}
 
 	.interpuncted {
