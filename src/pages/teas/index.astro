@@ -105,13 +105,13 @@ function getBrandUrl(brand: WithId<Brand>) {
 		}
 
 		const {href} = cardLink;
-		const alreadyPrefetched = !!document.querySelector(`link[rel="prefetch"][href="${href}"]`);
+		const alreadyPrefetched = !!document.querySelector(`link[rel="prerender"][href="${href}"]`);
 		if (alreadyPrefetched) {
 			return;
 		}
 
 		const prefetch = document.createElement('link');
-		prefetch.setAttribute('rel', 'prefetch');
+		prefetch.setAttribute('rel', 'prerender');
 		prefetch.setAttribute('href', href);
 		document.head.appendChild(prefetch);
 	});
