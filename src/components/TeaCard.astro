@@ -37,14 +37,33 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 	return currentMax;
 }, '');
 
-// const today = new Date();
-// const currentMonth = today.toLocaleDateString('en-US', {month: 'long'}) as Month;
+type Availability = 'available' | 'unavailable' | 'leaving';
+let teaAvailability: Availability = 'available';
+let availabilityTooltip = '';
+
+const today = new Date();
+const currentMonth = today.toLocaleDateString('en-US', {month: 'long'}) as Month;
+const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
+	.toLocaleDateString('en-US', {month: 'long'}) as Month;
+const excludedFromCurrentMonth = !!(tea.monthsAvailable?.length) && !tea.monthsAvailable.includes(currentMonth);
+const leavingSoon = tea.monthsAvailable?.includes(currentMonth) && !tea.monthsAvailable.includes(nextMonth);
+
+if (tea.discontinued) {
+	teaAvailability = 'unavailable';
+	availabilityTooltip = 'This tea has been discontinued.';
+} else if (excludedFromCurrentMonth) {
+	teaAvailability = 'unavailable';
+	availabilityTooltip = 'This tea is not in stock this month.';
+} else if (leavingSoon) {
+	teaAvailability = 'leaving';
+	availabilityTooltip = 'This tea will no longer be available soon.';
+}
 ---
 
 <article
 	aria-labelledby={titleId}
 	data-favorite={tea.favorited ? 'true' : undefined}
-	data-unavailable={tea.discontinued ? 'true' : undefined}
+	data-availability={teaAvailability}
 >
 	<div class="bottom-border">
 		<p id={titleId} class="title">
@@ -59,19 +78,29 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 				/>
 			)}
 		</p>
-		<p id={brandId} class="subtitle">
-			<IconWithPopup
-				label={`${tea.name} discontinued`}
-				name="raphael:no"
-			>
-				This is a test of the Emergency Broadcast System.
-			</IconWithPopup>
-			{brand.name}
-		</p>
+		<div id={brandId} class="subtitle">
+			{teaAvailability === 'unavailable' && (
+				<IconWithPopup
+					label={`${tea.name} unavailable`}
+					name="raphael:no"
+				>
+					{availabilityTooltip}
+				</IconWithPopup>
+			)}
+			{teaAvailability === 'leaving' && (
+				<IconWithPopup
+					label={`${tea.name} leaving`}
+					name="mdi:warning"
+				>
+					{availabilityTooltip}
+				</IconWithPopup>
+			)}
+			<span class="brand">{brand.name}</span>
+		</div>
 	</div>
 	<div class="meta">
 		<div class="interpuncted">
-			{tea.teaType?.length && <span>{tea.teaType.join(', ')}</span>}
+			{!!tea.teaType?.length && <span>{tea.teaType.join(', ')}</span>}
 			<span>{steepCount}</span>
 			{tea.wishlist && <span><strong>In wishlist</strong></span>}
 		</div>
@@ -132,9 +161,12 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 
 	.subtitle {
 		font-size: op.$font-size-1;
-		color: op.$stone-7;
-		font-weight: op.$font-weight-7;
 		margin-block-start: -0.075rem;
+		
+		& .brand {
+			color: op.$stone-8;
+			font-weight: op.$font-weight-7;
+		}
 	}
 
 	.interpuncted {
@@ -153,7 +185,7 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 		justify-content: flex-end;
 	}
 
-	[data-unavailable] {
+	[data-availability="unavailable"] {
 		background-color: op.$stone-3;
 		border: 1px solid op.$gray-4;
 

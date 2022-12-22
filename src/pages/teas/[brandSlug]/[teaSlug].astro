@@ -69,7 +69,7 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		<Detail name="Brand">
 			<a href={brandUrl}>{brand?.name}</a>
 		</Detail>
-		{tea?.teaType && (
+		{!!tea?.teaType?.length && (
 			<Detail name="Type">
 				{tea.teaType.join(', ')}
 			</Detail>
@@ -79,7 +79,7 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 				{tea.caffeineLevel}
 			</Detail>
 		)}
-		{tea?.ingredients?.length && (
+		{!!tea?.ingredients?.length && (
 			<Detail name="Ingredients">
 				<span class="capitalize-first-letter">
 					{tea.ingredients.join(', ')}
@@ -182,7 +182,7 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 			text-transform: uppercase;
 		}
 	}
-	
+
 	.card-list > * + * {
 		margin-block-start: op.$size-4;
 	}
