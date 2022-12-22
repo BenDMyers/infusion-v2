@@ -16,22 +16,13 @@ if (rating === '') {
 }
 
 const five = new Array(5).fill('');
-
-function getStarClasses(arrayIndex: number) {
-	const classes = ['star'];
-	const conceptualIndex = arrayIndex + 1;
-	if (conceptualIndex <= ratingAsNumber) {
-		classes.push('active');
-	}
-	return classes.join(' ');
-}
 ---
 
 <>
 	<span class="visually-hidden">{screenreaderDescription}</span>
 	<span aria-hidden="true">
 		{five.map((_, index) => (
-			<span class={getStarClasses(index)}>
+			<span class:list={[{star: true, active: index + 1 <= ratingAsNumber}]}>
 				★
 			</span>
 		))}
@@ -43,6 +34,10 @@ function getStarClasses(arrayIndex: number) {
 
 	.star {
 		color: op.$stone-5;
+
+		@media print {
+			color: op.$stone-0;
+		}
 
 		&.active {
 			color: var(--ink);

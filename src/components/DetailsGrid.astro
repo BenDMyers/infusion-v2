@@ -1,16 +1,17 @@
 ---
 export interface Props {
 	minimumDetailWidth?: string;
+	minimumDetailWidthPrint?: string;
 }
 
-const {minimumDetailWidth = '30ch'} = Astro.props;
+const {minimumDetailWidth = '30ch', minimumDetailWidthPrint = '20ch'} = Astro.props;
 ---
 
 <dl>
 	<slot />
 </dl>
 
-<style define:vars={{minimumDetailWidth}} lang="scss">
+<style define:vars={{minimumDetailWidth, minimumDetailWidthPrint}} lang="scss">
 	@use 'open-props-scss' as op;
 
 	dl {
@@ -22,5 +23,15 @@ const {minimumDetailWidth = '30ch'} = Astro.props;
 				1fr
 			));
 		gap: op.$size-4 op.$size-3;
+
+		@media print {
+			grid-template-columns: repeat(
+				auto-fill,
+				minmax(
+					min(100%, var(--minimumDetailWidthPrint)),
+					1fr
+				));
+		}
 	}
+
 </style>

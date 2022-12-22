@@ -58,14 +58,14 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 ---
 
 <Layout
-	title={`${tea?.name} by ${brand?.name}`}
+	title={`${tea?.name} | ${brand?.name}`}
 	prefetches={[steepCtaUrl, brandUrl]}
 >
 	<hgroup>
 		<h1>{tea?.name}</h1>
 		<p class="subtitle">{brand?.name}</p>
 	</hgroup>
-	<DetailsGrid minimumDetailWidth="15ch">
+	<DetailsGrid minimumDetailWidthPrint="15ch">
 		<Detail name="Brand">
 			<a href={brandUrl}>{brand?.name}</a>
 		</Detail>
@@ -182,17 +182,8 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 			text-transform: uppercase;
 		}
 	}
-
-	.card-list {
-		display: grid;
-		--min: 50ch;
-		grid-template-columns: repeat(
-			auto-fill,
-			minmax(
-				min(100%, var(--min)),
-				1fr
-			));
-		gap: op.$size-fluid-4 op.$size-fluid-3;
-		margin-block: op.$size-fluid-2;
+	
+	.card-list > * + * {
+		margin-block-start: op.$size-4;
 	}
 </style>

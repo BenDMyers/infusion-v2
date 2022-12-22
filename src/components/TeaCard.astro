@@ -3,6 +3,7 @@ import type { WithId } from 'mongodb';
 import type { Brand, Month, Rating, Steep, Tea, WithEmptyStringOption } from '../types/api';
 import { sluggify } from '../utils/slug';
 import StaticRating from './StaticRating.astro';
+import {Icon} from 'astro-icon';
 
 export interface Props {
 	brand: WithId<Brand>,
@@ -49,18 +50,27 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 			<a href={href} aria-describedby={brandId}>
 				{tea.name}
 			</a>
+			{tea.favorited && (
+				<Icon
+					pack="fa-solid"
+					name="star"
+					aria-label="Favorited"
+				/>
+			)}
 		</p>
 		<p id={brandId} class="subtitle">
 			{brand.name}
 		</p>
 	</div>
-	<div class="interpuncted">
-		{tea.teaType?.length && <span>{tea.teaType.join(', ')}</span>}
-		<span>{steepCount}</span>
-		{tea.wishlist && <span><strong>In wishlist</strong></span>}
-	</div>
-	<div>
-		<StaticRating rating={highestRating} />
+	<div class="meta">
+		<div class="interpuncted">
+			{tea.teaType?.length && <span>{tea.teaType.join(', ')}</span>}
+			<span>{steepCount}</span>
+			{tea.wishlist && <span><strong>In wishlist</strong></span>}
+		</div>
+		<div>
+			<StaticRating rating={highestRating} />
+		</div>
 	</div>
 </article>
 
@@ -71,6 +81,9 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 
 	article {
 		@include fully-clickable();
+		display: flex;
+		flex-direction: column;
+		height: 100%;
 		background-color: white;
 		border-radius: op.$radius-2;
 		box-shadow: var(--shadow);
@@ -78,7 +91,7 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 		color: var(--ink);
 		padding-block: op.$size-3;
 		
-		div {
+		& > div {
 			padding-inline: op.$size-3;
 		}
 	}
@@ -86,11 +99,11 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 	.bottom-border {
 		padding-block-end: op.$size-2;
 		margin-block-end: op.$size-2;
-		border-block-end: 1px solid op.$gray-3;
+		// border-block-end: 1px solid op.$gray-3;
 	}
 
 	.title {
-		font-size: op.$font-size-3;
+		font-size: op.$font-size-2;
 		font-weight: op.$font-weight-9;
 		line-height: op.$font-lineheight-1;
 
@@ -102,16 +115,23 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 				text-decoration: none;
 			}
 		}
+
+		svg {
+			display: inline;
+			height: 0.9rem;
+			color: goldenrod;
+		}
 	}
 
 	.subtitle {
+		font-size: op.$font-size-1;
 		color: op.$stone-7;
 		font-weight: op.$font-weight-7;
 		margin-block-start: -0.075rem;
 	}
 
 	.interpuncted {
-		margin-block-start: op.$size-3;
+		margin-block-start: op.$size-2;
 		& > *:not(:last-child) {
 			&::after {
 				content: ' · '
@@ -119,13 +139,16 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 		}
 	}
 
-	[data-favorite] a::after {
-		content: '⭐';
+	.meta {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
 	}
 
 	[data-unavailable] {
-		background-color: op.$stone-2;
-		border: 1px solid op.$gray-3;
+		background-color: op.$stone-3;
+		border: 1px solid op.$gray-4;
 
 		.bottom-border {
 			border-block-end: 1px solid op.$gray-4;

@@ -1,5 +1,6 @@
 ---
 import type { WithId } from 'mongodb';
+import { Icon } from 'astro-icon';
 import { getBrandById } from '../api/brands';
 import type { Brand, Steep, Tea } from '../types/api';
 import { sluggify } from '../utils/slug';
@@ -39,7 +40,7 @@ const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 				{steep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
 			</time>
 		}
-		{isFavoriteSteep && <span>❤️</span>}
+		{isFavoriteSteep && <Icon pack="fa-solid" name="heart" focusable="false" aria-label="Favorited" />}
 	</p>
 	<DetailsGrid minimumDetailWidth="20ch">
 		<Detail name="Amounts">
@@ -81,7 +82,7 @@ const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 
 	@keyframes quick-flash {
 		0% {
-			background-color: op.$green-0;
+			background-color: op.$green-1;
 		}
 		100% {
 			background-color: inherit;
@@ -109,5 +110,12 @@ const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 	.title {
 		font-size: op.$font-size-3;
 		font-weight: op.$font-weight-7;
+
+		svg {
+			display: inline;
+			height: op.$font-size-3;
+			color: op.$pink-7;
+			margin-inline-start: op.$size-1;
+		}
 	}
 </style>
