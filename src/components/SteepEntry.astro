@@ -74,6 +74,7 @@ const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 			</Detail>
 		)}
 	</DetailsGrid>
+	{steep.review && <p class="review">{steep.review}</p>}
 </article>
 
 <style lang="scss">
@@ -90,7 +91,7 @@ const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 	}
 
 	article {
-		background-color: white;
+		background-color: var(--card-surface);
 		border-radius: op.$radius-2;
 		box-shadow: var(--shadow);
 		border: 1px solid op.$gray-2;
@@ -117,5 +118,10 @@ const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 			color: op.$pink-7;
 			margin-inline-start: op.$size-1;
 		}
+	}
+
+	.review {
+		margin-block-start: op.$size-3;
+		font-size: op.$font-size-0;
 	}
 </style>

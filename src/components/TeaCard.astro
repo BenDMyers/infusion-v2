@@ -4,6 +4,7 @@ import type { Brand, Month, Rating, Steep, Tea, WithEmptyStringOption } from '..
 import { sluggify } from '../utils/slug';
 import StaticRating from './StaticRating.astro';
 import {Icon} from 'astro-icon';
+import IconWithPopup from './IconWithPopup.astro';
 
 export interface Props {
 	brand: WithId<Brand>,
@@ -59,6 +60,12 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 			)}
 		</p>
 		<p id={brandId} class="subtitle">
+			<IconWithPopup
+				label={`${tea.name} discontinued`}
+				name="raphael:no"
+			>
+				This is a test of the Emergency Broadcast System.
+			</IconWithPopup>
 			{brand.name}
 		</p>
 	</div>
@@ -84,7 +91,7 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		background-color: white;
+		background-color: var(--card-surface);
 		border-radius: op.$radius-2;
 		box-shadow: var(--shadow);
 		border: 1px solid op.$gray-2;

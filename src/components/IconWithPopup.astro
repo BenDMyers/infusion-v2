@@ -1,0 +1,86 @@
+---
+import {Icon} from 'astro-icon';
+import type {Props as IconProps} from 'astro-icon/lib/Props';
+import { sluggify } from '../utils/slug';
+
+interface ComponentProps {
+	label: string;
+}
+
+export interface Props extends IconProps, ComponentProps {};
+
+const {label, ...iconProps} = Astro.props;
+const tooltipId = `tooltip-${sluggify(label)}`;
+
+---
+
+<details open>
+	<summary aria-describedby={tooltipId}>
+		<Icon {...iconProps} aria-hidden="true" focusable="false" />
+		<span class="visually-hidden">{label}</span>
+	</summary>
+	<div class="tooltip" id={tooltipId}>
+		<slot />
+	</div>
+</details>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+
+	details {
+		cursor: pointer;
+		display: inline-block;
+		position: relative;
+		transition: 0.15s background linear;
+	}
+
+	summary {
+		list-style: none;
+
+		svg {
+			height: 1rem;
+			margin-block-end: -0.075rem;
+			
+			&[astro-icon="mdi:warning"] {
+				color: goldenrod;
+			}
+
+			&[astro-icon="raphael:no"] {
+				color: op.$pink-7;
+			}
+		}
+
+		&:not(:hover):not(:focus-within) {
+			& + .tooltip {
+				display: none;
+			}
+		}
+	}
+
+	.tooltip {
+		cursor: auto;
+		// box-shadow: op.$shadow-3;
+		filter: drop-shadow(0px 1px 2px rgba(130,130,130,1));
+		background: var(--tooltip-surface);
+		padding: 15px;
+		width: 250px;
+		position: absolute;
+		left: -10px;
+		top: 35px;
+		border-radius: 4px;
+		right: 0;
+		z-index: op.$layer-important;
+		
+		&:before {
+			content: '';
+			border-bottom: 12px solid var(--tooltip-surface);
+			border-left: 8px solid transparent;
+			border-right: 8px solid transparent;
+			height: 0;
+			left: 10px;
+			position: absolute;
+			top: -10px;
+			width: 0;
+		}
+	}
+</style>
