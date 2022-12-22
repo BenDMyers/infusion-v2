@@ -36,13 +36,18 @@ const { title, prefetches } = Astro.props;
 
 	main {
 		background-color: var(--surface);
-		box-shadow: op.$shadow-2;
+		box-shadow: var(--shadow);
 		padding-block: op.$size-4;
 		padding-inline: op.$size-5;
 		
 		@media (op.$md-n-above) {
 			border-radius: op.$radius-2;
 			margin: op.$size-4;
+		}
+
+		@media print {
+			margin: 0 !important;
+			padding: 0 !important;
 		}
 	}
 </style>

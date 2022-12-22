@@ -11,7 +11,7 @@ export interface Props {
 const {body, iconName, linkText, url} = Astro.props;
 ---
 
-<div class="cta-well">
+<div class="cta-well no-print">
 	<Icon pack="fa-solid" name={iconName} />
 	<p class="body">{body}</p>
 	<a href={url}>

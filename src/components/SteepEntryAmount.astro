@@ -1,0 +1,24 @@
+---
+import type { SteepFormat } from '../types/api';
+
+export interface Props {
+	format: SteepFormat;
+	teabags?: number;
+	teaspoons?: number;
+	water?: number;
+};
+
+const {format, teabags, teaspoons, water} = Astro.props;
+
+const teaAmount = (format === 'Loose leaf') ?
+	`${teaspoons?.toString()} tsp tea` :
+	(teabags === 1 ? '1 teabag' : `${teabags?.toString()} teabags`);
+
+const bits = [teaAmount];
+
+if (water) {
+	bits.push(`${water.toString()} oz water`);
+}
+---
+
+<>{bits.join(', ')}</>

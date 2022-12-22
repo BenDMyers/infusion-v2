@@ -1,0 +1,113 @@
+---
+import type { WithId } from 'mongodb';
+import { getBrandById } from '../api/brands';
+import type { Brand, Steep, Tea } from '../types/api';
+import { sluggify } from '../utils/slug';
+import Detail from './Detail.astro';
+import DetailsGrid from './DetailsGrid.astro';
+import PreparationDetails from './PreparationDetails.astro';
+import StaticRating from './StaticRating.astro';
+import SteepEntryAmount from './SteepEntryAmount.astro';
+
+export interface Props {
+	highlightTea: boolean;
+	steep: WithId<Steep>;
+	tea: WithId<Tea>;
+}
+
+const {steep, tea, highlightTea} = Astro.props;
+let brand: WithId<Brand> | null;
+let teaUrl: URL | undefined;
+
+if (highlightTea) {
+	brand = await getBrandById(tea.vendor);
+	if (brand) {
+		const brandSlug = sluggify(brand.name);
+		const teaSlug = sluggify(tea.name);
+		teaUrl = new URL(`/teas/${brandSlug}/${teaSlug}/`, Astro.url);
+	}
+}
+
+const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
+---
+
+<article id={`steep-${steep._id}`}>
+	<p class="title">
+		{(highlightTea && !!teaUrl) ?
+			<a href={teaUrl}>{tea.name}</a> :
+			<time datetime={steep.date.toISOString()}>
+				{steep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
+			</time>
+		}
+		{isFavoriteSteep && <span>❤️</span>}
+	</p>
+	<DetailsGrid minimumDetailWidth="20ch">
+		<Detail name="Amounts">
+			<SteepEntryAmount
+				format={steep.format}
+				teabags={steep.numTeabags}
+				teaspoons={steep.amountOfLooseLeafTeaInTeaspoons}
+				water={steep.amountOfWaterInOunces}
+			/>
+		</Detail>
+		<Detail name="Preparation">
+			<PreparationDetails
+				steepTime={steep.steepTime}
+				degreesFahreheit={steep.degreesFahreheit}
+				hotOrIced={steep.hotOrIced}
+			/>
+		</Detail>
+		{Number(steep.reinfusions) > 0 && (
+			<Detail name="Reinfusions">
+				{steep.reinfusions} {Number(steep.reinfusions) === 1 ? ' time' : ' times'}
+			</Detail>
+		)}
+		{!!steep.rating && (
+			<Detail name="Rating">
+				<StaticRating rating={steep.rating} />
+			</Detail>
+		)}
+		{!!steep.preparationNotes && (
+			<Detail name="Notes">
+				{steep.preparationNotes}
+			</Detail>
+		)}
+	</DetailsGrid>
+</article>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+
+	@keyframes quick-flash {
+		0% {
+			background-color: op.$green-0;
+		}
+		100% {
+			background-color: inherit;
+		}
+	}
+
+	article {
+		background-color: white;
+		border-radius: op.$radius-2;
+		box-shadow: var(--shadow);
+		border: 1px solid op.$gray-2;
+		color: var(--ink);
+		padding: op.$size-3;
+
+		&:target {
+			animation: 3s quick-flash;
+		}
+
+		@media print {
+			border: none;
+			padding: 0;
+		}
+	}
+
+	.title {
+		font-size: op.$font-size-3;
+		font-weight: op.$font-weight-7;
+	}
+</style>

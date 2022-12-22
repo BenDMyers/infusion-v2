@@ -18,7 +18,9 @@ if (Astro.props.hotOrIced === 'Iced') {
 
 let time = '';
 if (Astro.props.steepTime) {
-	time = `for ${Astro.props.steepTime.toString()}`;
+	time = (Astro.props.degreesFahreheit || Astro.props.amount) ?
+		`for ${Astro.props.steepTime.toString()}` :
+		Astro.props.steepTime.toString();
 }
 if (time && !Astro.props.freeform && temp !== 'Iced') {
 	time += ' min';

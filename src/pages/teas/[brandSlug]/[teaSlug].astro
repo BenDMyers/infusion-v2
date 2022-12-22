@@ -8,6 +8,7 @@ import DetailsGrid from '../../../components/DetailsGrid.astro';
 import PreparationDetails from '../../../components/PreparationDetails.astro';
 import StaticRating from '../../../components/StaticRating.astro';
 import SteepCtaWell from '../../../components/SteepCtaWell.astro';
+import SteepEntry from '../../../components/SteepEntry.astro';
 import Layout from '../../../layouts/Layout.astro';
 import type { Rating, Steep, Tea, WithEmptyStringOption } from '../../../types/api';
 
@@ -49,7 +50,7 @@ const showRecommendationDetail = !!(
 );
 
 function getSteepHash(steepId: ObjectId) {
-	return `steep-entry-${steepId.toString()}`;
+	return `steep-${steepId.toString()}`;
 }
 
 const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
@@ -64,7 +65,7 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		<h1>{tea?.name}</h1>
 		<p class="subtitle">{brand?.name}</p>
 	</hgroup>
-	<DetailsGrid>
+	<DetailsGrid minimumDetailWidth="15ch">
 		<Detail name="Brand">
 			<a href={brandUrl}>{brand?.name}</a>
 		</Detail>
@@ -132,12 +133,30 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		)}
 	</DetailsGrid>
 	<section id="steeps" aria-labelledby="steeps-heading">
-		<h2 id="steeps-heading">Steeps</h2>
+		<h2
+			id="steeps-heading"
+			class:list={[{'no-print': !steeps.length}]}
+		>
+			Steeps
+		</h2>
 		<SteepCtaWell
 			tea={tea as WithId<Tea>}
 			steeps={steeps}
 			url={steepCtaUrl}
 		/>
+		{!!steeps.length && (
+			<ul class="card-list">
+				{steeps.map(steep => (
+					<li>
+						<SteepEntry
+							steep={steep}
+							tea={tea as WithId<Tea>}
+							highlightTea={false}
+						/>
+					</li>
+				))}
+			</ul>
+		)}
 	</section>
 </Layout>
 
@@ -162,5 +181,18 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		&::first-letter {
 			text-transform: uppercase;
 		}
+	}
+
+	.card-list {
+		display: grid;
+		--min: 50ch;
+		grid-template-columns: repeat(
+			auto-fill,
+			minmax(
+				min(100%, var(--min)),
+				1fr
+			));
+		gap: op.$size-fluid-4 op.$size-fluid-3;
+		margin-block: op.$size-fluid-2;
 	}
 </style>

@@ -20,3 +20,12 @@
 body {
 	font-family: var(--body-font), sans-serif;
 }
+
+@media print {
+	:root {
+		--shadow: none;
+	}
+	.no-print {
+		display: none !important;
+	}
+}
