@@ -92,3 +92,27 @@ function getBrandUrl(brand: WithId<Brand>) {
 		margin-block: op.$size-fluid-2;
 	}
 </style>
+
+<script>
+	document.addEventListener('mouseover', (event) => {
+		const target = event.target;
+		if (!target) {
+			return;
+		}
+		const cardLink = (target as HTMLElement).closest('.card-list article a') as HTMLAnchorElement | undefined;
+		if (!cardLink) {
+			return;
+		}
+
+		const {href} = cardLink;
+		const alreadyPrefetched = !!document.querySelector(`link[rel="prefetch"][href="${href}"]`);
+		if (alreadyPrefetched) {
+			return;
+		}
+
+		const prefetch = document.createElement('link');
+		prefetch.setAttribute('rel', 'prefetch');
+		prefetch.setAttribute('href', href);
+		document.head.appendChild(prefetch);
+	});
+</script>
