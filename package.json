@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@acab/reset.css": "^0.5.3",
+    "@astrojs/netlify": "^1.3.0",
     "@fontsource/lato": "^4.5.10",
     "@fontsource/sacramento": "^4.5.9",
     "astro": "^1.7.2",
