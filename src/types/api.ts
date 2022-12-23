@@ -39,7 +39,7 @@ export type Steep = {
 	/** @deprecated */
 	usedHoney: WithEmptyStringOption<FriendlyBoolean>,
 	/** @deprecated */
-	usedSugar: WithEmptyStringOption<FriendlyBoolean>
+	usedSweetener: WithEmptyStringOption<FriendlyBoolean>
 };
 
 export type SteepFormat = 'Loose leaf' | 'Teabag';

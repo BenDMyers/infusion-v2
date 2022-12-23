@@ -176,13 +176,6 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		font-weight: op.$font-weight-7;
 	}
 
-	.capitalize-first-letter {
-		display: block;
-		&::first-letter {
-			text-transform: uppercase;
-		}
-	}
-
 	.card-list > * + * {
 		margin-block-start: op.$size-4;
 	}

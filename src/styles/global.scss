@@ -31,3 +31,10 @@ body {
 		display: none !important;
 	}
 }
+
+.capitalize-first-letter {
+	display: block;
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}

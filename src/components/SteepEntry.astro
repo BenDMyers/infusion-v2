@@ -9,6 +9,7 @@ import DetailsGrid from './DetailsGrid.astro';
 import PreparationDetails from './PreparationDetails.astro';
 import StaticRating from './StaticRating.astro';
 import SteepEntryAmount from './SteepEntryAmount.astro';
+import AddinDetails from './AddinDetails.astro';
 
 export interface Props {
 	highlightTea: boolean;
@@ -30,6 +31,7 @@ if (highlightTea) {
 }
 
 const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
+const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.usedHoney, steep.usedSugar].includes('Yes');
 ---
 
 <article id={`steep-${steep._id}`}>
@@ -58,6 +60,11 @@ const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 				hotOrIced={steep.hotOrIced}
 			/>
 		</Detail>
+		{usedAnySweetener && (
+			<Detail name="Add-Ins">
+				<AddinDetails {...steep} />
+			</Detail>
+		)}
 		{Number(steep.reinfusions) > 0 && (
 			<Detail name="Reinfusions">
 				{steep.reinfusions} {Number(steep.reinfusions) === 1 ? ' time' : ' times'}

@@ -1,0 +1,22 @@
+---
+import type { FriendlyBoolean, WithEmptyStringOption } from '../types/api';
+
+export interface Props {
+	addins?: string[];
+	usedCreamer?: WithEmptyStringOption<FriendlyBoolean>;
+	usedHoney?: WithEmptyStringOption<FriendlyBoolean>;
+	usedSweetener?: WithEmptyStringOption<FriendlyBoolean>;
+}
+
+const {addins, usedCreamer, usedHoney, usedSweetener} = Astro.props;
+const uniqueAddins = new Set(addins || []);
+
+// COMPAT:
+if (usedSweetener === 'Yes') uniqueAddins.add('sweetener');
+if (usedCreamer === 'Yes') uniqueAddins.add('creamer');
+if (usedHoney === 'Yes') uniqueAddins.add('honey');
+
+const addinsUsed = Array.from(uniqueAddins).sort();
+---
+
+<span class="capitalize-first-letter">{addinsUsed.join(', ')}</span>
