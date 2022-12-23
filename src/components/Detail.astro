@@ -13,20 +13,19 @@ const {name} = Astro.props;
 	</dd>
 </div>
 
-<style is:global lang="scss">
+<style lang="scss">
+	@use 'sass:math';
 	@use 'open-props-scss' as op;
 	@use '../styles/tokens.scss' as tokens;
 
 	dt {
-		font-size: op.$font-size-0;
+		font-size: math.div((op.$font-size-0 + op.$font-size-1), 2);
 		font-weight: op.$font-weight-7;
 		text-transform: uppercase;
 	}
 
 	dd {
-		font-size: op.$font-size-0;
-		
-		a {
+		:global(a) {
 			color: tokens.$teal-9;
 			font-weight: op.$font-weight-7;
 			text-decoration-thickness: 1px;

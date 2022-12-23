@@ -31,7 +31,7 @@ if (highlightTea) {
 }
 
 const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
-const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.usedHoney, steep.usedSugar].includes('Yes');
+const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.usedHoney, steep.usedSweetener].includes('Yes');
 ---
 
 <article id={`steep-${steep._id}`}>
@@ -106,7 +106,12 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 		padding: op.$size-3;
 
 		&:target {
+			scroll-margin-block-start: op.$size-9;
 			animation: 3s quick-flash;
+		}
+
+		& > :global(*:not(:first-child)) {
+			margin-block-start: op.$size-4;
 		}
 
 		@media print {
@@ -128,7 +133,6 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 	}
 
 	.review {
-		margin-block-start: op.$size-3;
-		font-size: op.$font-size-0;
+		color: op.$gray-9;
 	}
 </style>
