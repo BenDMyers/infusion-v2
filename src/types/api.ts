@@ -22,7 +22,7 @@ export type Steep = {
 	addins?: string[],
 	amountOfLooseLeafTeaInTeaspoons?: number,
 	amountOfWaterInOunces?: number,
-	degreesFahreheit?: number,
+	degreesFahrenheit?: number,
 	format: SteepFormat,
 	hotOrIced: HotOrIced,
 	numTeabags?: number,

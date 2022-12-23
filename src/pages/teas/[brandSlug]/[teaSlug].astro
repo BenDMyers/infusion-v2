@@ -95,7 +95,7 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 			<Detail name="Recommendation">
 				<PreparationDetails
 					amount={tea.recommendedAmount}
-					degreesFahreheit={
+					degreesFahrenheit={
 						(tea.recommendedSteepTemperature && tea.recommendedSteepTemperature > 0) ?
 							tea.recommendedSteepTemperature :
 							undefined

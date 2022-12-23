@@ -3,7 +3,7 @@ import type { HotOrIced, WithEmptyStringOption } from '../types/api';
 
 export interface Props {
 	amount?: string;
-	degreesFahreheit?: number;
+	degreesFahrenheit?: number;
 	freeform?: boolean;
 	hotOrIced?: WithEmptyStringOption<HotOrIced>;
 	steepTime?: string | number;
@@ -12,13 +12,13 @@ export interface Props {
 let temp = '';
 if (Astro.props.hotOrIced === 'Iced') {
 	temp = 'Iced';
-} else if (Astro.props.degreesFahreheit) {
-	temp = `${Astro.props.degreesFahreheit.toString()} ℉`;
+} else if (Astro.props.degreesFahrenheit) {
+	temp = `${Astro.props.degreesFahrenheit.toString()} ℉`;
 }
 
 let time = '';
 if (Astro.props.steepTime) {
-	time = (Astro.props.degreesFahreheit || Astro.props.amount) ?
+	time = (Astro.props.degreesFahrenheit || Astro.props.amount) ?
 		`for ${Astro.props.steepTime.toString()}` :
 		Astro.props.steepTime.toString();
 }
