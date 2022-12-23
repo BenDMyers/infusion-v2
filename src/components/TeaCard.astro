@@ -111,6 +111,7 @@ if (tea.discontinued) {
 </article>
 
 <style lang="scss">
+	@use 'sass:math';
 	@use 'open-props-scss' as op;
 	@use '../styles/tokens.scss' as tokens;
 	@import '../styles/mixins.scss';
@@ -139,6 +140,8 @@ if (tea.discontinued) {
 	}
 
 	.title {
+		$reserved-space: 0.5rem;
+
 		font-size: op.$font-size-2;
 		font-weight: op.$font-weight-9;
 		line-height: op.$font-lineheight-1;
@@ -148,6 +151,7 @@ if (tea.discontinued) {
 		a {
 			color: tokens.$teal-9;
 			text-decoration-thickness: 1px;
+			padding-inline-end: math.div($reserved-space, 2);
 
 			&:not(:hover):not(:focus) {
 				text-decoration: none;
@@ -158,6 +162,9 @@ if (tea.discontinued) {
 			display: inline-block;
 			height: 0.9rem;
 			color: goldenrod;
+			position: absolute;
+			margin-inline-start: 0.5rem;
+			transform: translate(-$reserved-space, 0.5ex);
 		}
 	}
 
