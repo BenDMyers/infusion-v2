@@ -1,0 +1,120 @@
+---
+import type { WithId } from 'mongodb';
+import type { Brand, Tea } from '../types/api';
+import normalizeUrl from 'normalize-url';
+import { sluggify } from '../utils/slug';
+import { choose } from '../utils/choose';
+
+export interface Props {
+	brand: WithId<Brand>;
+	teas: WithId<Tea>[];
+};
+
+const {brand, teas = []} = Astro.props;
+
+const brandSlug = sluggify(brand.name);
+const href = new URL(`/brands/${brandSlug}/`, Astro.url);
+
+const brandSite = brand.url && normalizeUrl(brand.url, {
+	stripProtocol: true
+});
+
+let teaList = '';
+switch (teas.length) {
+	case 0:
+		break;
+	case 1:
+		teaList = teas[0].name.bold();
+		break;
+	case 2:
+		teaList = `${teas[0].name.bold()} and ${teas[1].name.bold()}`;
+		break;
+	case 3:
+		teaList = `${teas[0].name.bold()}, ${teas[1].name.bold()}, and ${teas[2].name.bold()}`;
+		break;
+	default:
+		const firstRandomTea = choose(teas);
+		let secondRandomTea: WithId<Tea>;
+		do {
+			secondRandomTea = choose(teas);
+		} while (secondRandomTea === firstRandomTea);
+		const [firstName, secondName] = [firstRandomTea.name, secondRandomTea.name].sort();
+		const remainingTeas = teas.length - 2;
+		teaList = `${firstName.bold()}, ${secondName.bold()}, and <b>${remainingTeas} others</b>`
+}
+if (brand.name === 'Custom blends') {
+	let highlightedCustomBlend = choose(teas);
+	teaList = `${highlightedCustomBlend.name.bold()} and <b>${teas.length - 1} others</b>`;
+}
+---
+
+<article>
+	<div>
+		<p class="title">
+			<a href={href}>
+				{brand.name}
+			</a>
+		</p>
+		{!!brandSite && <p class="brand-site">{brandSite}</p>}
+	</div>
+	{!!teaList && (
+		<div class="highlighted-teas">
+			<p>
+				<Fragment set:html={teaList} />
+			</p>
+		</div>
+	)}
+</article>
+
+<style lang="scss">
+	@use 'sass:math';
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+	@import '../styles/mixins.scss';
+
+	article {
+		@include fully-clickable();
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background-color: var(--card-surface);
+		border-radius: op.$radius-2;
+		box-shadow: var(--shadow);
+		border: 1px solid op.$gray-2;
+		color: var(--ink);
+		padding-block: op.$size-3;
+
+		& > div {
+			padding-inline: op.$size-3;
+		}
+	}
+
+	.title {
+		font-size: op.$font-size-2;
+		font-weight: op.$font-weight-9;
+		line-height: op.$font-lineheight-1;
+		display: inline-block;
+		width: 100%;
+
+		a {
+			color: tokens.$teal-9;
+			text-decoration-thickness: 1px;
+
+			&:not(:hover):not(:focus) {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.brand-site {
+		font-size: math.div((op.$font-size-0 + op.$font-size-1), 2);
+		font-weight: op.$font-weight-7;
+		color: op.$stone-7;
+	}
+
+	.highlighted-teas {
+		color: op.$stone-9;
+		margin-block-start: auto;
+		padding-block-start: op.$size-3;
+	}
+</style>
