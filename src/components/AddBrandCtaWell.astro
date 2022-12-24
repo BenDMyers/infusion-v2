@@ -1,0 +1,13 @@
+---
+import CtaWell from './CtaWell.astro'
+
+const url = new URL('/brands/new/', Astro.url);
+
+---
+
+<CtaWell
+	body="boy howdy add a brand"
+	iconName="tag"
+	linkText="Add a Brand"
+	url={url}
+/>

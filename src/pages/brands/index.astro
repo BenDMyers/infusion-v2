@@ -1,6 +1,7 @@
 ---
 import { getAllBrands } from '../../api/brands';
 import { getTeasGroupedByBrands } from '../../api/teas';
+import AddBrandCtaWell from '../../components/AddBrandCtaWell.astro';
 import BrandCard from '../../components/BrandCard.astro';
 import Layout from '../../layouts/Layout.astro';
 
@@ -20,6 +21,7 @@ const [brands, groupedTeas] = await Promise.all([
 			/>
 		))}
 	</ul>
+	<AddBrandCtaWell />
 </Layout>
 
 <style lang="scss">
@@ -38,5 +40,9 @@ const [brands, groupedTeas] = await Promise.all([
 			));
 		gap: op.$size-fluid-2 op.$size-fluid-3;
 		margin-block: op.$size-fluid-2;
+	}
+
+	:global(.cta-well) {
+		margin-block: op.$size-fluid-3;
 	}
 </style>
