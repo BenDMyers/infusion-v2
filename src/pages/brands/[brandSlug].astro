@@ -1,0 +1,95 @@
+---
+import normalizeUrl from 'normalize-url';
+import { getBrandBySlug } from '../../api/brands';
+import { getSteepsGroupedByTeas } from '../../api/steeps';
+import { getTeasForBrand } from '../../api/teas';
+import Detail from '../../components/Detail.astro';
+import DetailsGrid from '../../components/DetailsGrid.astro';
+import TeaCard from '../../components/TeaCard.astro';
+import Layout from '../../layouts/Layout.astro';
+
+const {brandSlug} = Astro.params;
+if (!brandSlug) {
+	return;
+}
+
+const [brand, groupedSteeps] = await Promise.all([
+	getBrandBySlug(brandSlug),
+	getSteepsGroupedByTeas()
+]);
+
+if (!brand) {
+	Astro.redirect('/');
+	return;
+}
+
+const teas = await getTeasForBrand(brand._id) || [];
+
+let teasAddedLabel = `${teas.length} teas`;
+if (teas.length === 0) {
+	teasAddedLabel = 'None';
+} else if (teas.length === 1) {
+	teasAddedLabel = '1 tea';
+}
+
+---
+
+<Layout title={brand.name}>
+	<h1>{brand.name}</h1>
+	<DetailsGrid>
+		{!!brand.url && (
+			<Detail name="Site">
+				<a href={brand.url}>
+					{normalizeUrl(brand.url, {stripProtocol: true})}
+				</a>
+			</Detail>
+		)}
+		{!!brand.twitter && (
+			<Detail name="Twitter">
+				<a href={`https://twitter.com/${brand.twitter}`}>
+					@{brand.twitter}
+				</a>
+			</Detail>
+		)}
+		<Detail name="Teas Added">
+			{teasAddedLabel}
+		</Detail>
+	</DetailsGrid>
+	<section id="teas" aria-labelledby="teas-heading">
+		<h2 id="teas-heading">Teas</h2>
+		<ul class="card-list">
+			{teas.map(tea => (
+				<li>
+					<TeaCard
+						brand={brand}
+						tea={tea}
+						steeps={groupedSteeps[tea._id.toString()] || []}
+					/>
+				</li>
+			))}
+		</ul>
+	</section>
+</Layout>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../../styles/tokens.scss' as tokens;
+
+	.card-list {
+		display: grid;
+		--min: 30ch;
+		grid-template-columns: repeat(
+			auto-fill,
+			minmax(
+				min(100%, var(--min)),
+				1fr
+			));
+		gap: op.$size-fluid-2 op.$size-fluid-3;
+		margin-block: op.$size-fluid-2;
+	}
+
+	:global(dl) {
+		margin-block-start: op.$size-fluid-1;
+		margin-block-end: op.$size-fluid-2;
+	}
+</style>

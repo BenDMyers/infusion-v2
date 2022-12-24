@@ -1,4 +1,4 @@
-import type { WithId } from 'mongodb';
+import type { ObjectId, WithId } from 'mongodb';
 import type { Tea } from '../types/api';
 import { sluggify } from '../utils/slug';
 import { byName } from '../utils/sort';
@@ -39,4 +39,14 @@ export async function getTeaBySlugs(brandSlug: string, teaSlug: string) {
 	).toArray();
 	const tea = teasForBrand.find(tea => (sluggify(tea.name) === teaSlug));
 	return tea;
+}
+
+export async function getTeasForBrand(brandId: ObjectId) {
+	const db = await getDatabase();
+	const teasCollection = await db.collection('teas');
+	const teas = await (teasCollection.find<WithId<Tea>>({
+		vendor: brandId
+	})).toArray();
+	teas.sort(byName.asc);
+	return teas;
 }
