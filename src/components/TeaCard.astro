@@ -111,6 +111,7 @@ if (tea.discontinued) {
 </article>
 
 <style lang="scss">
+	@use 'sass:color';
 	@use 'sass:math';
 	@use 'open-props-scss' as op;
 	@use '../styles/tokens.scss' as tokens;
@@ -197,5 +198,11 @@ if (tea.discontinued) {
 	[data-availability="unavailable"] {
 		background-color: op.$stone-3;
 		border: 1px solid op.$gray-4;
+
+		.subtitle {
+			.brand {
+				color: color.scale(op.$stone-8, $lightness: -10%);
+			}
+		}
 	}
 </style>
