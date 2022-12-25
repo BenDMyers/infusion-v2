@@ -24,7 +24,7 @@ const [tea, brand] = await Promise.all([
 ]);
 
 const steeps = tea ? await getSteepsForTea(tea._id) : [];
-const mostRecentSteep: Steep | undefined = steeps[0];
+const mostRecentSteep: WithId<Steep> | undefined = steeps[0];
 const favoriteSteep = tea?.favoriteSteep ?
 	steeps.find(steep => (steep._id.toString() === tea.favoriteSteep?.toString())) :
 	undefined;
@@ -117,7 +117,9 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		</Detail>
 		{mostRecentSteep && (
 			<Detail name="Last Steeped">
-				{mostRecentSteep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
+				<a href={`#${getSteepHash(mostRecentSteep._id)}`}>
+					{mostRecentSteep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
+				</a>
 			</Detail>
 		)}
 		{favoriteSteep && (
