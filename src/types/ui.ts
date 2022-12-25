@@ -4,3 +4,5 @@ export type Detail = {
 }
 
 export type DetailList = Detail[];
+
+export type Availability = 'available' | 'unavailable' | 'leaving';

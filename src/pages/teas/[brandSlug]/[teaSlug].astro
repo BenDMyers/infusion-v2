@@ -3,6 +3,7 @@ import type { ObjectId, WithId } from 'mongodb';
 import { getBrandBySlug } from '../../../api/brands';
 import { getSteepsForTea } from '../../../api/steeps';
 import { getTeaBySlugs } from '../../../api/teas';
+import AvailabilityDetail from '../../../components/AvailabilityDetail.astro';
 import Detail from '../../../components/Detail.astro';
 import DetailsGrid from '../../../components/DetailsGrid.astro';
 import PreparationDetails from '../../../components/PreparationDetails.astro';
@@ -106,6 +107,11 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 				/>
 			</Detail>
 		)}
+		<AvailabilityDetail
+			availability={tea?.availability}
+			discontinued={tea?.discontinued}
+			monthsAvailable={tea?.monthsAvailable}
+		/>
 		<Detail name="Steeped">
 			{steeps.length} {steeps.length === 1 ? ' time' : ' times'}
 		</Detail>

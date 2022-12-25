@@ -1,6 +1,7 @@
 ---
 import type { WithId } from 'mongodb';
 import type { Brand, Month, Rating, Steep, Tea, WithEmptyStringOption } from '../types/api';
+import type { Availability } from '../types/ui';
 import { sluggify } from '../utils/slug';
 import StaticRating from './StaticRating.astro';
 import {Icon} from 'astro-icon';
@@ -37,7 +38,6 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 	return currentMax;
 }, '');
 
-type Availability = 'available' | 'unavailable' | 'leaving';
 let teaAvailability: Availability = 'available';
 let availabilityTooltip = '';
 

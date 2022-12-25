@@ -1,0 +1,83 @@
+---
+import type { Month } from '../types/api';
+import { formatContiguousMonths } from '../utils/format-contiguous-months';
+import Detail from './Detail.astro';
+import IconWithPopup from './IconWithPopup.astro';
+
+export interface Props {
+	availability?: string;
+	discontinued?: boolean;
+	monthsAvailable?: Month[];
+}
+
+const {availability, discontinued, monthsAvailable} = Astro.props;
+
+const availableAllYear = (
+	!monthsAvailable ||
+	monthsAvailable.length === 0 ||
+	monthsAvailable.length === 12
+);
+
+const today = new Date();
+const currentMonth = today.toLocaleDateString('en-US', {month: 'long'}) as Month;
+const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
+	.toLocaleDateString('en-US', {month: 'long'}) as Month;
+const unavailableNow = monthsAvailable?.length && !monthsAvailable.includes(currentMonth);
+const unavailableSoon = monthsAvailable?.length && !monthsAvailable.includes(nextMonth);
+const formattedContiguousMonths = formatContiguousMonths(monthsAvailable);
+---
+
+{(function () {
+	if (discontinued) {
+		return (
+			<Detail name="Availability">
+				<IconWithPopup
+					name="raphael:no"
+					label="Tea unavailable"
+				>
+					This tea has been discontinued.
+				</IconWithPopup>&nbsp;Discontinued
+				{availability && <>&nbsp;({availability})</>}
+			</Detail>
+		);
+	}
+
+	if (availableAllYear) {
+		return null;
+	}
+
+	if (unavailableNow) {
+		return (
+			<Detail name="Availability">
+				<IconWithPopup
+					name="raphael:no"
+					label="Tea unavailable"
+				>
+					This tea is not in stock this month.
+				</IconWithPopup>&nbsp;{formattedContiguousMonths}
+				{availability && <>&nbsp;({availability})</>}
+			</Detail>
+		);
+	}
+
+	if (unavailableSoon) {
+		return (
+			<Detail name="Availability">
+				<IconWithPopup
+					name="mdi:warning"
+					label="Tea leaving"
+				>
+					This tea will no longer be available soon.
+				</IconWithPopup>&nbsp;{formattedContiguousMonths}
+				{availability && <>&nbsp;({availability})</>}
+			</Detail>
+		);
+	}
+
+	return (
+		<Detail name="Availability">
+			{formattedContiguousMonths}
+			{availability && <>&nbsp;({availability})</>}
+		</Detail>
+	);
+})()}
