@@ -46,6 +46,7 @@ const five = new Array(5).fill('');
 		color: op.$stone-5;
 		height: op.$font-size-1;
 		width: op.$font-size-1;
+		pointer-events: none;
 
 		@media print {
 			color: op.$stone-0;
@@ -53,6 +54,16 @@ const five = new Array(5).fill('');
 
 		&.active {
 			color: var(--ink);
+		}
+
+		@media (forced-colors: active) {
+			&:not(.active) {
+				fill: none;
+				opacity: 40%;
+			}
+			&.active {
+				color: CanvasText;
+			}
 		}
 	}
 </style>

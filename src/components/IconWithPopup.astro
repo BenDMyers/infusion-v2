@@ -85,6 +85,12 @@ const tooltipId = `tooltip-${sluggify(label)}`;
 			position: absolute;
 			top: -10px;
 			width: 0;
+
+			@media (forced-colors: active) {
+				border-bottom: 12px solid Canvas;
+				border-left: 8px solid Canvas;
+				border-right: 8px solid Canvas;
+			}
 		}
 	}
 </style>
