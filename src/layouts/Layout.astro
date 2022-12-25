@@ -3,6 +3,7 @@ import '@fontsource/lato/400.css';
 import '@fontsource/lato/700.css';
 import '@fontsource/lato/900.css';
 import '../styles/main.scss';
+import {Sprite} from 'astro-icon';
 import NavBar from '../components/NavBar.astro';
 
 export interface Props {
@@ -25,12 +26,14 @@ const { title, prefetches } = Astro.props;
 		<link rel="prefetch" href="/teas/">
 		{prefetches?.map(url => <link rel="prefetch" href={url} />)}
 	</head>
-	<body>
-		<NavBar />
-		<main>
-			<slot />
-		</main>
-	</body>
+	<Sprite.Provider>
+		<body>
+			<NavBar />
+			<main>
+				<slot />
+			</main>
+		</body>
+	</Sprite.Provider>
 </html>
 
 <style lang="scss">
