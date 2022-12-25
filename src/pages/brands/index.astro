@@ -15,10 +15,12 @@ const [brands, groupedTeas] = await Promise.all([
 	<h1>Brands</h1>
 	<ul class="card-list">
 		{brands.map(brand => (
-			<BrandCard
-				brand={brand}
-				teas={groupedTeas[brand._id.toString()]}
-			/>
+			<li>
+				<BrandCard
+					brand={brand}
+					teas={groupedTeas[brand._id.toString()]}
+				/>
+			</li>
 		))}
 	</ul>
 	<AddBrandCtaWell />
