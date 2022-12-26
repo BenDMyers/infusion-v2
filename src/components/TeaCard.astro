@@ -6,6 +6,7 @@ import { sluggify } from '../utils/slug';
 import StaticRating from './StaticRating.astro';
 import {Icon} from 'astro-icon';
 import IconWithPopup from './IconWithPopup.astro';
+import EllipsisWithDropdownMenu from './EllipsisWithDropdownMenu.astro';
 
 export interface Props {
 	brand: WithId<Brand>,
@@ -78,6 +79,11 @@ if (tea.discontinued) {
 				/>
 			)}
 		</p>
+		<EllipsisWithDropdownMenu label={`Menu for ${tea.name}`}>
+			<li>
+				<a href="/">boop</a>
+			</li>
+		</EllipsisWithDropdownMenu>
 		<div id={brandId} class="subtitle">
 			{teaAvailability === 'unavailable' && (
 				<IconWithPopup
@@ -117,6 +123,8 @@ if (tea.discontinued) {
 	@use '../styles/tokens.scss' as tokens;
 	@import '../styles/mixins.scss';
 
+	$ellipsis-width: 5ch;
+
 	article {
 		@include fully-clickable();
 		display: flex;
@@ -147,7 +155,7 @@ if (tea.discontinued) {
 		font-weight: op.$font-weight-9;
 		line-height: op.$font-lineheight-1;
 		display: inline-block;
-		width: 100%;
+		width: calc(100% - $ellipsis-width);
 
 		a {
 			color: tokens.$teal-9;
@@ -167,6 +175,13 @@ if (tea.discontinued) {
 			margin-inline-start: 0.5rem;
 			transform: translate(-$reserved-space, 0.5ex);
 		}
+	}
+
+	:global(.ellipsis-menu) {
+		float: right;
+		margin-block-start: -0.7rem;
+		margin-inline-end: -1.5rem;
+		position: relative;
 	}
 
 	.subtitle {

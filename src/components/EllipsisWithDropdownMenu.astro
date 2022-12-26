@@ -1,0 +1,102 @@
+---
+import {Sprite} from 'astro-icon';
+
+export interface Props {
+	label?: string;
+};
+
+const {
+	label = 'Menu'
+} = Astro.props;
+---
+
+<details class="ellipsis-menu">
+	<summary aria-label={label}>
+		<Sprite
+			name="mdi:ellipsis-horizontal"
+			aria-hidden="true"
+			focusable="false"
+		/>
+	</summary>
+	<menu>
+		<slot />
+	</menu>
+</details>
+
+<style lang="scss">
+	@use 'sass:color';
+	@use 'sass:math';
+	@use 'open-props-scss' as op;
+
+	summary {
+		list-style: none;
+		width: 5ch;
+		// outline: 1px solid tomato;
+		padding: op.$size-1;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		svg {
+			height: op.$font-size-4;
+			margin-block-end: -0.075rem;
+			width: 3ch;
+			opacity: 0.8;
+		}
+
+		&:hover svg {
+			background-color: color.scale(op.$stone-3, $alpha: -30%);
+			
+			:global([data-availability="unavailable"]) & {
+				background-color: color.scale(op.$stone-5, $alpha: -50%);
+			}
+		}
+	}
+
+	menu {
+		cursor: auto;
+		// box-shadow: op.$shadow-3;
+		filter: drop-shadow(0px 1px 2px rgba(130,130,130,1));
+		background: var(--tooltip-surface);
+		padding: 15px;
+		width: 250px;
+		position: absolute;
+		left: -10px;
+		top: 35px;
+		border-radius: 4px;
+		right: 0;
+		z-index: op.$layer-important;
+		list-style: none;
+		
+		&:before {
+			content: '';
+			border-bottom: 12px solid var(--tooltip-surface);
+			border-left: 8px solid transparent;
+			border-right: 8px solid transparent;
+			height: 0;
+			left: 10px;
+			position: absolute;
+			top: -10px;
+			width: 0;
+
+			@media (forced-colors: active) {
+				border-bottom: 12px solid Canvas;
+				border-left: 8px solid Canvas;
+				border-right: 8px solid Canvas;
+			}
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('click', function(event) {
+		const openDropdown = document.querySelector<HTMLDetailsElement>('.ellipsis-menu[open]');
+		if (event.target && !!openDropdown) {
+			const target = event.target as HTMLElement;
+			if (!target.closest('.ellipsis-menu[open]')) {
+				openDropdown.open = false;
+			}
+		}
+	});
+</script>
