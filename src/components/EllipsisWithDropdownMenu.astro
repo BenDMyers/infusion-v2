@@ -27,6 +27,8 @@ const {
 	@use 'sass:color';
 	@use 'sass:math';
 	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+	@import '../styles/mixins.scss';
 
 	summary {
 		list-style: none;
@@ -42,7 +44,7 @@ const {
 			height: op.$font-size-4;
 			margin-block-end: -0.075rem;
 			width: 3ch;
-			opacity: 0.8;
+			opacity: 0.7;
 		}
 
 		&:hover svg {
@@ -52,6 +54,13 @@ const {
 				background-color: color.scale(op.$stone-5, $alpha: -50%);
 			}
 		}
+
+		&:focus-visible {
+			outline: none !important;
+			svg {
+				outline: 3px solid tokens.$teal-8;
+			}
+		}
 	}
 
 	menu {
@@ -59,10 +68,10 @@ const {
 		// box-shadow: op.$shadow-3;
 		filter: drop-shadow(0px 1px 2px rgba(130,130,130,1));
 		background: var(--tooltip-surface);
-		padding: 15px;
-		width: 250px;
+		min-width: max-content;
 		position: absolute;
-		left: -10px;
+		// left: -10px;
+		left: -50px;
 		top: 35px;
 		border-radius: 4px;
 		right: 0;
@@ -75,7 +84,7 @@ const {
 			border-left: 8px solid transparent;
 			border-right: 8px solid transparent;
 			height: 0;
-			left: 10px;
+			left: 62px;
 			position: absolute;
 			top: -10px;
 			width: 0;
@@ -85,6 +94,51 @@ const {
 				border-left: 8px solid Canvas;
 				border-right: 8px solid Canvas;
 			}
+		}
+
+		:global(li) {
+			@include fully-clickable();
+
+			display: flex;
+			align-items: center;
+			gap: 0.3rem;
+			// outline: 1px dashed cornflowerblue;
+			padding: 5px 12px;
+			color: var(--ink);
+			min-width: max-content;
+
+			&:not(:last-child) {
+				border-block-end: 1px solid op.$stone-4;
+			}
+
+			&:hover {
+				background-color: op.$stone-2;
+			}
+
+			&:has(:focus-visible) {
+				outline: 3px solid tokens.$teal-8;
+				&  :global(:focus-visible) {
+					outline: none;
+				}
+			}
+
+			:global(a) {
+				color: inherit;
+				text-decoration: none;
+				// font-weight: op.$font-weight-6;
+			}
+
+			&.danger {
+				color: op.$pink-9;
+			}
+		}
+
+		:global(svg) {
+			display: inline;
+			aspect-ratio: 1 / 1;
+			height: 1rem;
+			width: 1rem;
+			pointer-events: none;
 		}
 	}
 </style>

@@ -1,6 +1,6 @@
 ---
 import type { WithId } from 'mongodb';
-import { Icon } from 'astro-icon';
+import { Icon, Sprite } from 'astro-icon';
 import { getBrandById } from '../api/brands';
 import type { Brand, Steep, Tea } from '../types/api';
 import { sluggify } from '../utils/slug';
@@ -10,6 +10,7 @@ import PreparationDetails from './PreparationDetails.astro';
 import StaticRating from './StaticRating.astro';
 import SteepEntryAmount from './SteepEntryAmount.astro';
 import AddinDetails from './AddinDetails.astro';
+import EllipsisWithDropdownMenu from './EllipsisWithDropdownMenu.astro';
 
 export interface Props {
 	highlightTea: boolean;
@@ -35,6 +36,65 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 ---
 
 <article id={`steep-${steep._id}`}>
+	<EllipsisWithDropdownMenu>
+		<>
+		<li>
+			<Sprite
+				aria-hidden="true"
+				focusable="false"
+				name="mdi:pencil"
+			/>
+			<a href="/">
+				Edit
+			</a>
+		</li>
+		<li>
+			{
+				isFavoriteSteep ?
+					<>
+						<Sprite
+							aria-hidden="true"
+							focusable="false"
+							name="ion:heart-dislike"
+						/>
+						<a href="/">
+							Unfavorite
+						</a>
+					</> :
+					<>
+						<Sprite
+							aria-hidden="true"
+							focusable="false"
+							name="ion:heart"
+						/>
+						<a href="/">
+							Favorite
+						</a>
+					</>
+			}
+		</li>
+		<li>
+			<Sprite
+				aria-hidden="true"
+				focusable="false"
+				name="ion:duplicate"
+			/>
+			<a href="/">
+				Duplicate
+			</a>
+		</li>
+		<li class="danger">
+			<Sprite
+				aria-hidden="true"
+				focusable="false"
+				name="ion:trash-sharp"
+			/>
+			<a href="/">
+				Delete
+			</a>
+		</li>
+		</>
+	</EllipsisWithDropdownMenu>
 	<p class="title">
 		{(highlightTea && !!teaUrl) ?
 			<a href={teaUrl}>{tea.name}</a> :
@@ -123,6 +183,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 	.title {
 		font-size: op.$font-size-3;
 		font-weight: op.$font-weight-7;
+		margin-block-start: 0 !important;
 
 		svg {
 			display: inline;
@@ -130,6 +191,13 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 			color: op.$pink-7;
 			margin-inline-start: op.$size-1;
 		}
+	}
+
+	:global(.ellipsis-menu) {
+		float: right;
+		// margin-block-start: -3.5rem;
+		margin-inline-end: -1.25rem;
+		position: relative;
 	}
 
 	.review {
