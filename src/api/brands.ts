@@ -20,6 +20,6 @@ export async function getBrandBySlug(brandSlug: string) {
 export async function getBrandById(brandId: ObjectId) {
 	const db = await getDatabase();
 	const brandsCollection = await db.collection('vendors');
-	const brand = await brandsCollection.findOne<WithId<Brand>>({ _id: brandId.toString() });
+	const brand = await brandsCollection.findOne<WithId<Brand>>({ _id: brandId });
 	return brand;
 }

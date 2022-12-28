@@ -1,0 +1,75 @@
+---
+import { getBrandBySlug } from '../../../api/brands';
+import FormLogic from '../../../components/FormLogic.astro';
+import Layout from '../../../layouts/Layout.astro';
+
+const {brandSlug = ''} = Astro.params;
+
+const brand = await getBrandBySlug(brandSlug);
+
+---
+
+<Layout title={`Edit ${brand?.name}`}>
+	<h1>Edit {brand?.name}</h1>
+	<form action={`/api/brand/${brand?._id.toString()}`} method="post">
+		<input
+			type="hidden"
+			name="_id"
+			value={brand?._id?.toString() || ''}
+		/>
+		<input
+			type="hidden"
+			name="_method"
+			value="put"
+		/>
+		<div>
+			<label for="name">Name</label>
+			<input
+				type="text"
+				required
+				name="name"
+				id="name"
+				minlength="1"
+				aria-describedby="name-error"
+				value={brand?.name}
+			/>
+			<small id="name-error" class="error-message"></small>
+		</div>
+		<div>
+			<label for="url">URL</label>
+			<input
+				type="url"
+				name="url"
+				id="url"
+				aria-describedby="url-error"
+				value={brand?.url || ''}
+			/>
+			<small id="url-error" class="error-message"></small>
+		</div>
+		<div>
+			<label for="twitter">Twitter</label>
+			<input
+				type="text"
+				name="twitter"
+				id="twitter"
+				pattern="^[a-zA-Z0-9_]{1,15}$"
+				title="Provide the brand's Twitter handle"
+				aria-labelledby="twitter-error"
+				value={brand?.twitter || ''}
+			/>
+			<small id="twitter-error" class="error-message"></small>
+		</div>
+		<button type="submit">
+			<span class="contents">Submit</span>
+		</button>
+	</form>
+</Layout>
+<FormLogic />
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+
+	:global(form) {
+		margin-block-start: op.$size-4;
+	}
+</style>

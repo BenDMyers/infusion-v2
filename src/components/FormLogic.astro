@@ -9,7 +9,7 @@
 	}
 
 	document
-	.querySelector<HTMLFormElement>('form[action="/api/brand"]')
+	.querySelector<HTMLFormElement>('form[action]')
 	?.addEventListener('submit', async (event) => {
 		event.preventDefault();
 
@@ -29,9 +29,7 @@
 			window.location.href = response.url;
 		}
 
-
 		const body = await response.json();
-		console.log({response, body});
 
 		if (!response.ok) {
 			const errors = Object.entries(body.errors ?? {});
@@ -52,7 +50,6 @@
 			return;
 		}
 
-		console.log({body})
 		if (body.goto) {
 			window.location.href = body.goto;
 		}
