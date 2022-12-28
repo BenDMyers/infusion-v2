@@ -4,6 +4,8 @@ import type { Brand, Tea } from '../types/api';
 import normalizeUrl from 'normalize-url';
 import { sluggify } from '../utils/slug';
 import { choose } from '../utils/choose';
+import EllipsisWithDropdownMenu from './EllipsisWithDropdownMenu.astro';
+import { Sprite } from 'astro-icon';
 
 export interface Props {
 	brand: WithId<Brand>;
@@ -14,6 +16,7 @@ const {brand, teas = []} = Astro.props;
 
 const brandSlug = sluggify(brand.name);
 const href = new URL(`/brands/${brandSlug}/`, Astro.url);
+const editHref = new URL(`/brands/${brandSlug}/edit/`, Astro.url);
 
 const brandSite = brand.url && normalizeUrl(brand.url, {
 	stripProtocol: true
@@ -55,6 +58,18 @@ if (brand.name === 'Custom blends') {
 				{brand.name}
 			</a>
 		</p>
+		<EllipsisWithDropdownMenu label={`Menu for ${brand.name}`}>
+			<li>
+				<Sprite
+					aria-hidden="true"
+					focusable="false"
+					name="mdi:pencil"
+				/>
+				<a href={editHref}>
+					Edit
+				</a>
+			</li>
+		</EllipsisWithDropdownMenu>
 		{!!brandSite && <p class="brand-site">{brandSite}</p>}
 	</div>
 	{!!teaList ? (
@@ -78,6 +93,8 @@ if (brand.name === 'Custom blends') {
 	@use '../styles/tokens.scss' as tokens;
 	@import '../styles/mixins.scss';
 
+	$ellipsis-width: 5ch;
+
 	article {
 		@include fully-clickable();
 		display: flex;
@@ -100,7 +117,7 @@ if (brand.name === 'Custom blends') {
 		font-weight: op.$font-weight-9;
 		line-height: op.$font-lineheight-1;
 		display: inline-block;
-		width: 100%;
+		width: calc(100% - $ellipsis-width);
 
 		a {
 			color: tokens.$teal-9;
@@ -117,6 +134,15 @@ if (brand.name === 'Custom blends') {
 		font-weight: op.$font-weight-7;
 		// color: op.$stone-7;
 		color: op.$stone-8;
+		width: calc(100% - $ellipsis-width);
+		// display: inline-block;
+	}
+
+	:global(.ellipsis-menu) {
+		float: right;
+		margin-block-start: -0.5rem;
+		margin-inline-end: -1.25rem;
+		position: relative;
 	}
 
 	.highlighted-teas {

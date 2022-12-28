@@ -60,45 +60,33 @@ export const post: APIRoute = async ({params, request, redirect}) => {
 	}
 
 	try {
-		try {
-			const db = await getDatabase();
-			const brandsCollection = await db.collection('vendors');
-			const brandPartial: Brand = {
-				name: formData.get('name')?.toString() || '',
-				twitter: formData.get('twitter')?.toString(),
-				url: formData.get('url')?.toString(),
-			};
+		const db = await getDatabase();
+		const brandsCollection = await db.collection('vendors');
+		const brandPartial: Brand = {
+			name: formData.get('name')?.toString() || '',
+			twitter: formData.get('twitter')?.toString(),
+			url: formData.get('url')?.toString(),
+		};
 
-			const updates = await brandsCollection.updateOne(
-				{_id: brandId},
-				{$set: brandPartial}
-			);
-	
-			if (updates) {
-				const slug = sluggify(formData.get('name')?.toString() || '');
-				return redirect(`/brands/${slug}/`);
-			} else {
-				throw new Error('Unable to update brand');
-			}
-		} catch (err) {
-			console.error(err);
-			return new Response(
-				JSON.stringify({msg: err} as ApiRouteBody),
-				{
-					status: 500,
-					headers: {'Content-Type': 'application/json'}
-				}
-			);
+		const updates = await brandsCollection.updateOne(
+			{_id: brandId},
+			{$set: brandPartial}
+		);
+
+		if (updates) {
+			const slug = sluggify(formData.get('name')?.toString() || '');
+			return redirect(`/brands/${slug}/`);
+		} else {
+			throw new Error('Unable to update brand');
 		}
 	} catch (err) {
 		console.error(err);
+		return new Response(
+			JSON.stringify({msg: err} as ApiRouteBody),
+			{
+				status: 500,
+				headers: {'Content-Type': 'application/json'}
+			}
+		);
 	}
-
-	return new Response(
-		JSON.stringify({msg: 'golden'}),
-		{
-			status: 200,
-			headers: {'Content-Type': 'application/json'}
-		}
-	);
 };
