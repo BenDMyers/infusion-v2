@@ -57,10 +57,16 @@ if (brand.name === 'Custom blends') {
 		</p>
 		{!!brandSite && <p class="brand-site">{brandSite}</p>}
 	</div>
-	{!!teaList && (
+	{!!teaList ? (
 		<div class="highlighted-teas">
 			<p>
 				<Fragment set:html={teaList} />
+			</p>
+		</div>
+	) : (
+		<div class="no-teas">
+			<p>
+				No teas available
 			</p>
 		</div>
 	)}
@@ -118,4 +124,13 @@ if (brand.name === 'Custom blends') {
 		margin-block-start: auto;
 		padding-block-start: op.$size-3;
 	}
+
+	.no-teas {
+		color: #6E7272;
+		// font-weight: op.$font-weight-7;
+		font-style: italic;
+		margin-block-start: auto;
+		padding-block-start: op.$size-3;
+	}
+
 </style>

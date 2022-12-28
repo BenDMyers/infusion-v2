@@ -1,0 +1,69 @@
+<script>
+	function setSubmitButtonLoading(form: HTMLFormElement, loading: boolean) {
+		const submitButton = form.querySelector<HTMLButtonElement>('[type="submit"]');
+		if (loading) {
+			submitButton?.setAttribute('data-state', 'loading');
+		} else {
+			submitButton?.removeAttribute('data-state');
+		}
+	}
+
+	document
+	.querySelector<HTMLFormElement>('form[action="/api/brand"]')
+	?.addEventListener('submit', async (event) => {
+		event.preventDefault();
+
+		const form = event.currentTarget as HTMLFormElement;
+		const endpoint = form.action;
+		const method = form.method;
+
+		const options = {
+			method,
+			body: new FormData(form)
+		} as RequestInit;
+
+		setSubmitButtonLoading(form, true);
+
+		const response = await fetch(endpoint, options);
+		if (response.redirected) {
+			window.location.href = response.url;
+		}
+
+
+		const body = await response.json();
+		console.log({response, body});
+
+		if (!response.ok) {
+			const errors = Object.entries(body.errors ?? {});
+			for (const [fieldName, errorMessage] of errors) {
+				const field = document.querySelector<HTMLInputElement>(`[name="${fieldName}"]`);
+				const errorMessageNode = document.querySelector<HTMLSpanElement>(`[name="${fieldName}"] + .error-message`);
+				if (field) {
+					field.setAttribute('aria-invalid', 'true');
+				}
+				if (errorMessageNode) {
+					errorMessageNode.innerText = (errorMessage as string);
+				}
+			}
+
+			const firstErroneousField = form.querySelector<HTMLInputElement>('[aria-invalid]');
+			firstErroneousField?.focus();
+			setSubmitButtonLoading(form, false);
+			return;
+		}
+
+		console.log({body})
+		if (body.goto) {
+			window.location.href = body.goto;
+		}
+	});
+
+	document.addEventListener('change', (event) => {
+		const target = event.target as HTMLInputElement;
+		target.removeAttribute('aria-invalid');
+		const siblingNode = target.nextElementSibling;
+		if (siblingNode && siblingNode.classList.contains('error-message')) {
+			siblingNode.innerHTML = '';
+		}
+	});
+</script>
