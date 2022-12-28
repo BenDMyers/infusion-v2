@@ -87,7 +87,7 @@ if (tea.discontinued) {
 				/>
 			)}
 		</p>
-		<EllipsisWithDropdownMenu label={`Menu for ${tea.name}`}>
+		<EllipsisWithDropdownMenu label={t('menus.menuForTea', {tea: tea.name})}>
 			<li>
 				<a href="/">boopboop</a>
 			</li>

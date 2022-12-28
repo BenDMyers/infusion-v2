@@ -1,7 +1,7 @@
 {
 	"navbar": {
 		"teas": "Tees",
-		"favorites": "Lieblingstees",
+		"favorites": "Favoriten",
 		"brands": "Anbieter"
 	},
 	"homepage": {
@@ -15,6 +15,16 @@
 			"list_andOthers": "<b>{{firstTea}}</b>, <b>{{secondTea}}</b> und <b>{{count}} andere</b>",
 			"list_andOthersTruncated": "<b>{{firstTea}}</b> und <b>{{count}} anderes</b>"
 		}
+	},
+	"menus": {
+		"delete": "Löschen",
+		"duplicate": "Duplizieren",
+		"edit": "Bearbeiten",
+		"favorite": "Zu Favoriten hinzufügen",
+		"menu": "Menü",
+		"menuForSteepOfTea": "Menü für die Brühung von {{tea}} am {{date}}",
+		"menuForTea": "Menü für {{tea}}",
+		"unfavorite": "Aus Favoriten entfernen"
 	},
 	"ratings": {
 		"ratingWithCount_one": "{{count}} Stern",

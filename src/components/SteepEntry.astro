@@ -34,10 +34,13 @@ if (highlightTea) {
 
 const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.usedHoney, steep.usedSweetener].includes('Yes');
+
+const formattedSteepDate = steep.date.toLocaleDateString(i18next.language, {month: 'short', day: 'numeric', year: 'numeric'})
+const menuLabel = t('menus.menuForSteepOfTea', {tea: tea.name, date: formattedSteepDate});
 ---
 
 <article id={`steep-${steep._id}`}>
-	<EllipsisWithDropdownMenu>
+	<EllipsisWithDropdownMenu label={menuLabel}>
 		<>
 		<li>
 			<Sprite
@@ -46,7 +49,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 				name="mdi:pencil"
 			/>
 			<a href="/">
-				Edit
+				{t('menus.edit', 'Edit')}
 			</a>
 		</li>
 		<li>
@@ -59,7 +62,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 							name="ion:heart-dislike"
 						/>
 						<a href="/">
-							Unfavorite
+							{t('menus.unfavorite', 'Unfavorite')}
 						</a>
 					</> :
 					<>
@@ -69,7 +72,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 							name="ion:heart"
 						/>
 						<a href="/">
-							Favorite
+							{t('menus.favorite', 'Favorite')}
 						</a>
 					</>
 			}
@@ -81,7 +84,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 				name="ion:duplicate"
 			/>
 			<a href="/">
-				Duplicate
+				{t('menus.duplicate', 'Duplicate')}
 			</a>
 		</li>
 		<li class="danger">
@@ -91,7 +94,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 				name="ion:trash-sharp"
 			/>
 			<a href="/">
-				Delete
+				{t('menus.delete', 'Delete')}
 			</a>
 		</li>
 		</>
@@ -100,7 +103,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 		{(highlightTea && !!teaUrl) ?
 			<a href={teaUrl}>{tea.name}</a> :
 			<time datetime={steep.date.toISOString()}>
-				{steep.date.toLocaleDateString(i18next.language, {month: 'short', day: 'numeric', year: 'numeric'})}
+				{formattedSteepDate}
 			</time>
 		}
 		{isFavoriteSteep && <Icon pack="fa-solid" name="heart" focusable="false" aria-label="Favorited" />}
