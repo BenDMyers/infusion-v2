@@ -1,0 +1,82 @@
+{
+	"navbar": {
+		"teas": "Teas",
+		"favorites": "Favorites",
+		"brands": "Brands"
+	},
+	"homepage": {
+		"welcomeToInfusion": "Welcome to Infusion!"
+	},
+	"brandsPage": {
+		"brands": "Anbieter",
+		"cards": {
+			"list_2": "<b>{firstTea}</b> and <b>{secondTea}</b>",
+			"list_3": "<b>{firstTea}</b>, <b>{secondTea}</b>, and <b>{thirdTea}</b>",
+			"list_andOthers": "<b>{firstTea}</b>, <b>{secondTea}</b>, and <b>{count} others</b>",
+			"list_andOthersTruncated": "<b>{firstTea}</b> and <b>{count} others</b>"
+		}
+	},
+	"steepDetails": {
+		"addins": "Zusätze"
+	},
+	"teasPage": {
+		"myTeas": "My Teas",
+		"cards": {
+			"inWishlist": "In wishlist"
+		}
+	},
+	"teaDetails": {
+		"availability": "Availability",
+		"brand": "Brand",
+		"caffeineContent": "Caffeine Content",
+		"discontinued": "Discontinued",
+		"discontinuedMessage": "This tea has been discontinued.",
+		"favoriteSteep": "Favorite Steep",
+		"highestRating": "Highest Rating",
+		"ingredients": "Ingredients",
+		"lastSteeped": "Last Steeped",
+		"memo": "Memo",
+		"preferredSteeps": "Preferred Steeps",
+		"price": "Price",
+		"recommendation": "Recommendation",
+		"steeped": "Steeped",
+		"times_one": "{{count}} time",
+		"times_other": "{{count}} times",
+		"type": "Type"
+	},
+	"teaTypes": {
+		"black": "Black",
+		"chai": "Chai",
+		"darjeeling": "Darjeeling",
+		"green": "Green",
+		"herbal": "Herbal",
+		"honeybush": "Honeybush",
+		"lapsang souchong": "Lapsang Souchong",
+		"matcha": "Matcha",
+		"mate": "Maté",
+		"oolong": "Oolong",
+		"pu-erh": "Pu-Erh",
+		"rooibos": "Rooibos",
+		"white": "White"
+	},
+	"addins": {
+		"almond milk": "Mandelmilch",
+		"caramel creamer": "Karamell-Kaffeeweißer",
+		"cashew milk": "Cashewmilch",
+		"cinnamon simple syrup": "Zimtsirup",
+		"creamer": "Kaffeeweißer",
+		"half-and-half": "Halb & Halb",
+		"honey": "Honig",
+		"honey straw": "Honig-Strohhalm",
+		"lavender simple syrup": "Lavendelsirup",
+		"milk": "Milch",
+		"mint simple syrup": "Minzesirup",
+		"pecan simple syrup": "Zuckersirup mit Pekannüsse",
+		"powdered creamer": "Kaffeeweißer in Pulverform",
+		"simple syrup": "Zuckersirup",
+		"sugar": "Zucker",
+		"sweetener": "Süßstoff",
+		"tea sugar": "Teezucker",
+		"vanilla creamer": "Vanille-Kaffeeweißer"
+	}
+}

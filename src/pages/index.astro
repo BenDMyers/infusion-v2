@@ -1,9 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { changeLanguage, t } from "i18next";
+import Layout from "../layouts/Layout.astro";
+
+changeLanguage("en");
 ---
 
 <Layout title="Welcome to Astro.">
-	<h1>Welcome to Infusion!</h1>
+	<h1>{t('homepage.welcomeToInfusion')}</h1>
 	<p class="instructions">
 		To get started, open the directory <code>src/pages</code> in your project.<br />
 		<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.

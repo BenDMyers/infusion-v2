@@ -1,6 +1,7 @@
 ---
 import type { WithId } from 'mongodb';
 import { Icon, Sprite } from 'astro-icon';
+import i18next, {t} from 'i18next';
 import { getBrandById } from '../api/brands';
 import type { Brand, Steep, Tea } from '../types/api';
 import { sluggify } from '../utils/slug';
@@ -99,13 +100,13 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 		{(highlightTea && !!teaUrl) ?
 			<a href={teaUrl}>{tea.name}</a> :
 			<time datetime={steep.date.toISOString()}>
-				{steep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
+				{steep.date.toLocaleDateString(i18next.language, {month: 'short', day: 'numeric', year: 'numeric'})}
 			</time>
 		}
 		{isFavoriteSteep && <Icon pack="fa-solid" name="heart" focusable="false" aria-label="Favorited" />}
 	</p>
 	<DetailsGrid minimumDetailWidth="20ch">
-		<Detail name="Amounts">
+		<Detail name={t('steepDetails.amounts', 'Amounts')}>
 			<SteepEntryAmount
 				format={steep.format}
 				teabags={steep.numTeabags}
@@ -113,7 +114,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 				water={steep.amountOfWaterInOunces}
 			/>
 		</Detail>
-		<Detail name="Preparation">
+		<Detail name={t('steepDetails.preparation', 'Preparation')}>
 			<PreparationDetails
 				steepTime={steep.steepTime}
 				degreesFahrenheit={steep.degreesFahrenheit}
@@ -121,22 +122,22 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 			/>
 		</Detail>
 		{usedAnySweetener && (
-			<Detail name="Add-Ins">
+			<Detail name={t('steepDetails.addins')}>
 				<AddinDetails {...steep} />
 			</Detail>
 		)}
 		{Number(steep.reinfusions) > 0 && (
-			<Detail name="Reinfusions">
+			<Detail name={t('steepDetails.reinfusions', 'Reinfusions')}>
 				{steep.reinfusions} {Number(steep.reinfusions) === 1 ? ' time' : ' times'}
 			</Detail>
 		)}
 		{!!steep.rating && (
-			<Detail name="Rating">
+			<Detail name={t('steepDetails.rating', 'Rating')}>
 				<StaticRating rating={steep.rating} />
 			</Detail>
 		)}
 		{!!steep.preparationNotes && (
-			<Detail name="Notes">
+			<Detail name={t('steepDetails.notes', 'Notes')}>
 				{steep.preparationNotes}
 			</Detail>
 		)}

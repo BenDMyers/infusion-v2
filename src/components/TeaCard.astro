@@ -2,6 +2,8 @@
 import type { WithId } from 'mongodb';
 import type { Brand, Month, Rating, Steep, Tea, WithEmptyStringOption } from '../types/api';
 import type { Availability } from '../types/ui';
+import {t} from 'i18next';
+import {localizePath} from 'astro-i18next';
 import { sluggify } from '../utils/slug';
 import StaticRating from './StaticRating.astro';
 import {Icon} from 'astro-icon';
@@ -16,14 +18,14 @@ export interface Props {
 
 const {brand, steeps, tea} = Astro.props;
 const cardIdPrefix = `tea-card-${tea._id.toString()}`;
-const steepCount = steeps.length === 1 ? '1 steep' : `${steeps.length} steeps`;
+const steepCount = t('teasPage.cards.steepsWithCount', {count: steeps.length});
 
 const titleId = `${cardIdPrefix}-header`;
 const brandId = `${cardIdPrefix}-brand`;
 
 const brandSlug = sluggify(brand.name);
 const teaSlug = sluggify(tea.name);
-const href = new URL(`/teas/${brandSlug}/${teaSlug}/`, Astro.url);
+const href = localizePath(`/teas/${brandSlug}/${teaSlug}/`);
 
 const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, steep) => {
 	if (!steep.rating) {
@@ -38,6 +40,12 @@ const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, 
 
 	return currentMax;
 }, '');
+
+const teaTypes = (tea?.teaType || [])
+	.map(type => {
+		const typeKey = type.toLowerCase().replaceAll(' ', '_');
+		return t(`teaTypes.${typeKey}`)
+	});
 
 let teaAvailability: Availability = 'available';
 let availabilityTooltip = '';
@@ -106,9 +114,9 @@ if (tea.discontinued) {
 	</div>
 	<div class="meta">
 		<div class="interpuncted">
-			{!!tea.teaType?.length && <span>{tea.teaType.join(', ')}</span>}
+			{!!teaTypes?.length && <span>{teaTypes.join(', ')}</span>}
 			<span>{steepCount}</span>
-			{tea.wishlist && <span><strong>In wishlist</strong></span>}
+			{tea.wishlist && <span><strong>{t('teasPage.cards.inWishlist')}</strong></span>}
 		</div>
 		<div>
 			<StaticRating rating={highestRating} />
@@ -120,8 +128,8 @@ if (tea.discontinued) {
 	@use 'sass:color';
 	@use 'sass:math';
 	@use 'open-props-scss' as op;
-	@use '../styles/tokens.scss' as tokens;
-	@import '../styles/mixins.scss';
+	@use 'src/styles/tokens.scss' as tokens;
+	@import 'src/styles/mixins.scss';
 
 	$ellipsis-width: 5ch;
 

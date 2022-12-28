@@ -3,6 +3,8 @@ import '@fontsource/lato/400.css';
 import '@fontsource/lato/700.css';
 import '@fontsource/lato/900.css';
 import '../styles/main.scss';
+import i18next, {t} from 'i18next';
+import {HeadHrefLangs} from 'astro-i18next/components';
 import {Sprite} from 'astro-icon';
 import NavBar from '../components/NavBar.astro';
 
@@ -15,13 +17,14 @@ const { title, prefetches } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={i18next.language}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<HeadHrefLangs />
 		<link rel="prefetch" href="/">
 		<link rel="prefetch" href="/teas/">
 		{prefetches?.map(url => <link rel="prefetch" href={url} />)}

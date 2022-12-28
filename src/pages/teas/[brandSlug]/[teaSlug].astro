@@ -1,61 +1,58 @@
 ---
-import type { ObjectId, WithId } from 'mongodb';
-import { getBrandBySlug } from '../../../api/brands';
-import { getSteepsForTea } from '../../../api/steeps';
-import { getTeaBySlugs } from '../../../api/teas';
-import AvailabilityDetail from '../../../components/AvailabilityDetail.astro';
-import Detail from '../../../components/Detail.astro';
-import DetailsGrid from '../../../components/DetailsGrid.astro';
-import PreparationDetails from '../../../components/PreparationDetails.astro';
-import StaticRating from '../../../components/StaticRating.astro';
-import SteepCtaWell from '../../../components/SteepCtaWell.astro';
-import SteepEntry from '../../../components/SteepEntry.astro';
-import Layout from '../../../layouts/Layout.astro';
-import type { Rating, Steep, Tea, WithEmptyStringOption } from '../../../types/api';
+import i18next, { changeLanguage, t } from "i18next";
+import camelCase from "camelcase";
+import type { ObjectId, WithId } from "mongodb";
+import { getBrandBySlug } from "../../../api/brands";
+import { getSteepsForTea } from "../../../api/steeps";
+import { getTeaBySlugs } from "../../../api/teas";
+import AvailabilityDetail from "../../../components/AvailabilityDetail.astro";
+import Detail from "../../../components/Detail.astro";
+import DetailsGrid from "../../../components/DetailsGrid.astro";
+import PreparationDetails from "../../../components/PreparationDetails.astro";
+import StaticRating from "../../../components/StaticRating.astro";
+import SteepCtaWell from "../../../components/SteepCtaWell.astro";
+import SteepEntry from "../../../components/SteepEntry.astro";
+import Layout from "../../../layouts/Layout.astro";
+import type { Rating, Steep, Tea, WithEmptyStringOption } from "../../../types/api";
 
-const {brandSlug = '', teaSlug = ''} = Astro.params;
+changeLanguage("en");
+
+const { brandSlug = "", teaSlug = "" } = Astro.params;
 if (!brandSlug || !teaSlug) {
-	Astro.redirect('/', 301);
+    Astro.redirect("/", 301);
 }
-
 const [tea, brand] = await Promise.all([
-	getTeaBySlugs(brandSlug, teaSlug),
-	getBrandBySlug(brandSlug)
+    getTeaBySlugs(brandSlug, teaSlug),
+    getBrandBySlug(brandSlug)
 ]);
-
 const steeps = tea ? await getSteepsForTea(tea._id) : [];
 const mostRecentSteep: WithId<Steep> | undefined = steeps[0];
 const favoriteSteep = tea?.favoriteSteep ?
-	steeps.find(steep => (steep._id.toString() === tea.favoriteSteep?.toString())) :
-	undefined;
-
+    steeps.find(steep => (steep._id.toString() === tea.favoriteSteep?.toString())) :
+    undefined;
 const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, steep) => {
-	if (!steep.rating) {
-		return currentMax;
-	}
-
-	const numericRatingOfCurrentSteep = Number(steep.rating);
-	const numericRatingOfCurrentMax = Number(currentMax);
-	if (numericRatingOfCurrentSteep > numericRatingOfCurrentMax) {
-		return steep.rating;
-	}
-
-	return currentMax;
-}, '');
-
+    if (!steep.rating) {
+        return currentMax;
+    }
+    const numericRatingOfCurrentSteep = Number(steep.rating);
+    const numericRatingOfCurrentMax = Number(currentMax);
+    if (numericRatingOfCurrentSteep > numericRatingOfCurrentMax) {
+        return steep.rating;
+    }
+    return currentMax;
+}, "");
 const brandUrl = new URL(`/brands/${brandSlug}/`, Astro.url);
-const showRecommendationDetail = !!(
-	tea?.recommendedSteepTime ||
-	(tea?.recommendedSteepTemperature && tea?.recommendedSteepTemperature > 0) ||
-	tea?.recommendedAmount
-);
-
+const showRecommendationDetail = !!(tea?.recommendedSteepTime ||
+    (tea?.recommendedSteepTemperature && tea?.recommendedSteepTemperature > 0) ||
+    tea?.recommendedAmount);
 function getSteepHash(steepId: ObjectId) {
-	return `steep-${steepId.toString()}`;
+    return `steep-${steepId.toString()}`;
 }
-
 const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
-
+const types = (tea?.teaType || []).map(type => {
+    const typeKey = type.toLowerCase().replace(" ", "_");
+    return t(`teaTypes.${typeKey}`);
+});
 ---
 
 <Layout
@@ -67,33 +64,36 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		<p class="subtitle">{brand?.name}</p>
 	</hgroup>
 	<DetailsGrid minimumDetailWidthPrint="15ch">
-		<Detail name="Brand">
+		<Detail name={t('teaDetails.brand')}>
 			<a href={brandUrl}>{brand?.name}</a>
 		</Detail>
 		{!!tea?.teaType?.length && (
-			<Detail name="Type">
-				{tea.teaType.join(', ')}
+			<Detail name={t('teaDetails.type')}>
+				{types.join(', ')}
 			</Detail>
 		)}
 		{tea?.caffeineLevel && (
-			<Detail name="Caffeine Content">
+			<Detail name={t('teaDetails.caffeineContent')}>
 				{tea.caffeineLevel}
 			</Detail>
 		)}
 		{!!tea?.ingredients?.length && (
-			<Detail name="Ingredients">
+			<Detail name={t('teaDetails.ingredients')}>
 				<span class="capitalize-first-letter">
-					{tea.ingredients.join(', ')}
+					{tea.ingredients.map(ingr => {
+						const ingrKey = camelCase(ingr);
+						return t(`ingredients.${ingrKey}`, ingr);
+					}).join(', ')}
 				</span>
 			</Detail>
 		)}
 		{tea?.price && (
-			<Detail name="Price">
+			<Detail name={t('teaDetails.price')}>
 				{tea.price}
 			</Detail>
 		)}
 		{showRecommendationDetail && (
-			<Detail name="Recommendation">
+			<Detail name={t('teaDetails.recommendation')}>
 				<PreparationDetails
 					amount={tea.recommendedAmount}
 					degreesFahrenheit={
@@ -112,30 +112,30 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 			discontinued={tea?.discontinued}
 			monthsAvailable={tea?.monthsAvailable}
 		/>
-		<Detail name="Steeped">
-			{steeps.length} {steeps.length === 1 ? ' time' : ' times'}
+		<Detail name={t('teaDetails.steeped')}>
+			{t('teaDetails.times', {count: steeps.length})}
 		</Detail>
 		{mostRecentSteep && (
-			<Detail name="Last Steeped">
+			<Detail name={t('teaDetails.lastSteeped', 'Last Steeped')}>
 				<a href={`#${getSteepHash(mostRecentSteep._id)}`}>
-					{mostRecentSteep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
+					{mostRecentSteep.date.toLocaleDateString(i18next.language, {month: 'short', day: 'numeric', year: 'numeric'})}
 				</a>
 			</Detail>
 		)}
 		{favoriteSteep && (
-			<Detail name="Favorite Steep">
+			<Detail name={t('teaDetails.favoriteSteep')}>
 				<a href={`#${getSteepHash(favoriteSteep._id)}`}>
-					{favoriteSteep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
+					{favoriteSteep.date.toLocaleDateString(i18next.language, {month: 'short', day: 'numeric', year: 'numeric'})}
 				</a>
 			</Detail>
 		)}
 		{highestRating && (
-			<Detail name="Highest Rating">
+			<Detail name={t('teaDetails.highestRating')}>
 				<StaticRating rating={highestRating} />
 			</Detail>
 		)}
 		{tea?.preferredStyles && (
-			<Detail name="Preferred Steeps">
+			<Detail name={t('teaDetails.preferredSteeps', 'Preferred Steeps')}>
 				{tea.preferredStyles}
 			</Detail>
 		)}

@@ -1,9 +1,11 @@
 ---
 import type { WithId } from 'mongodb';
 import type { Brand, Tea } from '../types/api';
+import {localizePath} from 'astro-i18next';
 import normalizeUrl from 'normalize-url';
 import { sluggify } from '../utils/slug';
 import { choose } from '../utils/choose';
+import { interpolate } from '../utils/loc';
 
 export interface Props {
 	brand: WithId<Brand>;
@@ -13,7 +15,8 @@ export interface Props {
 const {brand, teas = []} = Astro.props;
 
 const brandSlug = sluggify(brand.name);
-const href = new URL(`/brands/${brandSlug}/`, Astro.url);
+// const href = new URL(`/brands/${brandSlug}/`, Astro.url);
+const href = localizePath(`/brands/${brandSlug}/`);
 
 const brandSite = brand.url && normalizeUrl(brand.url, {
 	stripProtocol: true
@@ -27,10 +30,25 @@ switch (teas.length) {
 		teaList = teas[0].name.bold();
 		break;
 	case 2:
-		teaList = `${teas[0].name.bold()} and ${teas[1].name.bold()}`;
+		// teaList = `${teas[0].name.bold()} and ${teas[1].name.bold()}`;
+		teaList = interpolate(
+			'brandsPage.cards.list_2',
+			{
+				firstTea: teas[0].name,
+				secondTea: teas[1].name,
+			}
+		)
 		break;
 	case 3:
-		teaList = `${teas[0].name.bold()}, ${teas[1].name.bold()}, and ${teas[2].name.bold()}`;
+		// teaList = `${teas[0].name.bold()}, ${teas[1].name.bold()}, and ${teas[2].name.bold()}`;
+		teaList = interpolate(
+			'brandsPage.cards.list_3',
+			{
+				firstTea: teas[0].name,
+				secondTea: teas[1].name,
+				thirdTea: teas[2].name,
+			}
+		)
 		break;
 	default:
 		const firstRandomTea = choose(teas);
@@ -40,11 +58,26 @@ switch (teas.length) {
 		} while (secondRandomTea === firstRandomTea);
 		const [firstName, secondName] = [firstRandomTea.name, secondRandomTea.name].sort();
 		const remainingTeas = teas.length - 2;
-		teaList = `${firstName.bold()}, ${secondName.bold()}, and <b>${remainingTeas} others</b>`
+		// teaList = `${firstName.bold()}, ${secondName.bold()}, and <b>${remainingTeas} others</b>`
+		teaList = interpolate(
+			'brandsPage.cards.list_andOthers',
+			{
+				firstTea: firstName,
+				secondTea: secondName,
+				count: remainingTeas.toString()
+			}
+		)
 }
 if (brand.name === 'Custom blends') {
-	let highlightedCustomBlend = choose(teas);
-	teaList = `${highlightedCustomBlend.name.bold()} and <b>${teas.length - 1} others</b>`;
+	const highlightedCustomBlend = choose(teas);
+	const remainingTeas = teas.length - 1;
+	teaList = interpolate(
+		'brandsPage.cards.list_andOthersTruncated',
+		{
+			firstTea: highlightedCustomBlend.name,
+			count: remainingTeas.toString()
+		}
+	)
 }
 ---
 
@@ -69,8 +102,8 @@ if (brand.name === 'Custom blends') {
 <style lang="scss">
 	@use 'sass:math';
 	@use 'open-props-scss' as op;
-	@use '../styles/tokens.scss' as tokens;
-	@import '../styles/mixins.scss';
+	@use 'src/styles/tokens.scss' as tokens;
+	@import 'src/styles/mixins.scss';
 
 	article {
 		@include fully-clickable();
