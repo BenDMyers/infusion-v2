@@ -1,0 +1,28 @@
+---
+import type { WithId } from 'mongodb';
+import type { Brand, Tea } from '../types/api';
+import { generateAddTeaCta } from '../utils/generate-add-tea-cta';
+import CtaWell from './CtaWell.astro'
+
+export interface Props {
+	brand: WithId<Brand>,
+	teas: WithId<Tea>[]
+}
+
+const {brand, teas} = Astro.props;
+
+const url = new URL('/teas/new/', Astro.url);
+if (brand._id) {
+	url.searchParams.set('vendor', brand._id.toString());
+}
+
+const body = generateAddTeaCta(brand, teas);
+
+---
+
+<CtaWell
+	body={body}
+	iconName="leaf"
+	linkText="Add a Tea"
+	url={url}
+/>

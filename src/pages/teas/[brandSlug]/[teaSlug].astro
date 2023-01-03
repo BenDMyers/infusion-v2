@@ -119,7 +119,10 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 			monthsAvailable={tea?.monthsAvailable}
 		/>
 		<Detail name="Steeped">
-			{steeps.length} {steeps.length === 1 ? ' time' : ' times'}
+			{steeps.length === 0 ?
+				'Never' :
+				`${steeps.length} ${steeps.length === 1 ? ' time' : ' times'}`
+			}
 		</Detail>
 		{mostRecentSteep && (
 			<Detail name="Last Steeped">

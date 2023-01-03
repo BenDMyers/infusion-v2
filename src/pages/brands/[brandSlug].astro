@@ -4,6 +4,7 @@ import normalizeUrl from 'normalize-url';
 import { getBrandBySlug } from '../../api/brands';
 import { getSteepsGroupedByTeas } from '../../api/steeps';
 import { getTeasForBrand } from '../../api/teas';
+import AddTeaCtaWell from '../../components/AddTeaCtaWell.astro';
 import Detail from '../../components/Detail.astro';
 import DetailsGrid from '../../components/DetailsGrid.astro';
 import EllipsisWithDropdownMenu from '../../components/EllipsisWithDropdownMenu.astro';
@@ -73,6 +74,10 @@ const editHref = new URL(`/brands/${brandSlug}/edit/`, Astro.url);
 	</DetailsGrid>
 	<section id="teas" aria-labelledby="teas-heading">
 		<h2 id="teas-heading">Teas</h2>
+		<AddTeaCtaWell
+			brand={brand}
+			teas={teas}
+		/>
 		<ul class="card-list">
 			{teas.map(tea => (
 				<li>

@@ -3,7 +3,7 @@ import type { Steep, Tea } from '../types/api';
 import {isToday, isWithinInterval} from 'date-fns';
 import { chooseWeighted } from './choose';
 
-type WeightedOption = {
+export type WeightedOption = {
 	message: string;
 	weight: number;
 };
