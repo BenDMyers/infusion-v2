@@ -28,7 +28,7 @@ const teaTypeOptions: Option[] = teaTypes.map(teaType => ({
 }));
 const ingredientOptions: Option[] = ingredients.map(ingredients => ({
 	label: ingredients.name,
-	value: ingredients._id.toString()
+	value: ingredients.name
 }));
 const caffeineContentOptions: Option[] = caffeineContentValues.map(caffeineContent => ({
 	label: caffeineContent,
@@ -53,10 +53,12 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					id="vendor"
 					items={brandOptions}
 					inputAttributes={{
-						required: true,
+						// required: true,
 						autocomplete: 'off',
+						'aria-required': 'true',
 						'data-lpignore': 'true'
 					}}
+					required
 					clearable={false}
 					showChevron
 					placeholder=""
@@ -125,7 +127,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					showChevron
 					placeholder=""
-					value={defaultValues?.get('ingredients')}
+					value={defaultValues?.getAll('ingredients')}
 				/>
 				<small id="ingredients-error" class="error-message"></small>
 			</div>

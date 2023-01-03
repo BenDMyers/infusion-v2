@@ -4,6 +4,8 @@ import { getBrandById, getBrandBySlug } from '../../../api/brands';
 import { getDatabase } from '../../../api/client';
 import { getTeaBySlugs } from '../../../api/teas';
 import type { ApiRouteBody } from '../../../types/api-routes';
+import type { Option } from '../../../types/ui';
+import { reshapeFormData } from '../../../utils/reshape-form-data';
 import { sluggify } from '../../../utils/slug';
 
 const CONTAINS_ALPHANUMERIC_CHARACTER = /[a-zA-Z0-9]/;
@@ -45,11 +47,13 @@ export const post: APIRoute = async ({ request, redirect }) => {
 		);
 	}
 
-	const brandId = new ObjectId(formData.get('vendor') as string);
+	const normalizedFormData = reshapeFormData(formData);
+
+	const brandId = new ObjectId(normalizedFormData.vendor);
 	const brand = await getBrandById(brandId);
 	if (!brand) {
 		const body: ApiRouteBody = {
-			errors: {name: 'Brand is required'}
+			errors: {vendor: 'Brand is required'}
 		};
 
 		return new Response(
@@ -81,7 +85,10 @@ export const post: APIRoute = async ({ request, redirect }) => {
 	try {
 		const db = await getDatabase();
 		const teasCollection = await db.collection('teas');
-		const createdTea = await teasCollection.insertOne(Object.fromEntries(formData));
+		const createdTea = await teasCollection.insertOne({
+			...normalizedFormData,
+			vendor: brandId
+		});
 
 		if (createdTea) {
 			return redirect(`/teas/${candidateBrandSlug}/${candidateTeaSlug}/`);

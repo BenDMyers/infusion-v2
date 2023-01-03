@@ -70,11 +70,12 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		<Detail name="Brand">
 			<a href={brandUrl}>{brand?.name}</a>
 		</Detail>
-		{!!tea?.teaType?.length && (
-			<Detail name="Type">
-				{tea.teaType.join(', ')}
-			</Detail>
-		)}
+		<Detail name="Type">
+			{!!tea?.teaType?.length ?
+				tea.teaType.join(', ') :
+				'None'
+			}
+		</Detail>
 		{tea?.caffeineLevel && (
 			<Detail name="Caffeine Content">
 				{tea.caffeineLevel}
@@ -94,17 +95,22 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		)}
 		{showRecommendationDetail && (
 			<Detail name="Recommendation">
-				<PreparationDetails
-					amount={tea.recommendedAmount}
-					degreesFahrenheit={
-						(tea.recommendedSteepTemperature && tea.recommendedSteepTemperature > 0) ?
-							tea.recommendedSteepTemperature :
-							undefined
-					}
-					freeform={tea.recommendedHotOrIced !== 'Iced'}
-					hotOrIced={tea.recommendedHotOrIced}
-					steepTime={tea.recommendedSteepTime}
-				/>
+				{
+					tea.recommendedHotOrIced === 'Iced' ?
+						'Iced' : (
+						<PreparationDetails
+							amount={tea.recommendedAmount}
+							degreesFahrenheit={
+								(tea.recommendedSteepTemperature && tea.recommendedSteepTemperature > 0) ?
+									tea.recommendedSteepTemperature :
+									undefined
+							}
+							freeform
+							hotOrIced={tea.recommendedHotOrIced}
+							steepTime={tea.recommendedSteepTime}
+						/>
+					)
+				}
 			</Detail>
 		)}
 		<AvailabilityDetail
@@ -137,6 +143,11 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		{tea?.preferredStyles && (
 			<Detail name="Preferred Steeps">
 				{tea.preferredStyles}
+			</Detail>
+		)}
+		{tea?.memo && (
+			<Detail name="Memo">
+				{tea.memo}
 			</Detail>
 		)}
 	</DetailsGrid>
