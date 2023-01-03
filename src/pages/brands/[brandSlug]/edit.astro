@@ -22,7 +22,7 @@ const brand = await getBrandBySlug(brandSlug);
 			name="_method"
 			value="put"
 		/>
-		<div class="field">
+		<div data-field="name">
 			<label for="name">Name</label>
 			<input
 				type="text"
@@ -35,7 +35,7 @@ const brand = await getBrandBySlug(brandSlug);
 			/>
 			<small id="name-error" class="error-message"></small>
 		</div>
-		<div class="field">
+		<div data-field="url">
 			<label for="url">URL</label>
 			<input
 				type="url"
@@ -46,7 +46,7 @@ const brand = await getBrandBySlug(brandSlug);
 			/>
 			<small id="url-error" class="error-message"></small>
 		</div>
-		<div class="field">
+		<div data-field="twitter">
 			<label for="twitter">Twitter</label>
 			<input
 				type="text"

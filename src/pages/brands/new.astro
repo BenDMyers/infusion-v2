@@ -7,17 +7,17 @@ import FormLogic from '../../components/FormLogic.astro';
 <Layout title="Add a Brand">
 	<h1>Add a Brand</h1>
 	<form action="/api/brand" method="post">
-		<div class="field">
+		<div data-field="name">
 			<label for="name">Name</label>
 			<input type="text" required name="name" id="name" minlength="1" aria-describedby="name-error" />
 			<small id="name-error" class="error-message"></small>
 		</div>
-		<div class="field">
+		<div data-field="url">
 			<label for="url">URL</label>
 			<input type="url" name="url" id="url" aria-describedby="url-error" />
 			<small id="url-error" class="error-message"></small>
 		</div>
-		<div class="field">
+		<div data-field="twitter">
 			<label for="twitter">Twitter</label>
 			<input
 				type="text"
