@@ -181,19 +181,19 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				/>
 				<small id="availability-error" class="error-message"></small>
 			</div>
-			<div data-field="discontinued">
-				<label for="discontinued">Discontinued?</label>
+			<fieldset data-field="discontinued">
+				<legend>Discontinued?</legend>
 				<label class="inline-label">
 					<input type="checkbox" name="discontinued" id="discontinued" />
 					<span>This tea is no longer available</span>
 				</label>
 				<small id="discontinued-error" class="error-message"></small>
-			</div>
-			<div data-field="monthsAvailable">
-				<label for="monthsAvailable">Months Available</label>
+			</fieldset>
+			<fieldset data-field="monthsAvailable">
+				<legend>Months Available</legend>
 				<MultiMonthSelect name="monthsAvailable" />
 				<small id="monthsAvailable-error" class="error-message"></small>
-			</div>
+			</fieldset>
 		</div>
 		<div class="row">
 			<div data-field="preferredStyles">
