@@ -1,4 +1,4 @@
-import type { ObjectId } from 'mongodb';
+import type { ObjectId, WithId } from 'mongodb';
 
 export type Brand = {
 	name: string,
@@ -53,7 +53,7 @@ export type Tea = {
 	favoriteSteep?: ObjectId,
 	image?: string
 	ingredients: string[],
-	memo: string,
+	memo?: string,
 	monthsAvailable?: Month[],
 	preferredStyles?: string,
 	price?: string,
@@ -70,3 +70,5 @@ export type Tea = {
 };
 
 export type WithEmptyStringOption<E> = '' | E;
+
+export type SimpleReference = WithId<{name: string}>;

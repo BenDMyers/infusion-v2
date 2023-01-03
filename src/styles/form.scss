@@ -1,0 +1,151 @@
+@use 'sass:color';
+@use 'sass:math';
+@use 'open-props-scss' as op;
+@use './tokens.scss' as *;
+@import './mixins.scss';
+
+:root {
+	accent-color: $teal-9;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	gap: op.$size-3;
+	margin-inline: auto;
+
+	[data-field] {
+		display: flex;
+		flex-direction: column;
+		max-width: 100%;
+
+		& > input {
+			padding-block: 6.5px;
+		}
+	}
+
+	[type="submit"] {
+		@include cta();
+		@include with-loading-spinner();
+		width: max-content;
+		margin-inline: auto;
+	}
+
+	input, select {
+		background-color: var(--card-surface);
+		border: 1px solid op.$stone-7;
+		border-radius: op.$radius-2;
+		padding-block: math.div(op.$size-2, 2);
+		padding-inline: op.$size-3;
+
+		&:focus-visible {
+			outline-offset: 0;
+		}
+	}
+
+	label {
+		font-size: op.$font-size-1;
+		font-weight: op.$font-weight-7;
+
+		&:has(+ :required)::after,
+		&:has(+ * :required)::after {
+			display: inline-block;
+			content: '*';
+			content: '*' / '';
+			color: op.$pink-9;
+			margin-inline-start: 0.1rem;
+			margin-block-end: -1rem;
+		}
+
+		&.inline-label {
+			font-weight: op.$font-weight-4;
+			display: flex;
+			gap: op.$size-2;
+			padding-block: 8px;
+		}
+	}
+
+	.error-message {
+		display: block;
+		color: op.$pink-9;
+		font-weight: op.$font-weight-7;
+		min-height: 1.5rem;
+
+		&:empty {
+			visibility: hidden;
+		}
+	}
+
+	.row {
+		display: flex;
+		flex-direction: row;
+		gap: op.$size-5;
+		width: 100%;
+
+		@media (op.$lg-n-below) {
+			flex-direction: column;
+
+			[data-field] {
+				width: 100%;
+			}
+		}
+	}
+
+	.svelte-select {
+		&.focused {
+			border: 1px solid transparent !important;
+			outline: var(--border-focused);
+		}
+
+		--background: var(--card-surface);
+		--border: 1px solid #{op.$stone-7};
+		--border-hover: 1px solid #{op.$stone-7};
+		--border-focused: 3px solid #{$teal-8};
+		--multi-select-input-margin: 0;
+
+		.chevron {
+			cursor: pointer;
+		}
+
+		.value-container {
+			width: calc(100% - 1.5ch);
+		}
+
+		.indicators {
+			align-items: flex-start !important;
+		}
+		
+		.svelte-select,
+		.multi-item,
+		.list-item,
+		.item {
+			cursor: pointer !important;
+		}
+	}
+}
+
+[type="checkbox"] {
+	width: op.$size-4;
+
+	&:focus-visible {
+		outline-offset: -3px !important;
+		outline-width: 4px;
+		border-radius: 10%;
+	}
+}
+
+.multi-month-select {
+	display: flex;
+	flex-wrap: wrap;
+	gap: op.$size-2;
+
+	[data-month] {
+		@include button();
+		padding-inline: 0.75rem;
+
+		&[aria-pressed="true"]:not(:hover) {
+			background-color: $teal-9;
+			color: $teal-0;
+		}
+	}
+}

@@ -6,3 +6,9 @@ export type Detail = {
 export type DetailList = Detail[];
 
 export type Availability = 'available' | 'unavailable' | 'leaving';
+
+export type Option = {
+	label: string,
+	subtitle?: string,
+	value: string,
+};

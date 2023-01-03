@@ -12,6 +12,38 @@
 	}
 }
 
+@mixin button {
+	background-color: op.$stone-4;
+	border: none;
+	border-radius: op.$radius-2;
+	box-shadow: var(--shadow);
+	color: op.$stone-11;
+	font-weight: op.$font-weight-7;
+	padding-inline: op.$size-3;
+	padding-block: op.$size-2;
+	transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	text-decoration: none;
+
+	display: flex;
+	align-items: center;
+	gap: op.$size-2;
+	
+	&:hover {
+		background-color: tokens.$teal-10;
+		color: tokens.$teal-0;
+	}
+
+	svg {
+		display: inline;
+		height: 1rem;
+		opacity: 0.8;
+	}
+
+	@media (forced-colors: active) {
+		outline: 1px solid LinkText;
+	}
+}
+
 @mixin cta {
 	background-color: color.scale(tokens.$teal-9, $lightness: -10%);
 	border: none;

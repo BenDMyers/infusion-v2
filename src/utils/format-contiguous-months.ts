@@ -2,7 +2,7 @@ import type { Month } from '../types/api';
 
 type MonthRange = {start: Month, end: Month};
 
-const MONTHS: Month[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+export const MONTHS: Month[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export function formatContiguousMonths(monthsAvailable: Month[] = []) {
 	if (monthsAvailable.length === 0 || monthsAvailable.length >= 12) {

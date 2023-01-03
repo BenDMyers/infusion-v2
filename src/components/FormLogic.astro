@@ -1,4 +1,6 @@
 <script>
+	import type { Month } from '../types/api';
+
 	function setSubmitButtonLoading(form: HTMLFormElement, loading: boolean) {
 		const submitButton = form.querySelector<HTMLButtonElement>('[type="submit"]');
 		if (loading) {
@@ -61,6 +63,35 @@
 		const siblingNode = target.nextElementSibling;
 		if (siblingNode && siblingNode.classList.contains('error-message')) {
 			siblingNode.innerHTML = '';
+		}
+	});
+
+	document.addEventListener('click', (event) => {
+		const target = event.target as HTMLElement;
+		const monthButton = target.closest<HTMLButtonElement>('[data-month]');
+		if (!monthButton) return;
+
+		event.preventDefault();
+
+		const fieldWrapper = target.closest<HTMLDivElement>('[data-field]');
+		if (!fieldWrapper) return;
+
+		const hiddenInput = fieldWrapper.querySelector<HTMLInputElement>('input[type="hidden"]');
+		if (!hiddenInput) return;
+
+		const currentMonths = JSON.parse(hiddenInput.value) as Month[];
+		const selectedMonth = monthButton.getAttribute('data-month') as Month;
+		const monthIndex = currentMonths.indexOf(selectedMonth);
+		const monthAlreadySelected = monthIndex > -1;
+
+		if (monthAlreadySelected) {
+			currentMonths.splice(monthIndex, 1);
+			hiddenInput.value = JSON.stringify(currentMonths);
+			monthButton.setAttribute('aria-pressed', 'false');
+		} else {
+			currentMonths.push(selectedMonth);
+			hiddenInput.value = JSON.stringify(currentMonths);
+			monthButton.setAttribute('aria-pressed', 'true');
 		}
 	});
 </script>

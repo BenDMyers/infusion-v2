@@ -1,10 +1,12 @@
 ---
+import { Sprite } from 'astro-icon';
 import normalizeUrl from 'normalize-url';
 import { getBrandBySlug } from '../../api/brands';
 import { getSteepsGroupedByTeas } from '../../api/steeps';
 import { getTeasForBrand } from '../../api/teas';
 import Detail from '../../components/Detail.astro';
 import DetailsGrid from '../../components/DetailsGrid.astro';
+import EllipsisWithDropdownMenu from '../../components/EllipsisWithDropdownMenu.astro';
 import TeaCard from '../../components/TeaCard.astro';
 import Layout from '../../layouts/Layout.astro';
 
@@ -32,9 +34,23 @@ if (teas.length === 0) {
 	teasAddedLabel = '1 tea';
 }
 
+const editHref = new URL(`/brands/${brandSlug}/edit/`, Astro.url);
+
 ---
 
 <Layout title={brand.name}>
+	<EllipsisWithDropdownMenu>
+		<li>
+			<Sprite
+				aria-hidden="true"
+				focusable="false"
+				name="mdi:pencil"
+			/>
+			<a href={editHref}>
+				Edit
+			</a>
+		</li>
+	</EllipsisWithDropdownMenu>
 	<h1>{brand.name}</h1>
 	<DetailsGrid>
 		{!!brand.url && (
@@ -91,5 +107,11 @@ if (teas.length === 0) {
 	:global(dl) {
 		margin-block-start: op.$size-fluid-1;
 		margin-block-end: op.$size-fluid-3;
+	}
+	:global(.ellipsis-menu) {
+		float: right;
+		margin-block-start: -0.5rem;
+		margin-inline-end: -1.25rem;
+		position: relative;
 	}
 </style>

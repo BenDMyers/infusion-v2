@@ -68,5 +68,5 @@ interface WithDate {
 	date: Date
 };
 
-export const byName = comparators((a: WithName) => a.name);
+export const byName = comparators((a: WithName) => a.name.toLocaleLowerCase());
 export const byDate = comparators((a: WithDate) => a.date);

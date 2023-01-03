@@ -1,0 +1,28 @@
+---
+import type { Month } from '../types/api';
+import { MONTHS } from '../utils/format-contiguous-months';
+
+export interface Props {
+	defaultValue?: Month[],
+	name: string
+}
+
+const {defaultValue = [], name} = Astro.props;
+---
+
+<input
+	type="hidden"
+	name={name}
+	value={JSON.stringify(defaultValue)}
+/>
+<div class="multi-month-select">
+	{MONTHS.map(month => (
+		<button
+			aria-label={month}
+			data-month={month}
+			aria-pressed={defaultValue.includes(month) ? 'true' : 'false'}
+		>
+			{month.substring(0, 3)}
+		</button>
+	))}
+</div>

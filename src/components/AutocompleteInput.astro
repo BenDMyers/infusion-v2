@@ -1,0 +1,50 @@
+---
+import type { Option } from '../types/ui';
+
+export interface Props {
+	name: string;
+	options: Option[];
+};
+
+const {name, options} = Astro.props;
+const autocompleteOptionsListId = `autocomplete-options--${name}`;
+---
+
+<select name={name} aria-hidden="true" tabindex="-1" class="visually-hidden">
+	{options.map(({label, value}) => <option value={value}>{label}</option>)}
+</select>
+<div class="autocomplete">
+	<input
+		aria-owns={autocompleteOptionsListId}
+		type="text"
+		autocapitalize="none"
+		autocomplete="off"
+		aria-autocomplete="list"
+		role="combobox"
+		id={name}
+		aria-expanded="false"
+	/>
+	<small id={`${name}-error`} class="error-message"></small>
+	<ul
+		id={autocompleteOptionsListId}
+		role="listbox"
+		class="hidden"
+	>
+		{options.map(({label, subtitle, value}) => (
+			<li
+				role="option"
+				tabindex="-1"
+				aria-selected="false"
+				data-option-value={value}
+				id={`${name}-autocomplete-${value}`}
+			>
+				{label}
+			</li>
+		))};
+	</ul>
+	<div aria-live="polite" role="status" class="visually-hidden"></div>
+</div>
+
+<script>
+	
+</script>
