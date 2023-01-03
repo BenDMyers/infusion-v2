@@ -9,6 +9,9 @@ import { caffeineContentValues, hotOrIced } from '../../utils/tea-enums';
 import { getAllIngredients } from '../../api/ingredients';
 import { field } from '../../utils/field';
 import MultiMonthSelect from '../../components/MultiMonthSelect.astro';
+import type { Month } from '../../types/api';
+
+const defaultValues = new URLSearchParams(Astro.url.search);
 
 const [brands, teaTypes, ingredients] = await Promise.all([
 	getAllBrands(),
@@ -57,6 +60,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					showChevron
 					placeholder=""
+					value={defaultValues?.get('vendor')}
 				/>
 				<small id="vendor-error" class="error-message"></small>
 			</div>
@@ -67,6 +71,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					type="text"
 					required
 					minlength="1"
+					value={defaultValues?.get('name')}
 				/>
 				<small id="name-error" class="error-message"></small>
 			</div>
@@ -85,6 +90,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					showChevron
 					placeholder=""
+					value={defaultValues?.get('teaType')}
 				/>
 				<small id="teaType-error" class="error-message"></small>
 			</div>
@@ -100,7 +106,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					searchable={false}
 					showChevron
-					value={caffeineContentOptions[0]}
+					value={defaultValues?.get('caffeineLevel') || caffeineContentOptions[0]}
 				/>
 				<small id="caffeineLevel-error" class="error-message"></small>
 			</div>
@@ -119,6 +125,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					showChevron
 					placeholder=""
+					value={defaultValues?.get('ingredients')}
 				/>
 				<small id="ingredients-error" class="error-message"></small>
 			</div>
@@ -127,6 +134,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<input
 					{...field('price')}
 					type="text"
+					value={defaultValues?.get('price')}
 				/>
 				<small id="price-error" class="error-message"></small>
 			</div>
@@ -142,7 +150,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					searchable={false}
 					showChevron
-					value={recommendedHotOrIcedOptions[0]}
+					value={defaultValues?.get('recommendedHotOrIced') || recommendedHotOrIcedOptions[0]}
 				/>
 				<small id="recommendedHotOrIced-error" class="error-message"></small>
 			</div>
@@ -151,6 +159,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<input
 					{...field('recommendedAmount')}
 					type="text"
+					value={defaultValues?.get('recommendedAmount')}
 				/>
 				<small id="recommendedAmount-error" class="error-message"></small>
 			</div>
@@ -159,6 +168,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<input
 					{...field('recommendedSteepTime')}
 					type="text"
+					value={defaultValues?.get('recommendedSteepTime')}
 				/>
 				<small id="recommendedSteepTime-error" class="error-message"></small>
 			</div>
@@ -168,6 +178,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					{...field('recommendedSteepTemperature')}
 					type="number"
 					placeholder="0"
+					value={defaultValues?.get('recommendedSteepTemperature')}
 				/>
 				<small id="recommendedSteepTemperature-error" class="error-message"></small>
 			</div>
@@ -178,20 +189,32 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<input
 					{...field('availability')}
 					type="text"
+					value={defaultValues?.get('availability')}
 				/>
 				<small id="availability-error" class="error-message"></small>
 			</div>
 			<fieldset data-field="discontinued">
 				<legend>Discontinued?</legend>
 				<label class="inline-label">
-					<input type="checkbox" name="discontinued" id="discontinued" />
+					<input
+						type="checkbox"
+						name="discontinued"
+						id="discontinued"
+						checked={defaultValues?.get('discontinued') ?
+							JSON.parse(defaultValues.get('discontinued') || '') :
+							false
+						}
+					/>
 					<span>This tea is no longer available</span>
 				</label>
 				<small id="discontinued-error" class="error-message"></small>
 			</fieldset>
 			<fieldset data-field="monthsAvailable">
 				<legend>Months Available</legend>
-				<MultiMonthSelect name="monthsAvailable" />
+				<MultiMonthSelect
+					name="monthsAvailable"
+					defaultValue={defaultValues?.getAll('monthsAvailable') as Month[]}
+				/>
 				<small id="monthsAvailable-error" class="error-message"></small>
 			</fieldset>
 		</div>
@@ -201,6 +224,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<input
 					{...field('preferredStyles')}
 					type="text"
+					value={defaultValues?.get('preferredStyles')}
 				/>
 				<small id="preferredStyles-error" class="error-message"></small>
 			</div>
@@ -209,6 +233,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<input
 					{...field('toTry')}
 					type="text"
+					value={defaultValues?.get('toTry')}
 				/>
 				<small id="toTry-error" class="error-message"></small>
 			</div>
@@ -217,6 +242,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<input
 					{...field('memo')}
 					type="text"
+					value={defaultValues?.get('memo')}
 				/>
 				<small id="memo-error" class="error-message"></small>
 			</div>
