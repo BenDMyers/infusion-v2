@@ -102,6 +102,7 @@ form {
 		--border: 1px solid #{op.$stone-7};
 		--border-hover: 1px solid #{op.$stone-7};
 		--border-focused: 3px solid #{$teal-8};
+		--font-size: 18px;
 		--multi-select-input-margin: 0;
 
 		.chevron {
@@ -151,20 +152,6 @@ form {
 	}
 }
 
-
-// LEGEND + FIELDSET RESET FROM https://thatemil.com/blog/2015/01/03/reset-your-fieldset/
-legend {
-	padding: 0;
-	display: table;
-}
-
 fieldset {
 	border: 0;
-	padding: 0.01em 0 0 0;
-	margin: 0;
-	min-width: 0;
-
-	body:not(:-moz-handler-blocked) & {
-		display: table-cell;
-	}
 }
