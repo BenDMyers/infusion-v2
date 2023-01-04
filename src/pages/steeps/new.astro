@@ -188,7 +188,7 @@ const today = new Date()
 					/>
 					<small id="userDate-error" class="error-message"></small>
 				</div>
-				<div data-field="reinfusions">
+				<!-- <div data-field="reinfusions">
 					<label for="reinfusions">Reinfusions</label>
 					<input
 						{...field('reinfusions')}
@@ -198,7 +198,7 @@ const today = new Date()
 						value={defaultValues?.get('reinfusions')}
 					/>
 					<small id="reinfusions-error" class="error-message"></small>
-				</div>
+				</div> -->
 				<div data-field="addins">
 					<label for="addins">Add-Ins</label>
 					<Select
@@ -289,7 +289,7 @@ const today = new Date()
 	}
 
 	[data-field="addins"] {
-		width: math.percentage($number: 8 / 16);
+		width: math.percentage($number: 12 / 16);
 	}
 
 	[data-field="preparationNotes"],
