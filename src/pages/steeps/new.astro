@@ -1,0 +1,342 @@
+---
+import Select from 'svelte-select';
+import { getAllAddins } from '../../api/addins';
+import { getAllTeas } from '../../api/teas';
+import FormLogic from '../../components/FormLogic.astro';
+import RatingField from '../../components/RatingField.astro';
+import Layout from '../../layouts/Layout.astro';
+import type { SteepFormat, WithEmptyStringOption } from '../../types/api';
+import type { Option } from '../../types/ui';
+import { field } from '../../utils/field';
+import { format } from '../../utils/tea-enums';
+
+const defaultValues = new URLSearchParams(Astro.url.search);
+
+const [teas, allAddins] = await Promise.all([
+	getAllTeas(),
+	getAllAddins()
+]);
+
+const teaOptions: Option[] = teas.map(tea => ({
+	label: tea.name,
+	value: tea._id.toString()
+}));
+
+const formatOptions: Option[] = format.map(fmt => ({
+	label: fmt,
+	value: fmt
+}));
+
+const hotOrIcedOptions: Option[] = [
+	{label: 'Hot', value: 'Hot'},
+	{label: 'Iced', value: 'Iced'}
+];
+
+const addinOptions: Option[] = allAddins.map(addin => ({
+	label: addin.name,
+	value: addin.name
+}));
+
+const today = new Date()
+	.toLocaleDateString()
+
+---
+
+<Layout title="Log a Steep">
+	<h1>Log a Steep</h1>
+	<form action="/api/steep" method="post">
+		<section id="basic-details" aria-labelledby="basic-details-heading">
+			<h2 id="basic-details-heading">Basic Details</h2>
+			<div class="row">
+				<div data-field="tea">
+					<label for="tea">Tea</label>
+					<Select
+						client:load
+						name="tea"
+						id="tea"
+						items={teaOptions}
+						inputAttributes={{
+							// required: true,
+							autocomplete: 'off',
+							'aria-required': 'true',
+							'data-lpignore': 'true'
+						}}
+						required
+						clearable={false}
+						showChevron
+						placeholder=""
+						value={defaultValues?.get('tea')}
+					/>
+					<small id="tea-error" class="error-message"></small>
+				</div>
+				<div data-field="format">
+					<label for="format">Loose Leaf or Teabag</label>
+					<Select
+						client:load
+						name="format"
+						id="format"
+						items={formatOptions}
+						inputAttributes={{
+							autocomplete: 'off',
+							'data-lpignore': 'true'
+						}}
+						searchable={false}
+						clearable={false}
+						showChevron
+						placeholder=""
+						value={defaultValues?.get('format') || formatOptions[0]}
+					/>
+					<small id="format-error" class="error-message"></small>
+				</div>
+				<div data-field="hotOrIced">
+					<label for="hotOrIced">Hot or Iced</label>
+					<Select
+						client:load
+						name="hotOrIced"
+						id="hotOrIced"
+						items={hotOrIcedOptions}
+						inputAttributes={{
+							autocomplete: 'off',
+							'data-lpignore': 'true'
+						}}
+						searchable={false}
+						clearable={false}
+						showChevron
+						placeholder=""
+						value={defaultValues?.get('hotOrIced') || hotOrIcedOptions[0]}
+					/>
+					<small id="hotOrIced-error" class="error-message"></small>
+				</div>
+			</div>
+			<div class="row">
+				<div
+					data-field="amountOfLooseLeafTeaInTeaspoons"
+					hidden={(defaultValues?.get('format') as WithEmptyStringOption<SteepFormat>) === 'Teabag'}
+				>
+					<label for="amountOfLooseLeafTeaInTeaspoons">Teaspoons of Tea</label>
+					<input
+						{...field('amountOfLooseLeafTeaInTeaspoons')}
+						type="number"
+						min="0"
+						placeholder="0"
+						value={defaultValues?.get('amountOfLooseLeafTeaInTeaspoons')}
+					/>
+					<small id="amountOfLooseLeafTeaInTeaspoons-error" class="error-message"></small>
+				</div>
+				<div
+					data-field="numTeabags"
+					hidden={(defaultValues?.get('format') as WithEmptyStringOption<SteepFormat>) !== 'Teabag'}
+				>
+					<label for="numTeabags">Teabags Used</label>
+					<input
+						{...field('numTeabags')}
+						type="number"
+						min="0"
+						placeholder="0"
+						value={defaultValues?.get('numTeabags')}
+					/>
+					<small id="numTeabags-error" class="error-message"></small>
+				</div>
+				<div data-field="steepTime">
+					<label for="steepTime">Time (minutes)</label>
+					<input
+						{...field('steepTime')}
+						type="number"
+						min="0"
+						placeholder="0"
+						value={defaultValues?.get('steepTime')}
+					/>
+					<small id="steepTime-error" class="error-message"></small>
+				</div>
+				<div data-field="amountOfWaterInOunces">
+					<label for="amountOfWaterInOunces">Ounces of Water</label>
+					<input
+						{...field('amountOfWaterInOunces')}
+						type="number"
+						min="0"
+						placeholder="0"
+						required
+						value={defaultValues?.get('amountOfWaterInOunces')}
+					/>
+					<small id="amountOfWaterInOunces-error" class="error-message"></small>
+				</div>
+				<div data-field="degreesFahrenheit">
+					<label for="degreesFahrenheit">Water Temperature (℉)</label>
+					<input
+						{...field('degreesFahrenheit')}
+						type="number"
+						min="0"
+						placeholder="0"
+						required
+						value={defaultValues?.get('degreesFahrenheit')}
+					/>
+					<small id="degreesFahrenheit-error" class="error-message"></small>
+				</div>
+			</div>
+		</section>
+		<section id="more-information" aria-labelledby="more-information-heading">
+			<h2 id="more-information-heading">More Information</h2>
+			<div class="row">
+				<div data-field="userDate">
+					<label for="userDate">Date Steeped</label>
+					<input
+						{...field('userDate')}
+						type="date"
+						min="0"
+						placeholder="0"
+						value={defaultValues?.get('userDate')}
+					/>
+					<small id="userDate-error" class="error-message"></small>
+				</div>
+				<div data-field="reinfusions">
+					<label for="reinfusions">Reinfusions</label>
+					<input
+						{...field('reinfusions')}
+						type="number"
+						min="0"
+						placeholder="0"
+						value={defaultValues?.get('reinfusions')}
+					/>
+					<small id="reinfusions-error" class="error-message"></small>
+				</div>
+				<div data-field="addins">
+					<label for="addins">Add-Ins</label>
+					<Select
+						client:load
+						name="addins"
+						id="addins"
+						items={addinOptions}
+						inputAttributes={{
+							autocomplete: 'off',
+							'data-lpignore': 'true'
+						}}
+						multiple
+						clearable={false}
+						showChevron
+						placeholder=""
+						value={defaultValues?.get('addins')}
+					/>
+					<small id="addins-error" class="error-message"></small>
+				</div>
+			</div>
+			<div class="row">
+				<div data-field="preparationNotes">
+					<label for="preparationNotes">Notes</label>
+					<input
+						{...field('preparationNotes')}
+						type="text"
+						value={defaultValues?.get('preparationNotes')}
+					/>
+					<small id="preparationNotes-error" class="error-message"></small>
+				</div>
+			</div>
+		</section>
+		<section id="what-did-you-think" aria-labelledby="what-did-you-think-heading">
+			<h2 id="what-did-you-think-heading">What Did You Think?</h2>
+			<div data-field="rating">
+				<fieldset>
+					<legend>Rating</legend>
+					<RatingField name="rating" />
+				</fieldset>
+			</div>
+		</section>
+		<button type="submit">Submit</button>
+	</form>
+</Layout>
+<FormLogic />
+
+<style lang="scss">
+	@use 'sass:math';
+	@use 'open-props-scss' as op;
+
+	:global(form) {
+		margin-block-start: op.$size-5;
+		
+		h2 {
+			margin-block-end: op.$size-2;
+		}
+	}
+
+	[data-field="tea"],
+	[data-field="format"],
+	[data-field="hotOrIced"] {
+		width: math.percentage($number: 1 / 3);
+	}
+
+	[data-field="amountOfLooseLeafTeaInTeaspoons"],
+	[data-field="numTeabags"],
+	[data-field="steepTime"],
+	[data-field="amountOfWaterInOunces"],
+	[data-field="degreesFahrenheit"],
+	[data-field="userDate"],
+	[data-field="reinfusions"] {
+		width: math.percentage($number: 4 / 16);
+	}
+
+	[data-field="addins"] {
+		width: math.percentage($number: 8 / 16);
+	}
+
+	[data-field="preparationNotes"] {
+		width: 100%;
+	}
+</style>
+
+<script>
+	const dateField = document.querySelector<HTMLInputElement>('[name="userDate"]');
+	if (dateField && !dateField.value) {
+		const today = new Date();
+		const yy = today.getFullYear();
+		const oneBasedMonth = today.getMonth() + 1;
+		const mm = (oneBasedMonth < 10) ? `0${oneBasedMonth}` : oneBasedMonth;
+		const dd = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+		dateField.value = `${yy}-${mm}-${dd}`;
+	}
+
+	const formatField = document.querySelector<HTMLInputElement>('[name="format"]');
+	const hotOrIcedField = document.querySelector<HTMLInputElement>('[name="hotOrIced"]');
+	const steepTimeField = document.querySelector<HTMLInputElement>('[name="steepTime"]');
+	const degreesField = document.querySelector<HTMLInputElement>('[name="degreesFahrenheit"]');
+	const teaspoonsFieldWrapper = document.querySelector<HTMLDivElement>('[data-field="amountOfLooseLeafTeaInTeaspoons"]');
+	const teabagsFieldWrapper = document.querySelector<HTMLDivElement>('[data-field="numTeabags"]');
+
+	const formatFieldObserver = new MutationObserver((mutations, observer) => {
+		if (mutations[0].attributeName === 'value') {
+			try {
+				const newFormatString = formatField?.value || '';
+				const newFormatOption = JSON.parse(newFormatString) as {label: 'Loose leaf' | 'Teabag', value: 'Loose leaf' | 'Teabag'};
+				if (newFormatOption.value === 'Loose leaf') {
+					teaspoonsFieldWrapper && (teaspoonsFieldWrapper.hidden = false);
+					teabagsFieldWrapper && (teabagsFieldWrapper.hidden = true);
+				} else {
+					teaspoonsFieldWrapper && (teaspoonsFieldWrapper.hidden = true);
+					teabagsFieldWrapper && (teabagsFieldWrapper.hidden = false);
+				}
+
+			} catch (err) {
+				teaspoonsFieldWrapper && (teaspoonsFieldWrapper.hidden = false);
+				teabagsFieldWrapper && (teabagsFieldWrapper.hidden = true);
+			}
+		}
+	});
+	formatFieldObserver.observe(formatField as Node, {attributes: true});
+
+	const hotOrIcedFieldObserver = new MutationObserver((mutations, observer) => {
+		if (mutations[0].attributeName === 'value') {
+			try {
+				const newHotOrIcedString = hotOrIcedField?.value || '';
+				const newHotOrIcedOption = JSON.parse(newHotOrIcedString) as {label: 'Hot' | 'Iced', value: 'Hot' | 'Iced'};
+				const hot = newHotOrIcedOption.value === 'Hot';
+				const iced = newHotOrIcedOption.value === 'Iced';
+				steepTimeField && (steepTimeField.disabled = iced);
+				steepTimeField && (steepTimeField.required = hot);
+				degreesField && (degreesField.disabled = iced);
+				degreesField && (degreesField.required = hot);
+			} catch (err) {
+				steepTimeField?.setAttribute('disabled', 'false');
+				degreesField?.setAttribute('disabled', 'false');
+			}
+		}
+	});
+	hotOrIcedFieldObserver.observe(hotOrIcedField as Node, {attributes: true});
+</script>

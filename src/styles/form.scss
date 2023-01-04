@@ -41,6 +41,15 @@ form {
 		&:focus-visible {
 			outline-offset: 0;
 		}
+
+		&:disabled {
+			background-color: op.$stone-3;
+			color: op.$gray-6;
+		}
+
+		&::placeholder {
+			color: color.mix(op.$gray-6, op.$gray-7, $weight: 55%);
+		}
 	}
 
 	label,

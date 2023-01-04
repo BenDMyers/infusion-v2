@@ -1,0 +1,127 @@
+---
+export interface Props {
+	name: string;
+}
+
+const {name} = Astro.props;
+---
+
+<div class="rating-group">
+	<label for={`${name}-star0`} class="visually-hidden">
+		No stars
+	</label>
+	<input type="radio" value="" name={name} id={`${name}-star0`} checked={true} />
+
+	<label for={`${name}-star1`}>
+		<span class="visually-hidden">1 star</span>
+	  </label>
+	  <input type="radio" value="1" name="rating" id={`${name}-star1`} />
+	  
+	  <label for={`${name}-star2`}>
+	  	<span class="visually-hidden">2 stars</span>
+	  </label>
+	  <input type="radio" value="2" name="rating" id={`${name}-star2`} />
+	  
+	  <label for={`${name}-star3`}>
+		<span class="visually-hidden">3 stars</span>
+	  </label>
+	  <input type="radio" value="3" name="rating" id={`${name}-star3`} />
+	  
+	  <label for={`${name}-star4`}>
+	  	<span class="visually-hidden">4 stars</span>
+	  </label>
+	  <input type="radio" value="4" name="rating" id={`${name}-star4`} />
+	  
+	  <label for={`${name}-star5`}>
+	  	<span class="visually-hidden">5 stars</span>
+	  </label>
+	  <input type="radio" value="5" name="rating" id={`${name}-star5`} />
+</div>
+
+<style lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+
+	$selected-color: tokens.$teal-8;
+	$hover-color: tokens.$teal-10;
+	$unselected-color: op.$gray-5;
+
+	.rating-group {
+		width: max-content;
+		cursor: pointer;
+
+		&:has(:focus-visible) {
+			outline: 3px solid tokens.$teal-8;
+			outline-offset: 3px;
+		}
+	}
+
+	input[type="radio"] {
+		clip: rect(0 0 0 0); 
+		clip-path: inset(50%);
+		height: 1px;
+		overflow: hidden;
+		position: absolute;
+		white-space: nowrap; 
+		width: 1px;
+	}
+
+	label::before {
+		content: '★';
+		content: '★' / '';
+		// Default all stars to selected color
+		color: $selected-color;
+		font-size: 24px;
+	}
+
+	// (No hover) All stars after the selected one should be gray
+	:checked ~ label::before {
+		color: $unselected-color;
+		@media (forced-colors: active) {
+			color: CanvasText;
+			opacity: 40%;
+		}
+	}
+
+	.rating-group:hover {
+		// Default stars to hover color
+		// This will be overruled for stars after the cursor
+		@supports selector(:has(label:hover)) {
+			&:has(label:hover) {
+				label::before {
+					color: $hover-color;
+					@media (forced-colors: active) {
+						color: Highlight;
+						opacity: 100%;
+					}
+				}
+			}
+		}
+
+		@supports not selector(:has(label:hover)) {
+			label::before {
+				color: $hover-color;
+				@media (forced-colors: active) {
+					color: Highlight;
+					opacity: 100%;
+				}
+			}
+		}
+		
+		// Selected stars after the cursor should retain their selected color
+		label:hover ~ label::before {
+			color: $selected-color;
+		}
+
+		// Unselected stars after the cursor should retain their unselected color
+		label:hover ~ :checked ~ label::before,
+		:checked ~ label:hover ~ label::before {
+			color: $unselected-color;
+
+			@media (forced-colors: active) {
+				color: CanvasText;
+				opacity: 40%;
+			}
+		}
+	}
+</style>

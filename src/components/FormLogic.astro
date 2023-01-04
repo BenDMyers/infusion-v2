@@ -94,4 +94,25 @@
 			monthButton.setAttribute('aria-pressed', 'true');
 		}
 	});
+
+	document.addEventListener('click', (event) => {
+		const target = event.target as HTMLElement;
+		const ratingFieldStarLabel = target.closest<HTMLLabelElement>('.rating-group label');
+		if (!ratingFieldStarLabel) { return; }
+
+		const radioId = ratingFieldStarLabel.htmlFor;
+		const radio = document.getElementById(radioId) as HTMLInputElement;
+		const nullStar = target
+			.closest<HTMLDivElement>('.rating-group')
+			?.querySelector<HTMLInputElement>('[id*="star0"]');
+
+		if (!radio || !nullStar) { return; }
+
+		if (radio.checked) {
+			// https://stackoverflow.com/a/6246260
+			setTimeout(() => {
+				nullStar.checked = true;
+			}, 0);
+		}
+	});
 </script>
