@@ -49,7 +49,9 @@ form {
 		font-weight: op.$font-weight-7;
 
 		&:has(+ :required)::after,
-		&:has(+ * :required)::after {
+		&:has(+ * :required)::after,
+		&:has(+ [aria-required])::after,
+		&:has(+ * [aria-required])::after {
 			display: inline-block;
 			content: '*';
 			content: '*' / '';
