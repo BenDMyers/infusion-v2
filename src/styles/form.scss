@@ -94,8 +94,9 @@ form {
 		gap: op.$size-5;
 		width: 100%;
 
-		@media (op.$lg-n-below) {
+		@media (max-width: 1024px) {
 			flex-direction: column;
+			gap: op.$size-1;
 
 			[data-field] {
 				width: 100%;
