@@ -39,11 +39,12 @@ const {name} = Astro.props;
 </div>
 
 <style lang="scss">
+	@use 'sass:color';
 	@use 'open-props-scss' as op;
 	@use '../styles/tokens.scss' as tokens;
 
-	$selected-color: tokens.$teal-8;
-	$hover-color: tokens.$teal-10;
+	$selected-color: tokens.$teal-9;
+	$hover-color: color.mix(tokens.$teal-7, tokens.$teal-8);
 	$unselected-color: op.$gray-5;
 
 	.rating-group {
@@ -96,6 +97,15 @@ const {name} = Astro.props;
 					}
 				}
 			}
+			&.cleared:has(label:hover) {
+				label::before {
+					color: $unselected-color;
+					@media (forced-colors: active) {
+						color: CanvasText;
+						opacity: 40%;
+					}
+				}
+			}
 		}
 
 		@supports not selector(:has(label:hover)) {
@@ -104,6 +114,16 @@ const {name} = Astro.props;
 				@media (forced-colors: active) {
 					color: Highlight;
 					opacity: 100%;
+				}
+			}
+
+			&.cleared {
+				label::before {
+					color: $unselected-color;
+					@media (forced-colors: active) {
+						color: CanvasText;
+						opacity: 40%;
+					}
 				}
 			}
 		}

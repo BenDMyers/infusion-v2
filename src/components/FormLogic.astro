@@ -102,16 +102,25 @@
 
 		const radioId = ratingFieldStarLabel.htmlFor;
 		const radio = document.getElementById(radioId) as HTMLInputElement;
-		const nullStar = target
-			.closest<HTMLDivElement>('.rating-group')
-			?.querySelector<HTMLInputElement>('[id*="star0"]');
+		const ratingGroup = target.closest<HTMLDivElement>('.rating-group');
+		const fieldset = target.closest('fieldset');
+		const nullStar = ratingGroup?.querySelector<HTMLInputElement>('[id*="star0"]');
 
-		if (!radio || !nullStar) { return; }
+		if (!radio || !ratingGroup || !fieldset || !nullStar) { return; }
 
 		if (radio.checked) {
+			function unsetClearedState(event: Event) {
+				ratingGroup?.classList.remove('cleared');
+				ratingFieldStarLabel?.removeEventListener('mouseout', unsetClearedState);
+				fieldset?.removeEventListener('change', unsetClearedState);
+			}
+
 			// https://stackoverflow.com/a/6246260
 			setTimeout(() => {
 				nullStar.checked = true;
+				ratingGroup.classList.add('cleared');
+				ratingFieldStarLabel.addEventListener('mouseout', unsetClearedState);
+				fieldset.addEventListener('change', unsetClearedState);
 			}, 0);
 		}
 	});
