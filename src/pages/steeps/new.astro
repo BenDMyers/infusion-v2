@@ -233,11 +233,23 @@ const today = new Date()
 		</section>
 		<section id="what-did-you-think" aria-labelledby="what-did-you-think-heading">
 			<h2 id="what-did-you-think-heading">What Did You Think?</h2>
-			<div data-field="rating">
-				<fieldset>
-					<legend>Rating</legend>
-					<RatingField name="rating" />
-				</fieldset>
+			<div class="row">
+				<div data-field="rating">
+					<fieldset>
+						<legend>Rating</legend>
+						<RatingField name="rating" />
+					</fieldset>
+				</div>
+			</div>
+			<div class="row">
+				<div data-field="review">
+					<label for="review">Review</label>
+						<textarea
+							{...field('review')}
+							value={defaultValues?.get('review')}
+						/>
+						<small id="review-error" class="error-message"></small>
+				</div>
 			</div>
 		</section>
 		<button type="submit">Submit</button>
@@ -269,7 +281,8 @@ const today = new Date()
 	[data-field="amountOfWaterInOunces"],
 	[data-field="degreesFahrenheit"],
 	[data-field="userDate"],
-	[data-field="reinfusions"] {
+	[data-field="reinfusions"],
+	[data-field="rating"] {
 		width: math.percentage($number: 4 / 16);
 	}
 
@@ -277,8 +290,13 @@ const today = new Date()
 		width: math.percentage($number: 8 / 16);
 	}
 
-	[data-field="preparationNotes"] {
+	[data-field="preparationNotes"],
+	[data-field="review"] {
 		width: 100%;
+	}
+
+	[data-field="review"] {
+		margin-block-start: op.$size-3;
 	}
 </style>
 
