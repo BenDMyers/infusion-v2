@@ -173,3 +173,9 @@ textarea {
     min-height: 8rem;
     max-height: 24rem;
 }
+
+[type="date"] {
+	@media (max-width: 1024px) {
+		min-width: 95%;
+	}
+}
