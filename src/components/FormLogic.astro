@@ -37,7 +37,7 @@
 			const errors = Object.entries(body.errors ?? {});
 			for (const [fieldName, errorMessage] of errors) {
 				const field = document.querySelector<HTMLInputElement>(`[name="${fieldName}"]`);
-				const errorMessageNode = document.querySelector<HTMLSpanElement>(`[name="${fieldName}"] + .error-message`);
+				const errorMessageNode = document.getElementById(`${fieldName}-error`);
 				if (field) {
 					field.setAttribute('aria-invalid', 'true');
 				}

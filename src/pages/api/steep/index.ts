@@ -24,7 +24,6 @@ export const post: APIRoute = async ({request, redirect}) => {
 		);
 	}
 
-	
 	const normalizedFormData = reshapeFormData(formData);
 	
 	const teaId = new ObjectId(normalizedFormData.tea);

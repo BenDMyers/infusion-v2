@@ -33,3 +33,17 @@ export async function getSteepsForTea(teaId: ObjectId) {
 	steeps.sort(byDate.desc);
 	return steeps;
 }
+
+export async function getSteepById(steepId: ObjectId) {
+	const db = await getDatabase();
+	const steepsCollection = await db.collection('steeps');
+	const steep = await steepsCollection.findOne<WithId<Steep>>({ _id: steepId });
+	return steep;
+}
+
+export async function deleteSteepById(steepId: ObjectId) {
+	const db = await getDatabase();
+	const steepsCollection = await db.collection('steeps');
+	const deletionRecord = await steepsCollection.deleteOne({_id: steepId});
+	return deletionRecord;
+}

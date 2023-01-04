@@ -128,6 +128,10 @@ const {
 				// font-weight: op.$font-weight-6;
 			}
 
+			:global(button) {
+				border: none;
+			}
+
 			&.danger {
 				color: op.$pink-9;
 			}
@@ -144,6 +148,9 @@ const {
 </style>
 
 <script>
+	type Action = 'delete';
+	type Resource = 'brand' | 'steep' | 'tea';
+
 	document.addEventListener('click', function(event) {
 		const openDropdown = document.querySelector<HTMLDetailsElement>('.ellipsis-menu[open]');
 		if (event.target && !!openDropdown) {
@@ -153,4 +160,38 @@ const {
 			}
 		}
 	});
+
+	document.addEventListener('click', function (event) {
+		const target = event.target as HTMLElement;
+		if (!target) { return; }
+
+		const actionButton = target.closest<HTMLButtonElement>('[data-action]');
+		if (!actionButton) { return; }
+
+		const VALID_ACTIONS: Action[] = ['delete'];
+		const action = actionButton.getAttribute('data-action') as Action;
+		if (!VALID_ACTIONS.includes(action)) { return; }
+
+		const resource = actionButton.getAttribute('data-resource') as Resource;
+		const resourceId = actionButton.getAttribute('data-resource-id') as string;
+
+		switch (action) {
+			case 'delete':
+				if (!resource || !resourceId) {
+					return;
+				}
+				// alert(`/api/${resource}/${resourceId}`)
+				fetch(
+					`/api/${resource}/${resourceId}`,
+					{method: 'delete', referrerPolicy: 'origin-when-cross-origin'}
+				).then((res) => {
+					if (res.ok) {
+						window.location.reload();
+					}
+				})
+				break;
+			default:
+				return;
+		}
+	})
 </script>

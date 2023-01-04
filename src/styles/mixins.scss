@@ -5,7 +5,8 @@
 @mixin fully-clickable {
 	position: relative;
 	
-	:global(a)::before {
+	:global(a)::before,
+	:global(button)::before {
 		content: '';
 		inset: 0;
 		position: absolute;

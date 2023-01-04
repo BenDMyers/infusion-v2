@@ -93,9 +93,13 @@ const date = steep.userDate ?
 				focusable="false"
 				name="ion:trash-sharp"
 			/>
-			<a href="/">
+			<button
+				data-action="delete"
+				data-resource="steep"
+				data-resource-id={steep._id.toString()}
+			>
 				Delete
-			</a>
+			</button>
 		</li>
 		</>
 	</EllipsisWithDropdownMenu>
