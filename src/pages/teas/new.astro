@@ -10,8 +10,11 @@ import { getAllIngredients } from '../../api/ingredients';
 import { field } from '../../utils/field';
 import MultiMonthSelect from '../../components/MultiMonthSelect.astro';
 import type { Month } from '../../types/api';
+import { ObjectId } from 'mongodb';
+import { getTeaById } from '../../api/teas';
 
-const defaultValues = new URLSearchParams(Astro.url.search);
+const params = new URLSearchParams(Astro.url.search);
+let defaultValues = params;
 
 const [brands, teaTypes, ingredients] = await Promise.all([
 	getAllBrands(),
@@ -23,8 +26,10 @@ const brandOptions: Option[] = brands.map(brand => ({
 	value: brand._id.toString()
 }));
 const teaTypeOptions: Option[] = teaTypes.map(teaType => ({
+	// label: teaType.name,
+	// value: teaType._id.toString()
 	label: teaType.name,
-	value: teaType._id.toString()
+	value: teaType.name
 }));
 const ingredientOptions: Option[] = ingredients.map(ingredients => ({
 	label: ingredients.name,
@@ -38,6 +43,19 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 	label: brewTemp,
 	value: brewTemp
 }));
+
+if (params.has('duplicate')) {
+	const originalTeaId = new ObjectId(params.get('duplicate') || '');
+	const originalTea = await getTeaById(originalTeaId);
+	const teaAsJson = JSON.parse(JSON.stringify(originalTea));
+	// if (teaAsJson.teaType) {
+		console.log({teaType: teaAsJson.teaType})
+	// 	teaAsJson.teaType = teaAsJson.teaType.map((type: string) => teaTypeOptions.find(option => (option.label === type)));
+	// 	console.log({teaType: teaAsJson.teaType})
+	// 	// teaAsJson.teaType = teaAsJson.teaType.split(',');
+	// }
+	defaultValues = new URLSearchParams(teaAsJson);
+}
 
 ---
 
@@ -74,6 +92,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					required
 					minlength="1"
 					value={defaultValues?.get('name')}
+					autofocus={params.has('duplicate')}
 				/>
 				<small id="name-error" class="error-message"></small>
 			</div>
@@ -92,7 +111,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					showChevron
 					placeholder=""
-					value={defaultValues?.get('teaType')}
+					value={defaultValues?.get('teaType')?.split(',')}
 				/>
 				<small id="teaType-error" class="error-message"></small>
 			</div>
@@ -127,7 +146,7 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					showChevron
 					placeholder=""
-					value={defaultValues?.getAll('ingredients')}
+					value={defaultValues?.get('ingredients')?.split(',')}
 				/>
 				<small id="ingredients-error" class="error-message"></small>
 			</div>
@@ -215,7 +234,11 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 				<legend>Months Available</legend>
 				<MultiMonthSelect
 					name="monthsAvailable"
-					defaultValue={defaultValues?.getAll('monthsAvailable') as Month[]}
+					defaultValue={
+						defaultValues?.get('monthsAvailable') ?
+							(defaultValues.get('monthsAvailable') as string).split(',') as Month[] :
+							undefined
+						}
 				/>
 				<small id="monthsAvailable-error" class="error-message"></small>
 			</fieldset>

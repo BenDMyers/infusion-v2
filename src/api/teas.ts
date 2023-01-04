@@ -50,3 +50,11 @@ export async function getTeasForBrand(brandId: ObjectId) {
 	teas.sort(byName.asc);
 	return teas;
 }
+
+export async function getTeaById(teaId: ObjectId) {
+	const db = await getDatabase();
+	const teasCollection = await db.collection('teas');
+	const tea = await teasCollection
+		.findOne<WithId<Tea>>({_id: teaId});
+	return tea;
+}
