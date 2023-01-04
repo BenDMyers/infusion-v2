@@ -33,6 +33,10 @@ if (highlightTea) {
 
 const isFavoriteSteep = tea.favoriteSteep?.toString() === steep._id.toString();
 const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.usedHoney, steep.usedSweetener].includes('Yes');
+
+const date = steep.userDate ?
+	new Date(steep.userDate + 'T00:00:00.000-07:00') :
+	steep.date;
 ---
 
 <article id={`steep-${steep._id}`}>
@@ -99,7 +103,7 @@ const usedAnySweetener = (!!steep.addins?.length) || [steep.usedCreamer, steep.u
 		{(highlightTea && !!teaUrl) ?
 			<a href={teaUrl}>{tea.name}</a> :
 			<time datetime={steep.date.toISOString()}>
-				{steep.date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'})}
+				{date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Chicago'})}
 			</time>
 		}
 		{isFavoriteSteep && <Icon pack="fa-solid" name="heart" focusable="false" aria-label="Favorited" />}

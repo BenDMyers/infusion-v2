@@ -1,10 +1,9 @@
 import type { APIRoute } from 'astro';
 import { ObjectId } from 'mongodb';
-import { getBrandById, getBrandBySlug } from '../../../api/brands';
+import { getBrandById } from '../../../api/brands';
 import { getDatabase } from '../../../api/client';
 import { getTeaBySlugs } from '../../../api/teas';
 import type { ApiRouteBody } from '../../../types/api-routes';
-import type { Option } from '../../../types/ui';
 import { reshapeFormData } from '../../../utils/reshape-form-data';
 import { sluggify } from '../../../utils/slug';
 

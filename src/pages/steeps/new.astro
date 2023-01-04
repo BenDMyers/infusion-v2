@@ -309,6 +309,7 @@ const today = new Date()
 		const mm = (oneBasedMonth < 10) ? `0${oneBasedMonth}` : oneBasedMonth;
 		const dd = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
 		dateField.value = `${yy}-${mm}-${dd}`;
+		dateField.max = `${yy}-${mm}-${dd}`;
 	}
 
 	const formatField = document.querySelector<HTMLInputElement>('[name="format"]');

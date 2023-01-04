@@ -1,6 +1,7 @@
 import type { Option } from '../types/ui';
 
 const PRESERVE_LABEL: {[key: string]: boolean} = {
+	addins: true,
 	teaType: true,
 	ingredients: true
 };
@@ -32,12 +33,12 @@ function isOptionList(value: FormDataEntryValue) {
 }
 
 function toOptionListValues(value: FormDataEntryValue) {
-	const parsed = JSON.parse(value as string) as Option[];
+	const parsed = JSON.parse((value as string) || '[]') as Option[];
 	return parsed.map(option => option.value);
 }
 
 function toOptionListLabels(value: FormDataEntryValue) {
-	const parsed = JSON.parse(value as string) as Option[];
+	const parsed = JSON.parse((value as string) || '[]') as Option[];
 	return parsed.map(option => option.label);
 }
 
@@ -54,6 +55,7 @@ export function reshapeFormData(formData: FormData) {
 		}*/
 
 		if (PRESERVE_LABEL[key]) {
+			console.log({key, value})
 			normalized[key] = toOptionListLabels(value);
 		} else if (value === '[]') {
 			// console.log({value, matched: 'empty array'})
