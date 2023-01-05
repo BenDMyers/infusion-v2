@@ -20,7 +20,9 @@ import {Sprite} from 'astro-icon';
 			</div>
 			<footer>
 				<button data-action="closedialog">Cancel</button>
-				<button data-action="confirm">Delete</button>
+				<button data-action="confirm">
+					<span class="contents">Delete</span>
+				</button>
 			</footer>
 		</div>
 	</dialog>
@@ -132,6 +134,7 @@ import {Sprite} from 'astro-icon';
 
 				[data-action="confirm"] {
 					@include destructive-button();
+					@include with-loading-spinner();
 				}
 			}
 			
@@ -184,7 +187,12 @@ import {Sprite} from 'astro-icon';
 
 	function confirm() {
 		const dialog = document.querySelector('dialog');
-		if (!keepOpen) {
+		if (keepOpen) {
+			const confirmationButton = dialog?.querySelector('[data-action="confirm"]') as HTMLButtonElement;
+			if (confirmationButton) {
+				confirmationButton.setAttribute('data-state', 'loading');
+			}
+		} else {
 			dialog?.close();
 			dialog?.remove();
 		}
