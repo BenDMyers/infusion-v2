@@ -178,6 +178,7 @@ import {Sprite} from 'astro-icon';
 	function closeModal() {
 		const dialog = document.querySelector('dialog');
 		dialog?.close();
+		dialog?.remove();
 		reject?.();
 	}
 
@@ -185,6 +186,7 @@ import {Sprite} from 'astro-icon';
 		const dialog = document.querySelector('dialog');
 		if (!keepOpen) {
 			dialog?.close();
+			dialog?.remove();
 		}
 		resolve?.();
 	}
