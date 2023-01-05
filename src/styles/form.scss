@@ -4,6 +4,32 @@
 @use './tokens.scss' as *;
 @import './mixins.scss';
 
+@mixin required-indicator() {
+	position: relative;
+
+	&::after {
+		$character: '*';
+        $character-svg: url('data:image/svg+xml;utf8,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><text fill="currentColor" x="50%" y="100%" font-family="system-ui" text-anchor="middle">#{$character}</text></svg>');
+
+        content: '';
+        -webkit-mask-image: $character-svg;
+        mask: $character-svg no-repeat center;
+        background-color: op.$pink-9;
+        position: absolute;
+        right: -0.85em;
+        top: 0.1rem;
+        font-size: inherit;
+        width: 1em;
+        height: 1em;
+
+         // forced-color-adjust: preserve-parent-color;
+       @media (forced-colors: active) {
+         // background-color: currentColor;
+         background-color: Highlight;
+       }
+	}
+}
+
 :root {
 	accent-color: $teal-9;
 }
@@ -56,17 +82,13 @@ form {
 	legend {
 		font-size: op.$font-size-1;
 		font-weight: op.$font-weight-7;
+		max-width: fit-content;
 
-		&:has(+ :required)::after,
-		&:has(+ * :required)::after,
-		&:has(+ [aria-required])::after,
-		&:has(+ * [aria-required])::after {
-			display: inline-block;
-			content: '*';
-			content: '*' / '';
-			color: op.$pink-9;
-			margin-inline-start: 0.1rem;
-			margin-block-end: -1rem;
+		&:has(+ :required),
+		&:has(+ * :required),
+		&:has(+ [aria-required]),
+		&:has(+ * [aria-required]) {
+			@include required-indicator();
 		}
 
 		&.inline-label {
