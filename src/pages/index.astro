@@ -1,24 +1,99 @@
 ---
+import { showLatestSteeps } from '../api/steeps';
+import SteepEntry from '../components/SteepEntry.astro';
 import Layout from '../layouts/Layout.astro';
+
+const DEFAULT_PAGE_SIZE = 10;
+const showParam = Astro.url.searchParams.get('show');
+const countShown = showParam ? Number(showParam) : DEFAULT_PAGE_SIZE;
+const {steeps, teas} = await showLatestSteeps(countShown);
+const loadMoreUrl = new URL(Astro.url);
+loadMoreUrl.searchParams.set('show', (countShown + DEFAULT_PAGE_SIZE).toString());
+
+function shouldAutofocus(index: number) {
+	if (!showParam) return false;
+	const previousCountShown = countShown - DEFAULT_PAGE_SIZE;
+	return index === previousCountShown;
+}
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout
+	title="Infusion"
+	prerenders={[loadMoreUrl]}
+>
 	<h1>Welcome to Infusion!</h1>
 	<p class="instructions">
-		To get started, open the directory <code>src/pages</code> in your project.<br />
-		<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
+		Infusion is your home for logging the teas you've tasted and how you tried them. While you're here, consider <a href="/steeps/new/">logging a drink you had</a> or adding to the collection of <a href="/teas/new/">teas</a> and <a href="/brands/new/">brands</a> on file!
 	</p>
+	<section id="latest-steeps" aria-labelledby="">
+		<h2 id="latest-steeps-heading">Latest Steeps</h2>
+		<ul class="steep-list">
+			{steeps.map((steep, index) => (
+				<li>
+					<SteepEntry
+						highlightTea
+						steep={steep}
+						tea={teas[steep.tea.toString()]}
+						autofocus={shouldAutofocus(index)}
+					/>
+				</li>
+			))}
+		</ul>
+		<div class="load-more-container">
+			<a
+				class="load-more"
+				href={loadMoreUrl}
+				onclick="this.setAttribute('data-state', 'loading')"
+			>
+				<span class="contents">Load more</span>
+			</a>
+		</div>
+	</section>
 </Layout>
 
-<style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-		max-width: 60ch;
-	}
+<style lang="scss">
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+	@import '../styles/mixins.scss';
+
 	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
+		font-size: op.$font-size-6;
+	}
+
+	.instructions {
+		margin-block: op.$size-3;
+		max-width: 80ch;
+
+		a {
+			font-weight: op.$font-weight-7;
+			color: tokens.$teal-9;
+
+			&:not(:hover) {
+				text-decoration: none;
+			}
+		}
+	}
+
+	#latest-steeps {
+		margin-block-start: op.$size-6;
+	}
+
+	.steep-list {
+		li {
+			margin-block-start: op.$size-5;
+		}
+	}
+
+	.load-more-container {
+		display: grid;
+		place-items: center;
+		padding-block-start: op.$size-6;
+		padding-block-end: op.$size-2;
+
+		a {
+			@include cta();
+			@include with-loading-spinner();
+			width: max-content;
+		}
 	}
 </style>

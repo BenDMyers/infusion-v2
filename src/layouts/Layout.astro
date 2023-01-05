@@ -10,9 +10,10 @@ import ConfirmationDialog from '../components/ConfirmationDialog.astro';
 export interface Props {
 	title: string;
 	prefetches?: URL[]
+	prerenders?: URL[]
 }
 
-const { title, prefetches } = Astro.props;
+const { title, prefetches, prerenders } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -23,9 +24,11 @@ const { title, prefetches } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-		<link rel="prefetch" href="/">
-		<link rel="prefetch" href="/teas/">
+		<link rel="prerender" href="/">
+		<link rel="prerender" href="/teas/">
+		<link rel="prerender" href="/brands/">
 		{prefetches?.map(url => <link rel="prefetch" href={url} />)}
+		{prerenders?.map(url => <link rel="prerender" href={url} />)}
 	</head>
 	<Sprite.Provider>
 		<body>

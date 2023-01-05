@@ -13,12 +13,13 @@ import AddinDetails from './AddinDetails.astro';
 import EllipsisWithDropdownMenu from './EllipsisWithDropdownMenu.astro';
 
 export interface Props {
+	autofocus?: boolean;
 	highlightTea: boolean;
 	steep: WithId<Steep>;
 	tea: WithId<Tea>;
 }
 
-const {steep, tea, highlightTea} = Astro.props;
+const {steep, tea, highlightTea, autofocus} = Astro.props;
 let brand: WithId<Brand> | null;
 let teaUrl: URL | undefined;
 
@@ -107,13 +108,23 @@ const date = steep.userDate ?
 	</EllipsisWithDropdownMenu>
 	<p class="title">
 		{(highlightTea && !!teaUrl) ?
-			<a href={teaUrl}>{tea.name}</a> :
-			<time datetime={steep.date.toISOString()}>
+			<a href={teaUrl} autofocus={autofocus}>{tea.name}</a> :
+			<time datetime={date.toISOString()}>
 				{date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Chicago'})}
 			</time>
 		}
 		{isFavoriteSteep && <Icon pack="fa-solid" name="heart" focusable="false" aria-label="Favorited" />}
 	</p>
+	{(highlightTea && !!teaUrl) && (
+		<div class="subheader">
+			<small class="brand">
+				{brand?.name}
+			</small>
+			<time datetime={date.toISOString()}>
+				{date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Chicago'})}
+			</time>
+		</div>
+	)}
 	<DetailsGrid minimumDetailWidth="20ch">
 		<Detail name="Amounts">
 			<SteepEntryAmount
@@ -200,6 +211,32 @@ const date = steep.userDate ?
 			height: op.$font-size-3;
 			color: op.$pink-7;
 			margin-inline-start: op.$size-1;
+		}
+
+		a {
+			font-size: op.$font-size-2;
+			color: tokens.$teal-9;
+			text-decoration-thickness: 1px;
+
+			&:not(:hover) {
+				text-decoration: none;
+			}
+		}
+	}
+
+	div.subheader {
+		margin-block-start: 0;
+		display: flex;
+		font-weight: op.$font-weight-7;
+
+		& > * {
+			font-size: .85rem;
+
+			&:not(:last-child)::after {
+				content: '·';
+				content: '·' / '';
+				margin-inline: op.$size-1;
+			}
 		}
 	}
 
