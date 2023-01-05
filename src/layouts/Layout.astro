@@ -24,9 +24,8 @@ const { title, prefetches, prerenders } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-		<link rel="prerender" href="/">
-		<link rel="prerender" href="/teas/">
-		<link rel="prerender" href="/brands/">
+		<link rel="prefetch" href="/">
+		<link rel="prefetch" href="/teas/">
 		{prefetches?.map(url => <link rel="prefetch" href={url} />)}
 		{prerenders?.map(url => <link rel="prerender" href={url} />)}
 	</head>
