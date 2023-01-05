@@ -5,6 +5,7 @@ import '@fontsource/lato/900.css';
 import '../styles/main.scss';
 import {Sprite} from 'astro-icon';
 import NavBar from '../components/NavBar.astro';
+import ConfirmationDialog from '../components/ConfirmationDialog.astro';
 
 export interface Props {
 	title: string;
@@ -32,6 +33,7 @@ const { title, prefetches } = Astro.props;
 			<main>
 				<slot />
 			</main>
+			<ConfirmationDialog />
 		</body>
 	</Sprite.Provider>
 </html>

@@ -34,6 +34,11 @@
 		color: tokens.$teal-0;
 	}
 
+	&:focus-visible {
+		outline: 3px solid tokens.$teal-8;
+		outline-offset: 5px;
+	}
+
 	svg {
 		display: inline;
 		height: 1rem;
@@ -42,6 +47,17 @@
 
 	@media (forced-colors: active) {
 		outline: 1px solid LinkText;
+	}
+}
+
+@mixin destructive-button {
+	@include button();
+	background-color: op.$pink-8;
+	color: op.$pink-0;
+
+	&:hover {
+		background-color: op.$pink-11;
+		// color: tokens.$teal-0;
 	}
 }
 

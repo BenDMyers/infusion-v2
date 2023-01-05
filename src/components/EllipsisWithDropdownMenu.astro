@@ -174,21 +174,31 @@ const {
 
 		const resource = actionButton.getAttribute('data-resource') as Resource;
 		const resourceId = actionButton.getAttribute('data-resource-id') as string;
+		const modalTitle = actionButton.getAttribute('data-modal-title') as string;
+		const modalBody = actionButton.getAttribute('data-modal-body') as string;
 
 		switch (action) {
 			case 'delete':
 				if (!resource || !resourceId) {
 					return;
 				}
-				// alert(`/api/${resource}/${resourceId}`)
-				fetch(
-					`/api/${resource}/${resourceId}`,
-					{method: 'delete', referrerPolicy: 'origin-when-cross-origin'}
-				).then((res) => {
-					if (res.ok) {
-						window.location.reload();
-					}
+				openModal({
+					title: modalTitle || 'Are you really sure you want to do this?',
+					body: modalBody || 'This action cannot be undone.',
+					keepOpenOnConfirmation: true
+				}).then(() => {
+					fetch(
+						`/api/${resource}/${resourceId}`,
+						{method: 'delete', referrerPolicy: 'origin-when-cross-origin'}
+					).then((res) => {
+						if (res.ok) {
+							window.location.reload();
+						}
+					})
 				})
+				.catch(() => console.log('closed'));
+				// alert(`/api/${resource}/${resourceId}`)
+				
 				break;
 			default:
 				return;

@@ -1,0 +1,223 @@
+---
+import {Sprite} from 'astro-icon';
+---
+
+<template id="modal-template">
+	<dialog>
+		<div class="contents">
+			<button class="x" data-action="closedialog" aria-label="Close">
+				<Sprite
+					aria-hidden="true"
+					focusable="false"
+					name="mdi:close-thick"
+				/>
+			</button>
+			<header>
+				<h1>Are you sure you want to delete this steep of Testing All the Things?</h1>
+			</header>
+			<div class="body">
+				This action cannot be undone.
+			</div>
+			<footer>
+				<button data-action="closedialog">Cancel</button>
+				<button data-action="confirm">Delete</button>
+			</footer>
+		</div>
+	</dialog>
+</template>
+
+<style lang="scss">
+	@use 'sass:math';
+	@use 'open-props-scss' as op;
+	@use '../styles/tokens.scss' as tokens;
+	@import '../styles/mixins.scss';
+
+	// $border-radius: math.div(op.$radius-2 + op.$radius-3, 2);
+	$border-radius: .5rem;
+
+	:global(body):has(:modal) {
+		overflow-y: hidden;
+	}
+
+	dialog {
+		padding: 0;
+		width: 100vw;
+		height: 100vh;
+		max-width: 100vw;
+		max-height: 100vh;
+		background: none;
+		border: none;
+
+		&:modal {
+			display: grid;
+			place-items: center;
+			overscroll-behavior: contain;
+		}
+
+		&::backdrop {
+			background: hsl(209deg 100% 6% / 0.5);
+			backdrop-filter: blur(6px);
+		}
+
+		.x {
+			$padding: 0.5rem;
+
+			background: none;
+			border: none;
+			border-radius: 50%;
+			position: absolute;
+			padding: $padding;
+			// top: calc(-1 * op.$size-fluid-3);
+			// right: calc(-1 * op.$size-fluid-3);
+			top: -2rem - $padding;
+			right: calc(-1 * op.$size-fluid-3 - $padding);
+			color: var(--card-surface);
+			transition: 0.2s background-color ease-in-out;
+			
+			svg {
+				width: op.$font-size-4;
+				aspect-ratio: 1 / 1;
+			}
+
+			&:focus-visible {
+				outline: 5px solid tokens.$teal-8;
+				outline-offset: 0px;
+			}
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.3);
+			}
+		}
+
+		& > .contents {
+			max-width: 80vw;
+			width: fit-content;
+			height: fit-content;
+			margin: auto;
+			background-color: var(--card-surface);
+			border-radius: $border-radius;
+			position: relative;
+
+			header {
+				border-block-end: 1px solid op.$stone-4;
+				padding: op.$size-fluid-2;
+
+				h1 {
+					font-size: op.$font-size-4;
+				}
+			}
+
+			.body {
+				border-block-end: 1px solid op.$stone-5;
+				padding-block: op.$size-fluid-3;
+				padding-inline: op.$size-fluid-2;
+			}
+
+			footer {
+				border-bottom-left-radius: $border-radius;
+				border-bottom-right-radius: $border-radius;
+				background-color: op.$stone-2;
+				padding-block: op.$size-fluid-1;
+				padding-inline: op.$size-fluid-2;
+				display: flex;
+				flex-direction: row;
+				justify-content: end;
+				gap: op.$size-3;
+
+				[data-action="closedialog"] {
+					@include button();
+					background-color: var(--card-surface);
+					color: op.$stone-9;
+				}
+
+				[data-action="confirm"] {
+					@include destructive-button();
+				}
+			}
+			
+		}
+	}
+</style>
+
+<script>
+	let modalPromise: Promise<boolean>;
+	let resolve: Function;
+	let reject: Function;
+	let keepOpen: boolean = false;
+
+	window.openModal = async function openModal(config: {
+		title: string,
+		body: string,
+		keepOpenOnConfirmation: boolean
+	}) {
+		const {title, body, keepOpenOnConfirmation = false} = config;
+		keepOpen = keepOpenOnConfirmation;
+		const modalTemplate = document.getElementById('modal-template') as HTMLTemplateElement;
+		const modal = modalTemplate?.content.cloneNode(true) as HTMLElement;
+		const h1 = modal.querySelector('h1');
+		if (h1) {
+			h1.innerText = title;
+		}
+		const modalBody = modal.querySelector<HTMLDivElement>('.body');
+		if (modalBody) {
+			modalBody.innerText = body;
+		}
+
+		document.body.append(modal);
+
+		// console.log({title, body})
+		const dialog = document.querySelector('dialog');
+		dialog?.showModal();
+		modalPromise = new Promise((res, rej) => {
+			resolve = res;
+			reject = rej;
+		});
+		return modalPromise;
+	}
+
+	function closeModal() {
+		const dialog = document.querySelector('dialog');
+		dialog?.close();
+		reject?.();
+	}
+
+	function confirm() {
+		const dialog = document.querySelector('dialog');
+		if (!keepOpen) {
+			dialog?.close();
+		}
+		resolve?.();
+	}
+
+	document.addEventListener('click', (event) => {
+		const dialog = document.querySelector('dialog');
+		if (!dialog?.open) {
+			return;
+		}
+
+		const target = event.target as HTMLElement;
+
+		// Handle confirmation clicks
+		const isConfirmationButton = target.closest<HTMLButtonElement>('[data-action="confirm"]');
+		if (isConfirmationButton) {
+			confirm();
+			return;
+		}
+
+		// Handle cancel/close button clicks
+		const isCancelButton = target.closest<HTMLButtonElement>('[data-action="closedialog"]');
+		if (isCancelButton) {
+			closeModal();
+			return;
+		}
+		
+		// Handle backdrop clicks
+		const withinDialog = !!target.closest('dialog');
+		const withinContents = !!target.closest('.contents');
+		const withinBackdrop = withinDialog && !withinContents;
+		if (withinBackdrop) {
+			closeModal();
+			return;
+		}
+	});
+</script>
