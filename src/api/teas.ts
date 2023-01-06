@@ -2,7 +2,7 @@ import type { ObjectId, WithId } from 'mongodb';
 import type { Brand, Steep, Tea } from '../types/api';
 import { sluggify } from '../utils/slug';
 import { byName } from '../utils/sort';
-import { getBrandBySlug } from './brands';
+import { getBrandDetailsFromSlug } from './brands';
 import { getDatabase } from './client';
 
 export async function getAllTeas() {
@@ -11,31 +11,6 @@ export async function getAllTeas() {
 	const allTeas = await (teasCollection.find<WithId<Tea>>({})).toArray();
 	allTeas.sort(byName.asc);
 	return allTeas;
-}
-
-export async function getTeaBySlugs(brandSlug: string, teaSlug: string) {
-	const brand = await getBrandBySlug(brandSlug);
-	if (!brand) {
-		return;
-	}
-
-	const db = await getDatabase();
-	const teasCollection = await db.collection('teas');
-	const teasForBrand = await (
-		teasCollection.find<WithId<Tea>>({ vendor: brand._id })
-	).toArray();
-	const tea = teasForBrand.find(tea => (sluggify(tea.name) === teaSlug));
-	return tea;
-}
-
-export async function getTeasForBrand(brandId: ObjectId) {
-	const db = await getDatabase();
-	const teasCollection = await db.collection('teas');
-	const teas = await (teasCollection.find<WithId<Tea>>({
-		vendor: brandId
-	})).toArray();
-	teas.sort(byName.asc);
-	return teas;
 }
 
 export async function getTeaById(teaId: ObjectId) {
@@ -78,4 +53,12 @@ export async function getTeaDetails(teaId: ObjectId) {
 	]).toArray();
 	const [match] = matches;
 	return match;
+}
+
+export async function getTeaDetailsBySlugs(brandSlug: string, teaSlug: string) {
+	const brand = await getBrandDetailsFromSlug(brandSlug);
+	if (!brand) return;
+
+	const brandTeas = brand.teas as AugmentedTeaDocument[];
+	return brandTeas.find(tea => (sluggify(tea.name) === teaSlug));
 }

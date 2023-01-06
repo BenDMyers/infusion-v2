@@ -1,8 +1,7 @@
 ---
 import { ObjectId, WithId } from 'mongodb';
 import { getBrandBySlug } from '../../../api/brands';
-import { getSteepsForTea } from '../../../api/steeps';
-import { getTeaBySlugs, getTeaDetails } from '../../../api/teas';
+import { getTeaDetailsBySlugs, getTeaDetails } from '../../../api/teas';
 import AvailabilityDetail from '../../../components/AvailabilityDetail.astro';
 import Detail from '../../../components/Detail.astro';
 import DetailsGrid from '../../../components/DetailsGrid.astro';
@@ -19,11 +18,11 @@ if (!brandSlug || !teaSlug) {
 }
 
 const [tea, brand] = await Promise.all([
-	getTeaBySlugs(brandSlug, teaSlug),
+	getTeaDetailsBySlugs(brandSlug, teaSlug),
 	getBrandBySlug(brandSlug)
 ]);
 
-const steeps = tea ? await getSteepsForTea(tea._id) : [];
+const steeps = tea?.steeps as WithId<Steep>[];
 const mostRecentSteep: WithId<Steep> | undefined = steeps[0];
 const favoriteSteep = tea?.favoriteSteep ?
 	steeps.find(steep => (steep._id.toString() === tea.favoriteSteep?.toString())) :

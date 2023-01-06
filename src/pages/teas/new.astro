@@ -2,7 +2,7 @@
 import Select from 'svelte-select';
 import Layout from '../../layouts/Layout.astro';
 import FormLogic from '../../components/FormLogic.astro';
-import { getAllBrands } from '../../api/brands';
+import { getAllBrandsDetails } from '../../api/brands';
 import type { Option } from '../../types/ui';
 import { getAllTeaTypes } from '../../api/teaTypes';
 import { caffeineContentValues, hotOrIced } from '../../utils/tea-enums';
@@ -14,7 +14,7 @@ import type { Month } from '../../types/api';
 const defaultValues = new URLSearchParams(Astro.url.search);
 
 const [brands, teaTypes, ingredients] = await Promise.all([
-	getAllBrands(),
+	getAllBrandsDetails(),
 	getAllTeaTypes(),
 	getAllIngredients()
 ]);

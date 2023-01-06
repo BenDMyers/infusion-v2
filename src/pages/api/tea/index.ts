@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { ObjectId } from 'mongodb';
 import { getBrandById } from '../../../api/brands';
 import { getDatabase } from '../../../api/client';
-import { getTeaBySlugs } from '../../../api/teas';
+import { getTeaDetailsBySlugs } from '../../../api/teas';
 import type { ApiRouteBody } from '../../../types/api-routes';
 import { reshapeFormData } from '../../../utils/reshape-form-data';
 import { sluggify } from '../../../utils/slug';
@@ -65,7 +65,7 @@ export const post: APIRoute = async ({ request, redirect }) => {
 	}
 	const candidateBrandSlug = sluggify(brand.name);
 	const candidateTeaSlug = sluggify(candidateTeaName);
-	const slugAlreadyExists = !!(await getTeaBySlugs(candidateBrandSlug, candidateTeaSlug));
+	const slugAlreadyExists = !!(await getTeaDetailsBySlugs(candidateBrandSlug, candidateTeaSlug));
 	
 	if (slugAlreadyExists) {
 		const body: ApiRouteBody = {

@@ -11,3 +11,11 @@ export const sortByName = {
 };
 
 export const sortCaseInsensitively = [nameLowercase, sortByName];
+
+export const sortByUserDate = {
+	$sort: {
+		userDate: -1,
+		date: -1,
+		_id: 1
+	}
+};

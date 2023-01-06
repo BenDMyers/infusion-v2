@@ -1,6 +1,6 @@
 import type { ObjectId, WithId } from 'mongodb';
 import type { Brand } from '../types/api';
-import { sortCaseInsensitively } from '../utils/aggregation-stages';
+import { sortByUserDate, sortCaseInsensitively } from '../utils/aggregation-stages';
 import { sluggify } from '../utils/slug';
 import { byName } from '../utils/sort';
 import { getDatabase } from './client';
@@ -93,8 +93,21 @@ export async function getBrandDetails(brandId: ObjectId) {
 					{
 						$lookup: {
 							from: 'steeps',
-							localField: '_id',
-							foreignField: 'tea',
+							// localField: '_id',
+							// foreignField: 'tea',
+							let: {
+								tea_id: '$_id',
+							},
+							pipeline: [
+								{
+									$match: {
+										$expr: {
+											$eq: ['$tea', '$$tea_id']
+										}
+									}
+								},
+								sortByUserDate
+							],
 							as: 'steeps'
 						}
 					}
