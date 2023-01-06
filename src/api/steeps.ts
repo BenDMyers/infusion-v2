@@ -1,5 +1,6 @@
 import { ObjectId, WithId } from 'mongodb';
 import type { Brand, Steep, Tea } from '../types/api';
+import { sortByUserDate } from '../utils/aggregation-stages';
 import { byDate } from '../utils/sort';
 import { getBrandById } from './brands';
 import { getDatabase } from './client';
@@ -53,27 +54,26 @@ export async function deleteSteepById(steepId: ObjectId) {
 export async function showLatestSteeps(limit: number) {
 	const db = await getDatabase();
 	const steepsCollection = await db.collection('steeps');
-	const steeps = await steepsCollection.find<WithId<Steep>>({}, {
-		limit,
-		sort: {
-			userDate: -1,
-			date: -1,
-			_id: 1
-		}
-	}).toArray();
 
-	const teas: {[key: string]: WithId<Tea>} = {};
-	const uniqueTeaIds = [
-		...new Set(steeps.map(steep => steep.tea.toString()))
-	];
-	const teaObjects = await Promise.all(
-		uniqueTeaIds.map(id => getTeaById(new ObjectId(id))) 
-	);
-	for (const tea of teaObjects) {
-		if (tea) {
-			teas[tea._id.toString()] = tea;
+	const steeps = await steepsCollection.aggregate([
+		sortByUserDate,
+		{$limit: limit},
+		{
+			$lookup: {
+				from: 'teas',
+				let: {tea_id: '$tea'},
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$eq: ['$_id', '$$tea_id']
+							}
+						}
+					},
+				],
+				as: 'teaData'
+			}
 		}
-	}
-
-	return {steeps, teas};
+	]).toArray();
+	return steeps;
 }

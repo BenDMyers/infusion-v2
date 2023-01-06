@@ -1,7 +1,7 @@
 ---
-import { ObjectId, WithId } from 'mongodb';
+import type { ObjectId, WithId } from 'mongodb';
 import { getBrandBySlug } from '../../../api/brands';
-import { getTeaDetailsBySlugs, getTeaDetails } from '../../../api/teas';
+import { getTeaDetailsBySlugs } from '../../../api/teas';
 import AvailabilityDetail from '../../../components/AvailabilityDetail.astro';
 import Detail from '../../../components/Detail.astro';
 import DetailsGrid from '../../../components/DetailsGrid.astro';
@@ -54,9 +54,6 @@ function getSteepHash(steepId: ObjectId) {
 }
 
 const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
-
-const fortyWinks = await getTeaDetails(new ObjectId('5eaf64de08e4080007f3432e'));
-console.log(fortyWinks);
 
 ---
 

@@ -1,14 +1,19 @@
 ---
+import type { WithId } from 'mongodb';
 import { showLatestSteeps } from '../api/steeps';
 import SteepEntry from '../components/SteepEntry.astro';
 import Layout from '../layouts/Layout.astro';
+import type { Steep } from '../types/api';
 
 const DEFAULT_PAGE_SIZE = 10;
 const showParam = Astro.url.searchParams.get('show');
-const countShown = showParam ? Number(showParam) : DEFAULT_PAGE_SIZE;
-const {steeps, teas} = await showLatestSteeps(countShown);
+const countShown = showParam ?
+	Number(showParam) :
+	DEFAULT_PAGE_SIZE;
+const steeps = await showLatestSteeps(countShown);
 const loadMoreUrl = new URL(Astro.url);
-loadMoreUrl.searchParams.set('show', (countShown + DEFAULT_PAGE_SIZE).toString());
+const nextShow = countShown + DEFAULT_PAGE_SIZE;
+loadMoreUrl.searchParams.set('show', nextShow.toString());
 
 function shouldAutofocus(index: number) {
 	if (!showParam) return false;
@@ -32,8 +37,8 @@ function shouldAutofocus(index: number) {
 				<li>
 					<SteepEntry
 						highlightTea
-						steep={steep}
-						tea={teas[steep.tea.toString()]}
+						steep={steep as WithId<Steep>}
+						tea={steep.teaData[0]}
 						autofocus={shouldAutofocus(index)}
 					/>
 				</li>
