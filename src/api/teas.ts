@@ -13,19 +13,6 @@ export async function getAllTeas() {
 	return allTeas;
 }
 
-export async function getTeasGroupedByBrands() {
-	const teas = await getAllTeas();
-	const groupedTeas = {} as {[key: string]: WithId<Tea>[]};
-	for (const tea of teas) {
-		const vendorId = tea.vendor.toString();
-		if (!groupedTeas[vendorId]) {
-			groupedTeas[vendorId] = [] as WithId<Tea>[];
-		}
-		groupedTeas[vendorId].push(tea);
-	}
-	return groupedTeas;
-}
-
 export async function getTeaBySlugs(brandSlug: string, teaSlug: string) {
 	const brand = await getBrandBySlug(brandSlug);
 	if (!brand) {
