@@ -6,10 +6,12 @@ import Layout from '../../../layouts/Layout.astro';
 const {brandSlug = ''} = Astro.params;
 
 const brand = await getBrandDetailsFromSlug(brandSlug);
-
 ---
 
-<Layout title={`Edit ${brand?.name}`}>
+<Layout
+	title={`Edit ${brand?.name}`}
+	description={`Edit ${brand?.name}'s details on Infusion.`}
+>
 	<h1>Edit {brand?.name}</h1>
 	<form action={`/api/brand/${brand?._id.toString()}`} method="post">
 		<input

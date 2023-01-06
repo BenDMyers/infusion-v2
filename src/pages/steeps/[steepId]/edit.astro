@@ -1,4 +1,5 @@
 ---
+import te from 'date-fns/locale/te';
 import { ObjectId } from 'mongodb';
 import Select from 'svelte-select';
 import { getAllAddins } from '../../../api/addins';
@@ -43,12 +44,19 @@ const addinOptions: Option[] = allAddins.map(addin => ({
 	value: addin.name
 }));
 
-const today = new Date()
-	.toLocaleDateString()
+const date = steep?.userDate ?
+	new Date(steep?.userDate + 'T00:00:00.000-07:00') :
+	steep?.date;
+
+const formattedDate = date?.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}) || '';
+const initialTea = teas.find(tea => (tea._id.toString() === steep?.tea.toString()));
 
 ---
 
-<Layout title="Log a Steep">
+<Layout
+	title="Edit Steep"
+	description={`Edit your ${formattedDate} steep of ${initialTea?.name} on Infusion.`}
+>
 	<h1>Edit Steep</h1>
 	<form action={`/api/steep/${steepId}`} method="post">
 		<section id="basic-details" aria-labelledby="basic-details-heading">

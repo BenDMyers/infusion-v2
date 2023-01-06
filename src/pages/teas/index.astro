@@ -8,6 +8,10 @@ import type { Brand } from '../../types/api';
 import { sluggify } from '../../utils/slug';
 
 const brands = await getAllBrandsDetails();
+const teaCount = brands.reduce((totalTeaCount, brand) => {
+	return totalTeaCount + brand.teas.length;
+}, 0);
+const formattedTeaCount = new Intl.NumberFormat('en-us').format(teaCount);
 
 function getBrandUrl(brand: WithId<Brand>) {
 	const brandSlug = sluggify(brand.name);
@@ -16,7 +20,10 @@ function getBrandUrl(brand: WithId<Brand>) {
 
 ---
 
-<Layout title="My Teas">
+<Layout
+	title="My Teas"
+	description={`Check out all ${formattedTeaCount} teas on Infusion!`}
+>
 	<h1>My Teas</h1>
 	{
 		brands.map((brand) => {

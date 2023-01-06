@@ -59,6 +59,7 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 
 <Layout
 	title={`${tea?.name} | ${brand?.name}`}
+	description={`Check out ${tea?.name} from ${brand?.name} on Infusion!`}
 	prefetches={[steepCtaUrl, brandUrl]}
 >
 	<hgroup>

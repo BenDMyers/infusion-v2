@@ -35,7 +35,10 @@ const editHref = new URL(`/brands/${brandSlug}/edit/`, Astro.url);
 
 ---
 
-<Layout title={brand.name}>
+<Layout
+	title={brand.name}
+	description={`Check out teas from ${brand?.name} on Infusion!`}
+>
 	<EllipsisWithDropdownMenu>
 		<li>
 			<Sprite

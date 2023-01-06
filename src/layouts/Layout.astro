@@ -6,14 +6,16 @@ import '../styles/main.scss';
 import {Sprite} from 'astro-icon';
 import NavBar from '../components/NavBar.astro';
 import ConfirmationDialog from '../components/ConfirmationDialog.astro';
+import MetaTags from '../components/MetaTags.astro';
 
 export interface Props {
 	title: string;
+	description?: string;
 	prefetches?: URL[]
 	prerenders?: URL[]
 }
 
-const { title, prefetches, prerenders } = Astro.props;
+const { title, description, prefetches, prerenders } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -22,12 +24,12 @@ const { title, prefetches, prerenders } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<!-- <link rel="prefetch" href="/"> -->
 		<link rel="prefetch" href="/teas/">
 		{prefetches?.map(url => <link rel="prefetch" href={url} />)}
 		{prerenders?.map(url => <link rel="prerender" href={url} />)}
+		<MetaTags title={title} description={description} />
 	</head>
 	<Sprite.Provider>
 		<body>

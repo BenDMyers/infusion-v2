@@ -37,12 +37,12 @@ const addinOptions: Option[] = allAddins.map(addin => ({
 	value: addin.name
 }));
 
-const today = new Date()
-	.toLocaleDateString()
-
 ---
 
-<Layout title="Log a Steep">
+<Layout
+	title="Log a Steep"
+	description="Log a steep on Infusion!"
+>
 	<h1>Log a Steep</h1>
 	<form action="/api/steep" method="post">
 		<section id="basic-details" aria-labelledby="basic-details-heading">

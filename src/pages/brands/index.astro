@@ -9,7 +9,10 @@ import Layout from '../../layouts/Layout.astro';
 const brands = await getAllBrandsDetails();
 ---
 
-<Layout title="Brands">
+<Layout
+	title="Brands"
+	description={`Check out all ${brands.length} tea brands on Infusion!`}
+>
 	<h1>Brands</h1>
 	<AddBrandCtaWell />
 	<ul class="card-list">
