@@ -1,5 +1,5 @@
 import type { ObjectId, WithId } from 'mongodb';
-import type { Tea } from '../types/api';
+import type { Brand, Steep, Tea } from '../types/api';
 import { sluggify } from '../utils/slug';
 import { byName } from '../utils/sort';
 import { getBrandBySlug } from './brands';
@@ -56,4 +56,39 @@ export async function getTeaById(teaId: ObjectId) {
 	const teasCollection = await db.collection('teas');
 	const tea = await teasCollection.findOne<WithId<Tea>>({ _id: teaId });
 	return tea;
+}
+
+export type AugmentedTeaDocument = WithId<Tea> & {
+	brandData: WithId<Brand>,
+	steeps: WithId<Steep>[]
+};
+
+export async function getTeaDetails(teaId: ObjectId) {
+	const db = await getDatabase();
+	const teasCollection = await db.collection('teas');
+	const matches = await teasCollection.aggregate<AugmentedTeaDocument>([
+		{
+			$match: {
+				_id: teaId
+			}
+		},
+		{
+			$lookup: {
+				from: 'vendors',
+				localField: 'vendor',
+				foreignField: '_id',
+				as: 'brandData'
+			}
+		},
+		{
+			$lookup: {
+				from: 'steeps',
+				localField: '_id',
+				foreignField: 'tea',
+				as: 'steeps'
+			}
+		}
+	]).toArray();
+	const [match] = matches;
+	return match;
 }

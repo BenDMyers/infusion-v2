@@ -1,9 +1,8 @@
 ---
 import { Sprite } from 'astro-icon';
 import normalizeUrl from 'normalize-url';
-import { getBrandBySlug } from '../../api/brands';
-import { getSteepsGroupedByTeas } from '../../api/steeps';
-import { getTeasForBrand } from '../../api/teas';
+import { getBrandDetailsFromSlug } from '../../api/brands';
+import type { AugmentedTeaDocument } from '../../api/teas';
 import AddTeaCtaWell from '../../components/AddTeaCtaWell.astro';
 import Detail from '../../components/Detail.astro';
 import DetailsGrid from '../../components/DetailsGrid.astro';
@@ -16,17 +15,14 @@ if (!brandSlug) {
 	return;
 }
 
-const [brand, groupedSteeps] = await Promise.all([
-	getBrandBySlug(brandSlug),
-	getSteepsGroupedByTeas()
-]);
+const brand = await getBrandDetailsFromSlug(brandSlug);
 
 if (!brand) {
 	Astro.redirect('/');
 	return;
 }
 
-const teas = await getTeasForBrand(brand._id) || [];
+const teas = brand.teas as AugmentedTeaDocument[];
 
 let teasAddedLabel = `${teas.length} teas`;
 if (teas.length === 0) {
@@ -84,7 +80,7 @@ const editHref = new URL(`/brands/${brandSlug}/edit/`, Astro.url);
 					<TeaCard
 						brand={brand}
 						tea={tea}
-						steeps={groupedSteeps[tea._id.toString()] || []}
+						steeps={tea.steeps}
 					/>
 				</li>
 			))}

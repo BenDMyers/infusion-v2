@@ -1,8 +1,8 @@
 ---
-import type { ObjectId, WithId } from 'mongodb';
+import { ObjectId, WithId } from 'mongodb';
 import { getBrandBySlug } from '../../../api/brands';
 import { getSteepsForTea } from '../../../api/steeps';
-import { getTeaBySlugs } from '../../../api/teas';
+import { getTeaBySlugs, getTeaDetails } from '../../../api/teas';
 import AvailabilityDetail from '../../../components/AvailabilityDetail.astro';
 import Detail from '../../../components/Detail.astro';
 import DetailsGrid from '../../../components/DetailsGrid.astro';
@@ -56,6 +56,9 @@ function getSteepHash(steepId: ObjectId) {
 
 const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 
+const fortyWinks = await getTeaDetails(new ObjectId('5eaf64de08e4080007f3432e'));
+console.log(fortyWinks);
+
 ---
 
 <Layout
@@ -66,8 +69,8 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		<h1>{tea?.name}</h1>
 		<p class="subtitle">{brand?.name}</p>
 	</hgroup>
-	<!-- <p>{tea?._id.toString()}</p>
-	<p>{tea?.vendor.toString()}</p> -->
+	<p>{tea?._id.toString()}</p>
+	<p>{tea?.vendor.toString()}</p>
 	<DetailsGrid minimumDetailWidthPrint="15ch">
 		<Detail name="Brand">
 			<a href={brandUrl}>{brand?.name}</a>
