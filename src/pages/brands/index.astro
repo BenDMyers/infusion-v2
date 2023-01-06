@@ -1,16 +1,12 @@
 ---
 import '@fontsource/lato/400-italic.css';
 
-import { getAllBrands } from '../../api/brands';
-import { getTeasGroupedByBrands } from '../../api/teas';
+import { getAllBrandsDetails } from '../../api/brands';
 import AddBrandCtaWell from '../../components/AddBrandCtaWell.astro';
 import BrandCard from '../../components/BrandCard.astro';
 import Layout from '../../layouts/Layout.astro';
 
-const [brands, groupedTeas] = await Promise.all([
-	getAllBrands(),
-	getTeasGroupedByBrands()
-]);
+const brands = await getAllBrandsDetails();
 ---
 
 <Layout title="Brands">
@@ -21,7 +17,7 @@ const [brands, groupedTeas] = await Promise.all([
 			<li>
 				<BrandCard
 					brand={brand}
-					teas={groupedTeas[brand._id.toString()]}
+					teas={brand.teas}
 				/>
 			</li>
 		))}

@@ -30,6 +30,42 @@ type AugmentedBrandDocument = WithId<Brand> & {
 	teas: AugmentedTeaDocument[]
 };
 
+export async function getAllBrandsDetails() {
+	const db = await getDatabase();
+	const brandsCollection = await db.collection('vendors');
+	const matches = await brandsCollection.aggregate<AugmentedBrandDocument>([
+		{
+			$lookup: {
+				from: 'teas',
+				let: {
+					brand_id: '$_id'
+				},
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$eq: ['$vendor', '$$brand_id']
+							}
+						}
+					},
+					...sortCaseInsensitively,
+					{
+						$lookup: {
+							from: 'steeps',
+							localField: '_id',
+							foreignField: 'tea',
+							as: 'steeps'
+						}
+					}
+				],
+				as: 'teas'
+			}
+		},
+		...sortCaseInsensitively
+	]).toArray();
+	return matches;
+}
+
 export async function getBrandDetails(brandId: ObjectId) {
 	const db = await getDatabase();
 	const brandsCollection = await db.collection('vendors');

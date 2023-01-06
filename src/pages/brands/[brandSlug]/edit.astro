@@ -1,11 +1,11 @@
 ---
-import { getBrandBySlug } from '../../../api/brands';
+import { getBrandDetailsFromSlug } from '../../../api/brands';
 import FormLogic from '../../../components/FormLogic.astro';
 import Layout from '../../../layouts/Layout.astro';
 
 const {brandSlug = ''} = Astro.params;
 
-const brand = await getBrandBySlug(brandSlug);
+const brand = await getBrandDetailsFromSlug(brandSlug);
 
 ---
 
@@ -15,7 +15,7 @@ const brand = await getBrandBySlug(brandSlug);
 		<input
 			type="hidden"
 			name="_id"
-			value={brand?._id?.toString() || ''}
+			value={brand?._id.toString() || ''}
 		/>
 		<input
 			type="hidden"
