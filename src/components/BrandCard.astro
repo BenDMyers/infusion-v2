@@ -1,11 +1,11 @@
 ---
+import { Sprite } from 'astro-icon';
 import type { WithId } from 'mongodb';
 import type { Brand, Tea } from '../types/api';
 import normalizeUrl from 'normalize-url';
 import { sluggify } from '../utils/slug';
 import { choose } from '../utils/choose';
 import EllipsisWithDropdownMenu from './EllipsisWithDropdownMenu.astro';
-import { Sprite } from 'astro-icon';
 
 export interface Props {
 	brand: WithId<Brand>;

@@ -4,7 +4,7 @@ import type { Brand, Month, Rating, Steep, Tea, WithEmptyStringOption } from '..
 import type { Availability } from '../types/ui';
 import { sluggify } from '../utils/slug';
 import StaticRating from './StaticRating.astro';
-import {Icon} from 'astro-icon';
+import {Icon, Sprite} from 'astro-icon';
 import IconWithPopup from './IconWithPopup.astro';
 import EllipsisWithDropdownMenu from './EllipsisWithDropdownMenu.astro';
 
@@ -24,6 +24,7 @@ const brandId = `${cardIdPrefix}-brand`;
 const brandSlug = sluggify(brand.name);
 const teaSlug = sluggify(tea.name);
 const href = new URL(`/teas/${brandSlug}/${teaSlug}/`, Astro.url);
+const editHref = new URL(`/teas/${brandSlug}/${teaSlug}/edit/`, Astro.url);
 
 const highestRating = steeps.reduce((currentMax: WithEmptyStringOption<Rating>, steep) => {
 	if (!steep.rating) {
@@ -81,7 +82,88 @@ if (tea.discontinued) {
 		</p>
 		<EllipsisWithDropdownMenu label={`Menu for ${tea.name}`}>
 			<li>
-				<a href="/">boopboop</a>
+				<Sprite
+					aria-hidden="true"
+					focusable="false"
+					name="mdi:pencil"
+				/>
+				<a href={editHref}>Edit</a>
+			</li>
+			<li>
+				{
+					tea.favorited ?
+						<>
+							<Sprite
+								aria-hidden="true"
+								focusable="false"
+								name="fluent:star-off-24-filled"
+							/>
+							<a href="/">
+								Unfavorite
+							</a>
+						</> :
+						<>
+							<Sprite
+								aria-hidden="true"
+								focusable="false"
+								name="fa-solid:star"
+							/>
+							<a href="/">
+								Favorite
+							</a>
+						</>
+				}
+			</li>
+			<li>
+				{
+					tea.wishlist ?
+						<>
+							<Sprite
+								aria-hidden="true"
+								focusable="false"
+								name="mdi:bookmark-off"
+							/>
+							<a href="/">
+								Unwishlist
+							</a>
+						</> :
+						<>
+							<Sprite
+								aria-hidden="true"
+								focusable="false"
+								name="mdi:bookmark"
+							/>
+							<a href="/">
+								Wishlist
+							</a>
+						</>
+				}
+			</li>
+			<li>
+				<Sprite
+					aria-hidden="true"
+					focusable="false"
+					name="ion:duplicate"
+				/>
+				<a href="/">
+					Duplicate
+				</a>
+			</li>
+			<li class="danger">
+				<Sprite
+					aria-hidden="true"
+					focusable="false"
+					name="ion:trash-sharp"
+				/>
+				<button
+					data-action="delete"
+					data-resource="tea"
+					data-resource-id={tea._id.toString()}
+					data-modal-title={`Are you sure you want to delete ${tea.name}?`}
+					data-modal-body="This will also delete any steeps of this tea. This action cannot be undone."
+				>
+					Delete
+			</button>
 			</li>
 		</EllipsisWithDropdownMenu>
 		<div id={brandId} class="subtitle">
