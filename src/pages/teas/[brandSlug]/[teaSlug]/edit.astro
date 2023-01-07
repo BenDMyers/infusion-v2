@@ -7,7 +7,7 @@ import { getAllTeaTypes } from '../../../../api/teaTypes';
 import FormLogic from '../../../../components/FormLogic.astro';
 import MultiMonthSelect from '../../../../components/MultiMonthSelect.astro';
 import Layout from '../../../../layouts/Layout.astro';
-import type { Month } from '../../types/api';
+import type { Month } from '../../../../types/api';
 import type { Option } from '../../../../types/ui';
 import { field } from '../../../../utils/field';
 import { caffeineContentValues, hotOrIced } from '../../../../utils/tea-enums';
@@ -111,7 +111,11 @@ const recommendedHotOrIcedOptions: Option[] = hotOrIced.map(brewTemp => ({
 					clearable={false}
 					showChevron
 					placeholder=""
-					value={tea?.teaType?.map(teaType => teaTypeOptions.find(opt => (opt.label === teaType)))}
+					value={(tea?.teaType || [])
+						.map(teaType => teaTypeOptions
+							.find(opt => (opt.label === teaType))
+						)
+					}
 				/>
 				<small id="teaType-error" class="error-message"></small>
 			</div>

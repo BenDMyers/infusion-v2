@@ -62,3 +62,10 @@ export async function getTeaDetailsBySlugs(brandSlug: string, teaSlug: string) {
 	const brandTeas = brand.teas as AugmentedTeaDocument[];
 	return brandTeas.find(tea => (sluggify(tea.name) === teaSlug));
 }
+
+export async function deleteTeaById(teaId: ObjectId) {
+	const db = await getDatabase();
+	const teasCollection = await db.collection('teas');
+	const deletionRecord = await teasCollection.deleteOne({_id: teaId});
+	return deletionRecord;
+}

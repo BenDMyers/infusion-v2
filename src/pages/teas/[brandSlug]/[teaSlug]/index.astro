@@ -22,7 +22,9 @@ const [tea, brand] = await Promise.all([
 	getBrandBySlug(brandSlug)
 ]);
 
-const steeps = tea?.steeps as WithId<Steep>[];
+console.log({tea})
+
+const steeps = tea?.steeps as WithId<Steep>[] || [];
 const mostRecentSteep: WithId<Steep> | undefined = steeps[0];
 const favoriteSteep = tea?.favoriteSteep ?
 	steeps.find(steep => (steep._id.toString() === tea.favoriteSteep?.toString())) :
@@ -148,6 +150,11 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		{tea?.preferredStyles && (
 			<Detail name="Preferred Steeps">
 				{tea.preferredStyles}
+			</Detail>
+		)}
+		{tea?.toTry && (
+			<Detail name="To Try">
+				{tea.toTry}
 			</Detail>
 		)}
 		{tea?.memo && (

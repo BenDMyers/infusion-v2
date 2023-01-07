@@ -9,6 +9,7 @@ export type WeightedOption = {
 };
 
 export function generateSteepCta(tea: WithId<Tea>, steeps: WithId<Steep>[]) {
+	console.log({tea, steeps})
 	const today = new Date();
 	const year = today.getFullYear();
 
