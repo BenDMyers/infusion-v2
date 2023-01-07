@@ -1,11 +1,11 @@
 ---
 import type { WithId } from 'mongodb';
-import { getAllBrandsDetails } from '../../api/brands';
-import type { AugmentedTeaDocument } from '../../api/teas';
-import TeaCard from '../../components/TeaCard.astro';
-import Layout from '../../layouts/Layout.astro';
-import type { Brand } from '../../types/api';
-import { sluggify } from '../../utils/slug';
+import { getAllBrandsDetails } from 'src/api/brands';
+import type { AugmentedTeaDocument } from 'src/api/teas';
+import TeaCard from 'src/components/TeaCard.astro';
+import Layout from 'src/layouts/Layout.astro';
+import type { Brand } from 'src/types/api';
+import { sluggify } from 'src/utils/slug';
 
 const brands = await getAllBrandsDetails();
 const teaCount = brands.reduce((totalTeaCount, brand) => {
@@ -60,7 +60,7 @@ function getBrandUrl(brand: WithId<Brand>) {
 
 <style lang="scss">
 	@use 'open-props-scss' as op;
-	@use '../../styles/tokens.scss' as tokens;
+	@use 'src/styles/tokens.scss' as tokens;
 
 	section {
 		margin-block-start: op.$size-fluid-4;

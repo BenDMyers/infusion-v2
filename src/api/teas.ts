@@ -4,6 +4,7 @@ import { sluggify } from '../utils/slug';
 import { byName } from '../utils/sort';
 import { getBrandDetailsFromSlug } from './brands';
 import { getDatabase } from './client';
+import { deleteAllSteepsForTea } from './steeps';
 
 export async function getAllTeas() {
 	const db = await getDatabase();
@@ -64,6 +65,10 @@ export async function getTeaDetailsBySlugs(brandSlug: string, teaSlug: string) {
 }
 
 export async function deleteTeaById(teaId: ObjectId) {
+	// Cascading deletion
+	await deleteAllSteepsForTea(teaId);
+
+	// Delete tea itself
 	const db = await getDatabase();
 	const teasCollection = await db.collection('teas');
 	const deletionRecord = await teasCollection.deleteOne({_id: teaId});

@@ -1,14 +1,14 @@
 ---
 import Select from 'svelte-select';
-import { getAllAddins } from '../../api/addins';
-import { getAllTeas } from '../../api/teas';
-import FormLogic from '../../components/FormLogic.astro';
-import RatingField from '../../components/RatingField.astro';
-import Layout from '../../layouts/Layout.astro';
-import type { SteepFormat, WithEmptyStringOption } from '../../types/api';
-import type { Option } from '../../types/ui';
-import { field } from '../../utils/field';
-import { format } from '../../utils/tea-enums';
+import { getAllAddins } from 'src/api/addins';
+import { getAllTeas } from 'src/api/teas';
+import FormLogic from 'src/components/FormLogic.astro';
+import RatingField from 'src/components/RatingField.astro';
+import Layout from 'src/layouts/Layout.astro';
+import type { SteepFormat, WithEmptyStringOption } from 'src/types/api';
+import type { Option } from 'src/types/ui';
+import { field } from 'src/utils/field';
+import { format } from 'src/utils/tea-enums';
 
 const defaultValues = new URLSearchParams(Astro.url.search);
 

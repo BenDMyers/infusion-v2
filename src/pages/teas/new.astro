@@ -1,15 +1,15 @@
 ---
 import Select from 'svelte-select';
-import Layout from '../../layouts/Layout.astro';
-import FormLogic from '../../components/FormLogic.astro';
-import { getAllBrandsDetails } from '../../api/brands';
-import type { Option } from '../../types/ui';
-import { getAllTeaTypes } from '../../api/teaTypes';
-import { caffeineContentValues, hotOrIced } from '../../utils/tea-enums';
-import { getAllIngredients } from '../../api/ingredients';
-import { field } from '../../utils/field';
-import MultiMonthSelect from '../../components/MultiMonthSelect.astro';
-import type { Month } from '../../types/api';
+import Layout from 'src/layouts/Layout.astro';
+import FormLogic from 'src/components/FormLogic.astro';
+import { getAllBrandsDetails } from 'src/api/brands';
+import type { Option } from 'src/types/ui';
+import { getAllTeaTypes } from 'src/api/teaTypes';
+import { caffeineContentValues, hotOrIced } from 'src/utils/tea-enums';
+import { getAllIngredients } from 'src/api/ingredients';
+import { field } from 'src/utils/field';
+import MultiMonthSelect from 'src/components/MultiMonthSelect.astro';
+import type { Month } from 'src/types/api';
 
 const defaultValues = new URLSearchParams(Astro.url.search);
 

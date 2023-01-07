@@ -1,10 +1,10 @@
 ---
 import '@fontsource/lato/400-italic.css';
 
-import { getAllBrandsDetails } from '../../api/brands';
-import AddBrandCtaWell from '../../components/AddBrandCtaWell.astro';
-import BrandCard from '../../components/BrandCard.astro';
-import Layout from '../../layouts/Layout.astro';
+import { getAllBrandsDetails } from 'src/api/brands';
+import AddBrandCtaWell from 'src/components/AddBrandCtaWell.astro';
+import BrandCard from 'src/components/BrandCard.astro';
+import Layout from 'src/layouts/Layout.astro';
 
 const brands = await getAllBrandsDetails();
 ---

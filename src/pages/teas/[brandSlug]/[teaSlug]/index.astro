@@ -1,16 +1,16 @@
 ---
 import type { ObjectId, WithId } from 'mongodb';
-import { getBrandBySlug } from '../../../../api/brands';
-import { getTeaDetailsBySlugs } from '../../../../api/teas';
-import AvailabilityDetail from '../../../../components/AvailabilityDetail.astro';
-import Detail from '../../../../components/Detail.astro';
-import DetailsGrid from '../../../../components/DetailsGrid.astro';
-import PreparationDetails from '../../../../components/PreparationDetails.astro';
-import StaticRating from '../../../../components/StaticRating.astro';
-import SteepCtaWell from '../../../../components/SteepCtaWell.astro';
-import SteepEntry from '../../../../components/SteepEntry.astro';
-import Layout from '../../../../layouts/Layout.astro';
-import type { Rating, Steep, Tea, WithEmptyStringOption } from '../../../../types/api';
+import { getBrandBySlug } from 'src/api/brands';
+import { getTeaDetailsBySlugs } from 'src/api/teas';
+import AvailabilityDetail from 'src/components/AvailabilityDetail.astro';
+import Detail from 'src/components/Detail.astro';
+import DetailsGrid from 'src/components/DetailsGrid.astro';
+import PreparationDetails from 'src/components/PreparationDetails.astro';
+import StaticRating from 'src/components/StaticRating.astro';
+import SteepCtaWell from 'src/components/SteepCtaWell.astro';
+import SteepEntry from 'src/components/SteepEntry.astro';
+import Layout from 'src/layouts/Layout.astro';
+import type { Rating, Steep, Tea, WithEmptyStringOption } from 'src/types/api';
 
 const {brandSlug = '', teaSlug = ''} = Astro.params;
 if (!brandSlug || !teaSlug) {

@@ -2,9 +2,7 @@ import type { APIRoute } from 'astro';
 import { ObjectId } from 'mongodb';
 import { getBrandDetails } from '../../../api/brands';
 import { getDatabase } from '../../../api/client';
-import { deleteAllSteepsForTea } from '../../../api/steeps';
 import { deleteTeaById, getTeaDetails, getTeaDetailsBySlugs } from '../../../api/teas';
-import type { CaffeineLevel, Tea } from '../../../types/api';
 import type { ApiRouteBody } from '../../../types/api-routes';
 import { reshapeFormData } from '../../../utils/reshape-form-data';
 import { sluggify } from '../../../utils/slug';
@@ -118,7 +116,6 @@ export const del: APIRoute = async ({params}) => {
 	}
 
 	try {
-		await deleteAllSteepsForTea(id);
 		await deleteTeaById(id);
 		const body: ApiRouteBody = {msg: 'Deleted successfully'};
 		return new Response(

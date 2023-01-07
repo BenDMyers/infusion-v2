@@ -1,14 +1,14 @@
 ---
 import { Sprite } from 'astro-icon';
 import normalizeUrl from 'normalize-url';
-import { getBrandDetailsFromSlug } from '../../api/brands';
-import type { AugmentedTeaDocument } from '../../api/teas';
-import AddTeaCtaWell from '../../components/AddTeaCtaWell.astro';
-import Detail from '../../components/Detail.astro';
-import DetailsGrid from '../../components/DetailsGrid.astro';
-import EllipsisWithDropdownMenu from '../../components/EllipsisWithDropdownMenu.astro';
-import TeaCard from '../../components/TeaCard.astro';
-import Layout from '../../layouts/Layout.astro';
+import { getBrandDetailsFromSlug } from 'src/api/brands';
+import type { AugmentedTeaDocument } from 'src/api/teas';
+import AddTeaCtaWell from 'src/components/AddTeaCtaWell.astro';
+import Detail from 'src/components/Detail.astro';
+import DetailsGrid from 'src/components/DetailsGrid.astro';
+import EllipsisWithDropdownMenu from 'src/components/EllipsisWithDropdownMenu.astro';
+import TeaCard from 'src/components/TeaCard.astro';
+import Layout from 'src/layouts/Layout.astro';
 
 const {brandSlug} = Astro.params;
 if (!brandSlug) {

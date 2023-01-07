@@ -1,16 +1,16 @@
 ---
 import Select from 'svelte-select';
-import { getAllBrandsDetails } from '../../../../api/brands';
-import { getAllIngredients } from '../../../../api/ingredients';
-import { getTeaDetailsBySlugs } from '../../../../api/teas';
-import { getAllTeaTypes } from '../../../../api/teaTypes';
-import FormLogic from '../../../../components/FormLogic.astro';
-import MultiMonthSelect from '../../../../components/MultiMonthSelect.astro';
-import Layout from '../../../../layouts/Layout.astro';
-import type { Month } from '../../../../types/api';
-import type { Option } from '../../../../types/ui';
-import { field } from '../../../../utils/field';
-import { caffeineContentValues, hotOrIced } from '../../../../utils/tea-enums';
+import { getAllBrandsDetails } from 'src/api/brands';
+import { getAllIngredients } from 'src/api/ingredients';
+import { getTeaDetailsBySlugs } from 'src/api/teas';
+import { getAllTeaTypes } from 'src/api/teaTypes';
+import FormLogic from 'src/components/FormLogic.astro';
+import MultiMonthSelect from 'src/components/MultiMonthSelect.astro';
+import Layout from 'src/layouts/Layout.astro';
+import type { Month } from 'src/types/api';
+import type { Option } from 'src/types/ui';
+import { field } from 'src/utils/field';
+import { caffeineContentValues, hotOrIced } from 'src/utils/tea-enums';
 
 const {brandSlug = '', teaSlug = ''} = Astro.params;
 
