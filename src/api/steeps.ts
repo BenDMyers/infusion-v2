@@ -26,6 +26,13 @@ export async function deleteSteepById(steepId: ObjectId) {
 	return deletionRecord;
 }
 
+export async function deleteAllSteepsForTea(teaId: ObjectId) {
+	const db = await getDatabase();
+	const steepsCollection = await db.collection('steeps');
+	const deletionRecord = await steepsCollection.deleteMany({tea: teaId});
+	return deletionRecord;
+}
+
 export async function showLatestSteeps(limit: number) {
 	const db = await getDatabase();
 	const steepsCollection = await db.collection('steeps');
