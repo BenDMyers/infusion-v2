@@ -15,13 +15,10 @@ export const homepageOpenGraphImageUrl = cloudinary.url(
 					font_size: 450,
 					text: 'infusion'
 				},
-				// width: 1780,
-				// height: 1200,
 				crop: 'fit',
 			},
 			{
 				gravity: 'center',
-				// x: 90,
 				y: 20,
 				effect: 'shadow:20',
 				color: '#00897e',
