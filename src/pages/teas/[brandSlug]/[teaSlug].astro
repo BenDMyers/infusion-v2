@@ -66,8 +66,8 @@ const steepCtaUrl = new URL(`/steeps/new/?tea=${tea?._id}`, Astro.url);
 		<h1>{tea?.name}</h1>
 		<p class="subtitle">{brand?.name}</p>
 	</hgroup>
-	<p>{tea?._id.toString()}</p>
-	<p>{tea?.vendor.toString()}</p>
+	<p hidden>{tea?._id.toString()}</p>
+	<p hidden>{tea?.vendor.toString()}</p>
 	<DetailsGrid minimumDetailWidthPrint="15ch">
 		<Detail name="Brand">
 			<a href={brandUrl}>{brand?.name}</a>
