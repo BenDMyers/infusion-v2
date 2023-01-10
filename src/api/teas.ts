@@ -1,4 +1,5 @@
 import type { ObjectId, WithId } from 'mongodb';
+import { sortCaseInsensitively } from 'src/utils/aggregation-stages';
 import type { Brand, Steep, Tea } from '../types/api';
 import { sluggify } from '../utils/slug';
 import { byName } from '../utils/sort';
@@ -12,6 +13,33 @@ export async function getAllTeas() {
 	const allTeas = await (teasCollection.find<WithId<Tea>>({})).toArray();
 	allTeas.sort(byName.asc);
 	return allTeas;
+}
+
+export async function getAllTeasDetails() {
+	const db = await getDatabase();
+	const teasCollection = await db.collection('teas');
+	const aggregation = await teasCollection.aggregate<AugmentedTeaDocument>([
+		{
+			$lookup: {
+				from: 'vendors',
+				let: {
+					brand_id: '$vendor'
+				},
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$eq: ['$_id', '$$brand_id']
+							}
+						}
+					},
+				],
+				as: 'brandData'
+			}
+		},
+		...sortCaseInsensitively
+	]).toArray();
+	return aggregation;
 }
 
 export async function getTeaById(teaId: ObjectId) {

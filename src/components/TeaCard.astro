@@ -218,9 +218,15 @@ if (tea.discontinued) {
 		border: 1px solid op.$gray-2;
 		color: var(--ink);
 		padding-block: op.$size-3;
+		page-break-inside: avoid;
 		
 		& > div {
 			padding-inline: op.$size-3;
+		}
+
+		@media print {
+			border: 1px solid op.$stone-5 !important;
+			box-shadow: none;
 		}
 	}
 

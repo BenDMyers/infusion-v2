@@ -77,6 +77,8 @@ export const post: APIRoute = async ({params, request, redirect}) => {
 			{_id: teaId},
 			{
 				$set: {
+					discontinued: false,
+					wishlist: false,
 					...normalized,
 					vendor: new ObjectId(normalized.vendor)
 				}

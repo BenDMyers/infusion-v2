@@ -57,6 +57,8 @@ export function reshapeFormData(formData: FormData) {
 		if (PRESERVE_LABEL[key]) {
 			console.log({key, value})
 			normalized[key] = toOptionListLabels(value);
+		} else if (value === 'on') {
+			normalized[key] = true;
 		} else if (value === '[]') {
 			// console.log({value, matched: 'empty array'})
 			normalized[key] = [];

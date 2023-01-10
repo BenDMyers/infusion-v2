@@ -2,7 +2,9 @@
 import type { WithId } from 'mongodb';
 import { getAllBrandsDetails } from 'src/api/brands';
 import type { AugmentedTeaDocument } from 'src/api/teas';
+import FormLogic from 'src/components/FormLogic.astro';
 import TeaCard from 'src/components/TeaCard.astro';
+import TeaFilterWell from 'src/components/TeaFilterWell.astro';
 import Layout from 'src/layouts/Layout.astro';
 import type { Brand } from 'src/types/api';
 import { sluggify } from 'src/utils/slug';
@@ -25,6 +27,10 @@ function getBrandUrl(brand: WithId<Brand>) {
 	description={`Check out all ${formattedTeaCount} teas on Infusion!`}
 >
 	<h1>My Teas</h1>
+	<TeaFilterWell />
+	<div hidden class="no-teas-found">
+		<p>No teas found.</p>
+	</div>
 	{
 		brands.map((brand) => {
 			const brandId = brand._id.toString();
@@ -35,7 +41,7 @@ function getBrandUrl(brand: WithId<Brand>) {
 			}
 
 			return (
-				<section aria-labelledby={`brand-${brandId}-heading`}>
+				<section data-brand={brandId} aria-labelledby={`brand-${brandId}-heading`}>
 					<h2 id={`brand-${brandId}-heading`}>
 						<a href={getBrandUrl(brand)}>
 							{brand.name}
@@ -43,7 +49,7 @@ function getBrandUrl(brand: WithId<Brand>) {
 					</h2>
 					<ul class="card-list">
 						{teas.map(tea => (
-							<li>
+							<li data-tea={tea._id.toString()}>
 								<TeaCard
 									brand={brand}
 									tea={tea}
@@ -57,6 +63,7 @@ function getBrandUrl(brand: WithId<Brand>) {
 		})
 	}
 </Layout>
+<FormLogic />
 
 <style lang="scss">
 	@use 'open-props-scss' as op;
@@ -72,7 +79,7 @@ function getBrandUrl(brand: WithId<Brand>) {
 	}
 
 	h1 {
-		margin-block-end: 0;
+		margin-block-end: op.$size-fluid-3;
 	}
 
 	h2 a {
@@ -96,6 +103,14 @@ function getBrandUrl(brand: WithId<Brand>) {
 			));
 		gap: op.$size-fluid-2 op.$size-fluid-3;
 		margin-block: op.$size-fluid-2;
+	}
+
+	.no-teas-found {
+		display: grid;
+		place-items: center;
+		font-size: op.$font-size-4;
+		padding: op.$size-10;
+		color: op.$stone-7;
 	}
 </style>
 

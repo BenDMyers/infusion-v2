@@ -1,3 +1,8 @@
+---
+import Search from "./Search.astro";
+
+---
+
 <header class="no-print">
 	<nav>
 		<ul>
@@ -10,8 +15,11 @@
 			<li>
 				<a href="/teas/?favorited=true">Favorites</a>
 			</li>
-			<li>
+			<li class="brands-item">
 				<a href="/brands/">Brands</a>
+			</li>
+			<li class="search-item">
+				<Search />
 			</li>
 		</ul>
 	</nav>
@@ -31,6 +39,7 @@
 			ul {
 				list-style: none;
 				display: flex;
+				flex-wrap: wrap;
 
 				li {
 					@include fully-clickable();
@@ -40,7 +49,7 @@
 					display: grid;
 					place-items: center;
 
-					&:hover {
+					&:not(.search-item):hover {
 						background-color: var(--accent-color-hover);
 						a {
 							text-decoration: underline;
@@ -59,9 +68,24 @@
 		}
 	}
 
+	.brands-item {
+		@media (max-width: 798px) {
+			border-inline-end: none;
+		}
+	}
+
 	.brand {
 		font-family: var(--brand-font), cursive;
 		font-size: 1.9rem;
 		font-weight: 400;
+	}
+
+	.search-item {
+		flex-grow: 1;
+		min-width: min(40ch, 95vw);
+
+		@media (max-width: 798px) {
+			padding-block-end: 0.75rem;
+		}
 	}
 </style>

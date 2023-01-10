@@ -1,0 +1,106 @@
+---
+import { Sprite } from 'astro-icon';
+import { getAllBrandsDetails } from 'src/api/brands';
+import { getAllIngredients } from 'src/api/ingredients';
+import { getAllTeaTypes } from 'src/api/teaTypes';
+import type { Option } from 'src/types/ui';
+import RatingField from './RatingField.astro';
+import TeaFilterForm from './TeaFilterForm.svelte';
+
+const favoritedByDefault = Astro.url.searchParams.get('favorited') === 'true';
+
+const [brands, teaTypes, ingredients] = await Promise.all([
+	getAllBrandsDetails(),
+	getAllTeaTypes(),
+	getAllIngredients()
+]);
+
+const brandOptions: Option[] = brands.map(brand => ({
+	label: brand.name,
+	value: brand._id.toString()
+}));
+const teaTypeOptions: Option[] = teaTypes.map(teaType => ({
+	label: teaType.name,
+	value: teaType._id.toString()
+}));
+const ingredientOptions: Option[] = ingredients.map(ingredients => ({
+	label: ingredients.name,
+	value: ingredients.name
+}));
+---
+
+<section id="filters" aria-labelledby="filters-heading" class="tea-filter-well no-print">
+	<details open={favoritedByDefault}>
+		<summary id="filters-heading">
+			<span>Filters</span>
+		</summary>
+		<div class="body">
+			<TeaFilterForm
+				client:only
+				favoritedByDefault={favoritedByDefault}
+				brandOptions={brandOptions}
+				ingredientOptions={ingredientOptions}
+				teaTypeOptions={teaTypeOptions}
+			>
+				<RatingField slot="highest-rating-field" name="highestRating" />
+				<Sprite
+					slot="reset-sprite"
+					aria-hidden="true"
+					focusable="false"
+					name="mdi:close-thick"
+				/>
+			</TeaFilterForm>
+		</div>
+	</details>
+</section>
+
+<style lang="scss">
+	@use 'sass:math';
+	@use 'open-props-scss' as op;
+	@import '../styles/mixins.scss';
+
+	.tea-filter-well {
+		width: 100%;
+		background-color: op.$stone-2;
+		border: 1px solid op.$stone-4;
+		padding-block: op.$size-4;
+		padding-inline: op.$size-4;
+
+		.body {
+			margin-block-start: op.$size-4;
+		}
+	}
+
+	summary {
+		font-size: op.$font-size-fluid-1;
+		font-weight: op.$font-weight-7;
+		width: max-content;
+
+		span {
+			margin-inline-start: 0.15rem;
+		}
+	}
+
+	:global(form) {
+		:global([data-field]) {
+			width: 23%;
+		}
+
+		:global([type="reset"]) {
+			@include button();
+			width: max-content;
+			background-color: var(--card-surface);
+			float: right;
+	
+			&:disabled {
+				background-color: op.$stone-4;
+				color: op.$stone-7;
+			}
+	
+			svg {
+				width: 1em;
+			}
+		}
+	}
+
+</style>

@@ -1,3 +1,5 @@
+import type { Option } from 'src/types/ui';
+
 const COEFFICIENTS = [1, -1];
 
 type Comparator<E> = (a: E, b: E) => number;
@@ -70,3 +72,7 @@ interface WithDate {
 
 export const byName = comparators((a: WithName) => a.name.toLocaleLowerCase());
 export const byDate = comparators((a: WithDate) => a.date);
+
+export const byLabel = (a: Option, b: Option) => a.label.localeCompare(b.label);
+export const bySubtitle = comparators((a: Option) => a.subtitle);
+export const inSearchOrder = composeComparators(byLabel, bySubtitle.asc);

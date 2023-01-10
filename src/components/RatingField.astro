@@ -18,27 +18,27 @@ const {name, defaultValue} = Astro.props;
 	<label for={`${name}-star1`}>
 		<span class="visually-hidden">1 star</span>
 	  </label>
-	  <input type="radio" value="1" name="rating" id={`${name}-star1`} checked={defaultValue === '1'} />
+	  <input type="radio" value="1" name={name} id={`${name}-star1`} checked={defaultValue === '1'} />
 	  
 	  <label for={`${name}-star2`}>
 	  	<span class="visually-hidden">2 stars</span>
 	  </label>
-	  <input type="radio" value="2" name="rating" id={`${name}-star2`} checked={defaultValue === '2'} />
+	  <input type="radio" value="2" name={name} id={`${name}-star2`} checked={defaultValue === '2'} />
 	  
 	  <label for={`${name}-star3`}>
 		<span class="visually-hidden">3 stars</span>
 	  </label>
-	  <input type="radio" value="3" name="rating" id={`${name}-star3`} checked={defaultValue === '3'} />
+	  <input type="radio" value="3" name={name} id={`${name}-star3`} checked={defaultValue === '3'} />
 	  
 	  <label for={`${name}-star4`}>
 	  	<span class="visually-hidden">4 stars</span>
 	  </label>
-	  <input type="radio" value="4" name="rating" id={`${name}-star4`} checked={defaultValue === '4'} />
+	  <input type="radio" value="4" name={name} id={`${name}-star4`} checked={defaultValue === '4'} />
 	  
 	  <label for={`${name}-star5`}>
 	  	<span class="visually-hidden">5 stars</span>
 	  </label>
-	  <input type="radio" value="5" name="rating" id={`${name}-star5`} checked={defaultValue === '5'} />
+	  <input type="radio" value="5" name={name} id={`${name}-star5`} checked={defaultValue === '5'} />
 </div>
 
 <style lang="scss">

@@ -29,6 +29,7 @@ body {
 @media print {
 	:root {
 		--shadow: none;
+		font-size: 12px;
 	}
 	.no-print {
 		display: none !important;

@@ -1,0 +1,55 @@
+---
+import { getAllBrands } from 'src/api/brands';
+import { getAllTeasDetails } from 'src/api/teas';
+import type { Option } from 'src/types/ui';
+import { sluggify } from 'src/utils/slug';
+import { inSearchOrder } from 'src/utils/sort';
+import SearchBar from './SearchBar.svelte';
+
+const [brands, teas] = await Promise.all([
+	getAllBrands(),
+	getAllTeasDetails()
+]);
+
+const brandOptions = brands.map(brand => {
+	const brandSlug = sluggify(brand.name || '');
+	const path = `/brands/${brandSlug}/`;
+	return {
+		label: brand.name,
+		value: path
+	} as Option;
+});
+
+const teaOptions = teas.map(tea => {
+	const brandSlug = sluggify(tea.brandData[0].name || '');
+	const teaSlug = sluggify(tea.name || '');
+	const path = `/teas/${brandSlug}/${teaSlug}/`;
+	return {
+		label: tea.name,
+		subtitle: tea.brandData[0].name,
+		value: path
+	} as Option;
+});
+
+const allOptions = [...brandOptions, ...teaOptions]
+	.sort(inSearchOrder.asc);
+
+---
+
+<SearchBar client:idle options={allOptions} />
+
+<script>
+	const search = document.querySelector('[name="search"]') as HTMLInputElement;
+	const searchObserver = new MutationObserver((mutations, observer) => {
+		if (mutations[0].attributeName === 'value') {
+			try {
+				console.log(search.value)
+				const option = JSON.parse(search.value);
+				window.location.href = option.value;
+			} catch (err) {
+				console.error(err);
+			}
+		}
+	});
+	searchObserver.observe(search as Node, {attributes: true});
+</script>

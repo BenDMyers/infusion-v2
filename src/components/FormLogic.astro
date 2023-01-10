@@ -118,6 +118,7 @@
 			// https://stackoverflow.com/a/6246260
 			setTimeout(() => {
 				nullStar.checked = true;
+				radio.dispatchEvent(new Event('change', {bubbles: true}));
 				ratingGroup.classList.add('cleared');
 				ratingFieldStarLabel.addEventListener('mouseout', unsetClearedState);
 				fieldset.addEventListener('change', unsetClearedState);
